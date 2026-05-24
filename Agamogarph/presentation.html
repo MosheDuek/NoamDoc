@@ -1,0 +1,1156 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="he">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>מצגת אגמוגרף - למה זה קסום?</title>
+<link href="https://fonts.googleapis.com/css2?family=Varela+Round&family=Heebo:wght@400;700;900&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'Varela Round', 'Heebo', sans-serif;
+  overflow-x: hidden;
+  background: #000;
+}
+
+.slide-container {
+  height: 100vh;
+  scroll-snap-type: y mandatory;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+.slide-container::-webkit-scrollbar { display: none; }
+
+.slide {
+  height: 100vh;
+  scroll-snap-align: start;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 30px;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Navigation dots */
+.nav-dots {
+  position: fixed;
+  left: 30px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(255,255,255,0.3);
+  cursor: pointer;
+  transition: all 0.3s;
+  border: 2px solid transparent;
+}
+.dot.active {
+  background: white;
+  transform: scale(1.3);
+  border-color: rgba(0,0,0,0.2);
+}
+
+/* Slide backgrounds */
+.slide-1 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+.slide-2 { background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%); }
+.slide-3 { background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); }
+.slide-4 { background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); }
+.slide-4 { background: linear-gradient(135deg, #fa709a 0%, #fee140 100%); }
+.slide-5 { background: linear-gradient(135deg, #30cfd0 0%, #330867 100%); }
+.slide-6 { background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%); }
+.slide-7 { background: linear-gradient(135deg, #ff9a56 0%, #ff6a88 100%); }
+.slide-8 { background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%); }
+.slide-9 { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+
+/* Typography */
+h1 {
+  font-size: 3.2rem;
+  color: white;
+  text-align: center;
+  margin-bottom: 15px;
+  font-weight: 900;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+  animation: fadeInDown 1s ease;
+}
+h2 {
+  font-size: 2.2rem;
+  color: white;
+  margin-bottom: 20px;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+  animation: fadeInUp 1s ease 0.2s both;
+}
+.subtitle {
+  font-size: 1.5rem;
+  color: rgba(255,255,255,0.95);
+  text-align: center;
+  max-width: 800px;
+  line-height: 1.6;
+  animation: fadeIn 1s ease 0.4s both;
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+}
+
+/* Content boxes */
+.content-box {
+  background: rgba(255,255,255,0.95);
+  border-radius: 25px;
+  padding: 30px 40px;
+  max-width: 850px;
+  box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+  animation: scaleIn 0.8s ease 0.5s both;
+  color: #333;
+}
+.content-box h3 {
+  font-size: 1.8rem;
+  color: #333;
+  margin-bottom: 12px;
+  text-align: center;
+}
+.content-box p, .content-box li {
+  font-size: 1.2rem;
+  line-height: 1.7;
+  color: #555;
+}
+
+/* Examples grid */
+.examples-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 800px;
+  margin-top: 20px;
+}
+.example-card {
+  background: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  padding: 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  animation: fadeInUp 0.8s ease both;
+}
+.example-card:nth-child(1) { animation-delay: 0.3s; }
+.example-card:nth-child(2) { animation-delay: 0.4s; }
+.example-card:nth-child(3) { animation-delay: 0.5s; }
+.example-card:nth-child(4) { animation-delay: 0.6s; }
+.example-card .icon {
+  font-size: 3rem;
+  margin-bottom: 10px;
+}
+.example-card h4 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 6px;
+}
+.example-card p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.4;
+}
+
+/* Instructions */
+.instructions {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  max-width: 850px;
+  margin-top: 20px;
+}
+.instruction-step {
+  background: rgba(255,255,255,0.95);
+  border-radius: 20px;
+  padding: 25px 20px;
+  text-align: center;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  animation: fadeInUp 0.8s ease both;
+}
+.instruction-step:nth-child(1) { animation-delay: 0.3s; }
+.instruction-step:nth-child(2) { animation-delay: 0.4s; }
+.instruction-step:nth-child(3) { animation-delay: 0.5s; }
+.instruction-step:nth-child(4) { animation-delay: 0.6s; }
+.step-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 45px;
+  height: 45px;
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  font-size: 1.6rem;
+  font-weight: 900;
+  border-radius: 50%;
+  margin-bottom: 12px;
+}
+.instruction-step h4 {
+  font-size: 1.2rem;
+  color: #333;
+  margin-bottom: 8px;
+}
+.instruction-step p {
+  font-size: 1rem;
+  color: #666;
+  line-height: 1.5;
+}
+
+/* Bullet list with icons */
+.icon-list {
+  list-style: none;
+  max-width: 800px;
+  margin-top: 20px;
+}
+.icon-list li {
+  background: rgba(255,255,255,0.95);
+  border-radius: 15px;
+  padding: 18px 25px;
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  color: #333;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.15);
+  animation: slideInRight 0.8s ease both;
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+.icon-list li:nth-child(1) { animation-delay: 0.3s; }
+.icon-list li:nth-child(2) { animation-delay: 0.4s; }
+.icon-list li:nth-child(3) { animation-delay: 0.5s; }
+.icon-list li:nth-child(4) { animation-delay: 0.6s; }
+.icon-list li:nth-child(5) { animation-delay: 0.7s; }
+.icon-list .emoji {
+  font-size: 1.8rem;
+  flex-shrink: 0;
+}
+
+/* Images gallery */
+.images-gallery {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
+  max-width: 900px;
+  margin-top: 20px;
+}
+.image-item {
+  background: white;
+  border-radius: 15px;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  animation: zoomIn 0.8s ease both;
+}
+.image-item:nth-child(1) { animation-delay: 0.3s; }
+.image-item:nth-child(2) { animation-delay: 0.4s; }
+.image-item:nth-child(3) { animation-delay: 0.5s; }
+.image-item:nth-child(4) { animation-delay: 0.6s; }
+.image-item img {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+}
+.image-item p {
+  padding: 12px;
+  font-size: 1rem;
+  color: #333;
+  text-align: center;
+  background: white;
+}
+
+/* Scroll hint */
+.scroll-hint {
+  position: absolute;
+  bottom: 30px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: 1.2rem;
+  color: rgba(255,255,255,0.8);
+  animation: bounce 2s infinite;
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(50px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateX(50px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes zoomIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes bounce {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(-50%, -10px); }
+}
+
+/* Timer section */
+.timer-section {
+  background: white;
+  border-radius: 20px;
+  padding: 25px 30px;
+  margin-top: 20px;
+  max-width: 700px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+/* Card preview boxes */
+.card-preview-box {
+  background: white;
+  border-radius: 15px;
+  padding: 15px;
+  box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+  animation: fadeInUp 0.8s ease both;
+}
+.card-preview-box:nth-child(1) { animation-delay: 0.2s; }
+.card-preview-box:nth-child(2) { animation-delay: 0.3s; }
+.card-preview-box:nth-child(3) { animation-delay: 0.4s; }
+.card-preview-box:nth-child(4) { animation-delay: 0.5s; }
+.card-preview-box h3 {
+  text-align: center;
+  font-size: 1.1rem;
+  margin: 0;
+}
+
+
+.time-buttons {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.time-btn {
+  padding: 12px 30px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  border: 3px solid #ddd;
+  background: white;
+  border-radius: 15px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Varela Round', 'Heebo', sans-serif;
+  color: #666;
+}
+
+.time-btn:hover {
+  border-color: #667eea;
+  transform: translateY(-2px);
+}
+
+.time-btn.active {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: white;
+  border-color: #667eea;
+}
+
+.start-btn {
+  padding: 15px 50px;
+  font-size: 1.3rem;
+  font-weight: 900;
+  background: linear-gradient(135deg, #43e97b, #38f9d7);
+  color: white;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s;
+  font-family: 'Varela Round', 'Heebo', sans-serif;
+  box-shadow: 0 5px 15px rgba(67,233,123,0.4);
+  margin-bottom: 20px;
+}
+
+.start-btn:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(67,233,123,0.5);
+}
+
+.start-btn.running {
+  background: linear-gradient(135deg, #f093fb, #f5576c);
+  box-shadow: 0 5px 15px rgba(240,147,251,0.4);
+}
+
+.countdown-display {
+  display: none;
+  margin-top: 15px;
+  position: relative;
+}
+
+.countdown-display.active {
+  display: block;
+  animation: slideInUp 0.5s ease;
+}
+
+.time-remaining {
+  font-size: 4rem;
+  font-weight: 900;
+  color: #333;
+  margin-bottom: 5px;
+  font-family: 'Courier New', monospace;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+.time-label {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 20px;
+}
+
+/* Progress ring */
+.progress-ring {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.progress-ring svg {
+  transform: rotate(-90deg);
+}
+
+.progress-ring-circle-bg {
+  fill: none;
+  stroke: #e0e0e0;
+  stroke-width: 10;
+}
+
+.progress-ring-circle {
+  fill: none;
+  stroke: #43e97b;
+  stroke-width: 10;
+  stroke-linecap: round;
+  stroke-dasharray: 565.48;
+  stroke-dashoffset: 0;
+  transition: stroke 1s, stroke-dashoffset 1s linear;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 2rem;
+  font-weight: 900;
+  color: #333;
+}
+
+/* Color states */
+.countdown-display.green .time-remaining { color: #43e97b; }
+.countdown-display.green .progress-ring-circle { stroke: #43e97b; }
+
+.countdown-display.yellow .time-remaining { color: #ffd93d; }
+.countdown-display.yellow .progress-ring-circle { stroke: #ffd93d; }
+
+.countdown-display.orange .time-remaining { color: #ff9a56; animation: pulse-warning 1s infinite; }
+.countdown-display.orange .progress-ring-circle { stroke: #ff9a56; }
+
+.countdown-display.red .time-remaining { color: #ff6b6b; animation: pulse-danger 0.5s infinite; }
+.countdown-display.red .progress-ring-circle { stroke: #ff6b6b; }
+
+@keyframes pulse-warning {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes pulse-danger {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.1); }
+}
+
+@keyframes slideInUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  h1 { font-size: 2.5rem; }
+  h2 { font-size: 1.8rem; }
+  .subtitle { font-size: 1.3rem; }
+  .examples-grid, .instructions, .images-gallery { grid-template-columns: 1fr; }
+  .content-box { padding: 25px; }
+  .nav-dots { left: 15px; }
+  .time-buttons { flex-direction: column; gap: 10px; }
+  .time-btn { width: 100%; }
+}
+
+/* Special elements */
+.agam-portrait {
+  width: 160px;
+  height: 160px;
+  border-radius: 50%;
+  background: white;
+  padding: 10px;
+  box-shadow: 0 15px 40px rgba(0,0,0,0.3);
+  margin-bottom: 20px;
+  animation: scaleIn 1s ease 0.5s both;
+}
+
+.warning-box {
+  background: #fff3cd;
+  border: 3px solid #ffc107;
+  border-radius: 15px;
+  padding: 15px 20px;
+  margin-top: 15px;
+  text-align: center;
+  font-size: 1.1rem;
+  color: #856404;
+  font-weight: 700;
+  animation: pulse 2s infinite;
+  max-width: 700px;
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.02); }
+}
+</style>
+</head>
+<body>
+
+<!-- Navigation Dots -->
+<div class="nav-dots">
+  <div class="dot active" data-slide="0"></div>
+  <div class="dot" data-slide="1"></div>
+  <div class="dot" data-slide="2"></div>
+  <div class="dot" data-slide="3"></div>
+  <div class="dot" data-slide="4"></div>
+  <div class="dot" data-slide="5"></div>
+  <div class="dot" data-slide="6"></div>
+  <div class="dot" data-slide="7"></div>
+  <div class="dot" data-slide="8"></div>
+</div>
+
+<div class="slide-container" id="slideContainer">
+
+<!-- ==================== SLIDE 1: TITLE ==================== -->
+<div class="slide slide-1">
+  <h1>🎨 מה זה אגמוגרף? 🎨</h1>
+  <p class="subtitle">זוויות שונות = מציאויות שונות! 🌈</p>
+  
+  <!-- Simple SVG illustration of agamograph -->
+  <svg width="350" height="250" viewBox="0 0 400 300" style="margin-top: 30px; animation: fadeIn 1s ease 0.8s both;">
+    <!-- Accordion folded paper -->
+    <g opacity="0.9">
+      <polygon points="50,100 80,50 110,100" fill="#FFD700" stroke="#333" stroke-width="2"/>
+      <polygon points="110,100 140,50 170,100" fill="#FF6B6B" stroke="#333" stroke-width="2"/>
+      <polygon points="170,100 200,50 230,100" fill="#4ECDC4" stroke="#333" stroke-width="2"/>
+      <polygon points="230,100 260,50 290,100" fill="#95E1D3" stroke="#333" stroke-width="2"/>
+      <polygon points="290,100 320,50 350,100" fill="#FFD93D" stroke="#333" stroke-width="2"/>
+      <!-- Base line -->
+      <line x1="50" y1="100" x2="350" y2="100" stroke="#333" stroke-width="3"/>
+    </g>
+    <!-- Person walking (simple stick figure) -->
+    <g style="animation: slideWalk 4s ease-in-out infinite;">
+      <circle cx="50" cy="180" r="15" fill="#fff" stroke="#333" stroke-width="2"/>
+      <line x1="50" y1="195" x2="50" y2="240" stroke="#fff" stroke-width="3"/>
+      <line x1="50" y1="210" x2="30" y2="225" stroke="#fff" stroke-width="3"/>
+      <line x1="50" y1="210" x2="70" y2="225" stroke="#fff" stroke-width="3"/>
+      <line x1="50" y1="240" x2="35" y2="265" stroke="#fff" stroke-width="3"/>
+      <line x1="50" y1="240" x2="65" y2="265" stroke="#fff" stroke-width="3"/>
+      <!-- Eye line -->
+      <line x1="50" y1="175" x2="200" y2="75" stroke="#fff" stroke-width="2" stroke-dasharray="5,5" opacity="0.7"/>
+    </g>
+    <style>
+      @keyframes slideWalk {
+        0%, 100% { transform: translateX(0); }
+        50% { transform: translateX(300px); }
+      }
+    </style>
+  </svg>
+</div>
+
+<!-- ==================== SLIDE 2: REAL LIFE 1 ==================== -->
+<div class="slide slide-2">
+  <h2>👀 ראיתם את זה בחיים?</h2>
+  <div class="content-box" style="max-width: 800px; padding: 30px 40px;">
+    <h3>פינת רחוב</h3>
+    <svg width="100%" height="280" viewBox="0 0 700 380" style="margin: 15px 0; max-width: 700px;">
+      <!-- Building corner -->
+      <polygon points="350,50 500,150 350,250 200,150" fill="#E8E8E8" stroke="#333" stroke-width="3"/>
+      <line x1="350" y1="50" x2="350" y2="250" stroke="#333" stroke-width="4"/>
+      
+      <!-- Windows right side -->
+      <rect x="380" y="120" width="35" height="45" fill="#87CEEB" stroke="#333" stroke-width="2"/>
+      <rect x="425" y="120" width="35" height="45" fill="#87CEEB" stroke="#333" stroke-width="2"/>
+      
+      <!-- Windows left side -->
+      <rect x="240" y="120" width="35" height="45" fill="#87CEEB" stroke="#333" stroke-width="2"/>
+      <rect x="285" y="120" width="35" height="45" fill="#87CEEB" stroke="#333" stroke-width="2"/>
+      
+      <!-- Person A (right) -->
+      <g transform="translate(600, 200)">
+        <circle cx="0" cy="0" r="22" fill="#FFD700" stroke="#333" stroke-width="2"/>
+        <text x="0" y="6" text-anchor="middle" font-size="18" font-weight="bold">א</text>
+        <line x1="0" y1="22" x2="0" y2="55" stroke="#333" stroke-width="3"/>
+        <line x1="0" y1="35" x2="-18" y2="48" stroke="#333" stroke-width="3"/>
+        <line x1="0" y1="35" x2="18" y2="48" stroke="#333" stroke-width="3"/>
+        <line x1="0" y1="55" x2="-13" y2="75" stroke="#333" stroke-width="3"/>
+        <line x1="0" y1="55" x2="13" y2="75" stroke="#333" stroke-width="3"/>
+        <!-- Eye line -->
+        <line x1="-15" y1="0" x2="-120" y2="-30" stroke="#FFD700" stroke-width="2" stroke-dasharray="5,5"/>
+      </g>
+      
+      <!-- Person B (left) -->
+      <g transform="translate(100, 200)">
+        <circle cx="0" cy="0" r="22" fill="#FF6B6B" stroke="#333" stroke-width="2"/>
+        <text x="0" y="6" text-anchor="middle" font-size="18" font-weight="bold">ב</text>
+        <line x1="0" y1="22" x2="0" y2="55" stroke="#333" stroke-width="3"/>
+        <line x1="0" y1="35" x2="-18" y2="48" stroke="#333" stroke-width="3"/>
+        <line x1="0" y1="35" x2="18" y2="48" stroke="#333" stroke-width="3"/>
+        <line x1="0" y1="55" x2="-13" y2="75" stroke="#333" stroke-width="3"/>
+        <line x1="0" y1="55" x2="13" y2="75" stroke="#333" stroke-width="3"/>
+        <!-- Eye line -->
+        <line x1="15" y1="0" x2="120" y2="-30" stroke="#FF6B6B" stroke-width="2" stroke-dasharray="5,5"/>
+      </g>
+      
+      <!-- Labels in boxes - positioned away from building -->
+      <g>
+        <!-- Right label -->
+        <rect x="510" y="65" width="170" height="28" rx="14" fill="rgba(255,215,0,0.2)" stroke="#FFD700" stroke-width="2"/>
+        <text x="595" y="84" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">👁 רואה: רחוב הרצל</text>
+        
+        <!-- Left label -->
+        <rect x="20" y="65" width="170" height="28" rx="14" fill="rgba(255,107,107,0.2)" stroke="#FF6B6B" stroke-width="2"/>
+        <text x="105" y="84" text-anchor="middle" font-size="13" font-weight="bold" fill="#333">👁 רואה: רחוב בן יהודה</text>
+      </g>
+    </svg>
+    <p style="text-align: center; font-size: 1.2rem; margin-top: 10px; color: #333;">🏢 <strong>אותה פינה — שתי תמונות!</strong></p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 3: REAL LIFE 2 ==================== -->
+<div class="slide slide-3">
+  <h2>📖 עוד דוגמה — ספר על השולחן</h2>
+  <div class="content-box" style="max-width: 800px; padding: 30px 40px;">
+    <h3>מבט מלמעלה</h3>
+    <svg width="100%" height="280" viewBox="0 0 700 380" style="margin: 15px 0; max-width: 700px;">
+      <!-- Table (circle) -->
+      <circle cx="350" cy="190" r="150" fill="#C4A57B" opacity="0.4" stroke="#333" stroke-width="3"/>
+      
+      <!-- Book in center -->
+      <rect x="310" y="145" width="80" height="110" fill="#4A90E2" stroke="#333" stroke-width="3"/>
+      <text x="350" y="205" text-anchor="middle" font-size="15" font-weight="bold" fill="white">האי פוטר</text>
+      
+      <!-- Kid North -->
+      <g transform="translate(350, 35)">
+        <circle cx="0" cy="0" r="25" fill="#FFD700" stroke="#333" stroke-width="2"/>
+        <text x="0" y="7" text-anchor="middle" font-size="20" font-weight="bold">א</text>
+        <line x1="0" y1="25" x2="0" y2="80" stroke="#FFD700" stroke-width="2" stroke-dasharray="5,5"/>
+      </g>
+      
+      <!-- Kid South -->
+      <g transform="translate(350, 345)">
+        <circle cx="0" cy="0" r="25" fill="#FF6B6B" stroke="#333" stroke-width="2"/>
+        <text x="0" y="7" text-anchor="middle" font-size="20" font-weight="bold">ב</text>
+        <line x1="0" y1="-25" x2="0" y2="-80" stroke="#FF6B6B" stroke-width="2" stroke-dasharray="5,5"/>
+      </g>
+      
+      <!-- Labels - positioned far from circles -->
+      <g>
+        <!-- Top label -->
+        <rect x="420" y="25" width="240" height="30" rx="15" fill="rgba(255,215,0,0.2)" stroke="#FFD700" stroke-width="2"/>
+        <text x="540" y="46" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">👁 צופה א: רואה כריכה קדמית</text>
+        
+        <!-- Bottom label -->
+        <rect x="40" y="335" width="240" height="30" rx="15" fill="rgba(255,107,107,0.2)" stroke="#FF6B6B" stroke-width="2"/>
+        <text x="160" y="356" text-anchor="middle" font-size="14" font-weight="bold" fill="#333">👁 צופה ב: רואה כריכה אחורית</text>
+      </g>
+    </svg>
+    <p style="text-align: center; font-size: 1.2rem; margin-top: 10px; color: #333;">📚 <strong>אותו ספר — שני צדדים!</strong></p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 4: WHO INVENTED ==================== -->
+<div class="slide slide-4">
+  <h2>🤔 אז מי המציא את האגמוגרף?</h2>
+  <svg class="agam-portrait" viewBox="0 0 200 200">
+    <circle cx="100" cy="100" r="95" fill="#E8E8E8"/>
+    <circle cx="100" cy="80" r="35" fill="#FFD7A8"/>
+    <ellipse cx="90" cy="75" rx="5" ry="8" fill="#333"/>
+    <ellipse cx="110" cy="75" rx="5" ry="8" fill="#333"/>
+    <path d="M 85 90 Q 100 95 115 90" fill="none" stroke="#333" stroke-width="2"/>
+    <ellipse cx="100" cy="130" rx="45" ry="60" fill="#4A90E2"/>
+  </svg>
+  <div class="content-box" style="max-width: 650px; padding: 25px 35px;">
+    <h3>יעקב אגם</h3>
+    <p style="font-size: 1.3rem; text-align: center; line-height: 1.8;">
+      🎨 <strong>אמן ישראלי</strong><br>
+      📅 המציא את הטכניקה ב<strong>שנות ה-60</strong><br>
+      ✨ "האמן שהעניק לזמן צורה!"
+    </p>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 6: ABOUT AGAM ==================== -->
+<div class="slide slide-5">
+  <h2>🎭 יעקב אגם — אמן התנועה</h2>
+  <ul class="icon-list">
+    <li>
+      <span class="emoji">🏠</span>
+      <span><strong>נולד ב-1928</strong> בראשון לציון, ישראל</span>
+    </li>
+    <li>
+      <span class="emoji">🎨</span>
+      <span><strong>חלוץ האמנות הקינטית</strong> — אמנות שזזה ומשתנה!</span>
+    </li>
+    <li>
+      <span class="emoji">🌍</span>
+      <span>יצר <strong>פסלים ציבוריים ענקיים</strong> ברחבי העולם</span>
+    </li>
+    <li>
+      <span class="emoji">📐</span>
+      <span><strong>"אגמוגרף"</strong> = שם הטכניקה על שמו<br>(AGAM + GRAPH)</span>
+    </li>
+  </ul>
+</div>
+
+<!-- ==================== SLIDE 7: HOW IT WORKS ==================== -->
+<div class="slide slide-6">
+  <h2>🔧 הסוד של האגמוגרף</h2>
+  <div class="content-box" style="max-width: 850px; padding: 30px 40px;">
+    <svg width="100%" height="300" viewBox="0 0 700 350" style="max-width: 700px;">
+      <!-- Folded strips diagram -->
+      <text x="350" y="30" text-anchor="middle" font-size="20" font-weight="bold" fill="#333">10 פסים מקופלים</text>
+      
+      <!-- Top view accordion -->
+      <g transform="translate(100, 60)">
+        <polygon points="0,80 50,20 100,80" fill="#FF6B6B" stroke="#333" stroke-width="2"/>
+        <text x="50" y="55" text-anchor="middle" font-size="14" font-weight="bold">A</text>
+        
+        <polygon points="100,80 150,20 200,80" fill="#4ECDC4" stroke="#333" stroke-width="2"/>
+        <text x="150" y="55" text-anchor="middle" font-size="14" font-weight="bold">B</text>
+        
+        <polygon points="200,80 250,20 300,80" fill="#FF6B6B" stroke="#333" stroke-width="2"/>
+        <text x="250" y="55" text-anchor="middle" font-size="14" font-weight="bold">A</text>
+        
+        <polygon points="300,80 350,20 400,80" fill="#4ECDC4" stroke="#333" stroke-width="2"/>
+        <text x="350" y="55" text-anchor="middle" font-size="14" font-weight="bold">B</text>
+        
+        <polygon points="400,80 450,20 500,80" fill="#FF6B6B" stroke="#333" stroke-width="2"/>
+        <text x="450" y="55" text-anchor="middle" font-size="14" font-weight="bold">A</text>
+      </g>
+      
+      <!-- Viewer from right sees A -->
+      <g transform="translate(50, 180)">
+        <text x="0" y="0" font-size="18" font-weight="bold" fill="#FF6B6B">👁 מזווית ימין</text>
+        <text x="0" y="25" font-size="16" fill="#333">רואים רק פסים A</text>
+        <rect x="0" y="35" width="30" height="20" fill="#FF6B6B"/>
+        <rect x="35" y="35" width="30" height="20" fill="#FF6B6B"/>
+        <rect x="70" y="35" width="30" height="20" fill="#FF6B6B"/>
+        <text x="50" y="75" text-anchor="middle" font-size="16" font-weight="bold" fill="#FF6B6B">= תמונה 1</text>
+      </g>
+      
+      <!-- Viewer from left sees B -->
+      <g transform="translate(400, 180)">
+        <text x="0" y="0" font-size="18" font-weight="bold" fill="#4ECDC4">👁 מזווית שמאל</text>
+        <text x="0" y="25" font-size="16" fill="#333">רואים רק פסים B</text>
+        <rect x="0" y="35" width="30" height="20" fill="#4ECDC4"/>
+        <rect x="35" y="35" width="30" height="20" fill="#4ECDC4"/>
+        <rect x="70" y="35" width="30" height="20" fill="#4ECDC4"/>
+        <text x="50" y="75" text-anchor="middle" font-size="16" font-weight="bold" fill="#4ECDC4">= תמונה 2</text>
+      </g>
+      
+      <!-- Brain icon -->
+      <text x="350" y="280" text-anchor="middle" font-size="18" font-weight="bold" fill="#333">🧠 המוח שלכם "משלים" את התמונה השלמה!</text>
+      <text x="350" y="310" text-anchor="middle" font-size="16" fill="#666">כל צד = תמונה שלמה ושונה</text>
+    </svg>
+  </div>
+</div>
+
+<!-- ==================== SLIDE 8: CONTRIBUTION ==================== -->
+<div class="slide slide-7">
+  <h2>🌍 מה האגמוגרף נתן לעולם?</h2>
+  <ul class="icon-list">
+    <li>
+      <span class="emoji">🎨</span>
+      <span><strong>אמנות חיה</strong> — תמונות שמשתנות בזמן שאתה זז</span>
+    </li>
+    <li>
+      <span class="emoji">👁️</span>
+      <span><strong>ראיית זוויות</strong> — לראות 2 דברים באותו רגע</span>
+    </li>
+    <li>
+      <span class="emoji">🏛️</span>
+      <span><strong>מוזיאונים ופסלים</strong> — יצירות ענק ברחבי העולם</span>
+    </li>
+    <li>
+      <span class="emoji">📺</span>
+      <span><strong>פרסומות חכמות</strong> — שלטי חוצות שמשנים מסר</span>
+    </li>
+    <li>
+      <span class="emoji">🧠</span>
+      <span><strong>מחשבה חדשה</strong> — "אמת אחת לא קיימת - יש זוויות!"</span>
+    </li>
+  </ul>
+</div>
+
+<!-- ==================== SLIDE 9: YOUR TURN ==================== -->
+<div class="slide slide-8">
+  <h2>✨ עכשיו תורכם!</h2>
+  <p class="subtitle" style="color: #333; margin-bottom: 15px; font-size: 1.3rem;">היום כל אחד מכם מקבל עמוד אגמוגרף!</p>
+  
+  <div style="display: flex; gap: 20px; max-width: 1100px; align-items: flex-start;">
+    
+    <!-- RIGHT SIDE: Instructions -->
+    <div style="flex: 1;">
+      <div class="instructions">
+        <div class="instruction-step">
+          <div class="step-num">1</div>
+          <h4>סמנו קווי קיפול</h4>
+          <p>העבירו ציפורן חזקה על כל קו מקווקו</p>
+        </div>
+        
+        <div class="instruction-step">
+          <div class="step-num">2</div>
+          <h4>קפלו אקורדיון</h4>
+          <p>▲ קיפול הר (לכם)<br>▼ קיפול עמק (ממכם)<br>חוזר חלילה!</p>
+        </div>
+        
+        <div class="instruction-step">
+          <div class="step-num">3</div>
+          <h4>הציבו זקוף</h4>
+          <p>⚠️ לא לשכב<br>להציב על השולחן!</p>
+        </div>
+        
+        <div class="instruction-step">
+          <div class="step-num">4</div>
+          <h4>עמדו מהצד וראו קסם!</h4>
+          <p>👀 ימין → מסר אחד<br>👀 שמאל → מסר שני</p>
+        </div>
+      </div>
+      
+      <div class="instruction-step" style="max-width: 100%; margin-top: 12px; background: linear-gradient(135deg, rgba(102,126,234,0.15), rgba(118,75,162,0.15)); border: 3px solid rgba(102,126,234,0.5);">
+        <div class="step-num" style="background: linear-gradient(135deg, #43e97b, #38f9d7);">5</div>
+        <h4>הראו למורה!</h4>
+        <p>👩‍🏫 כשסיימתם — גשו למורה והראו לה את האגמוגרף שלכם!</p>
+      </div>
+      
+      <div class="warning-box" style="margin-top: 12px;">
+        🤫 אל תספרו לחברים מה יש לכם — תנו להם לגלות בעצמם! 🎊
+      </div>
+    </div>
+    
+    <!-- LEFT SIDE: Timer -->
+    <div style="flex: 0 0 320px;">
+      <div class="timer-section" style="margin-top: 0;">
+        <h3 style="margin-bottom: 12px; color: #333; font-size: 1.2rem;">⏱️ כמה זמן צריך?</h3>
+        
+        <!-- Time selection buttons -->
+        <div class="time-buttons" style="flex-direction: column; gap: 8px;">
+          <button class="time-btn" data-minutes="5" style="padding: 10px 20px; font-size: 1rem;">5 דקות</button>
+          <button class="time-btn active" data-minutes="10" style="padding: 10px 20px; font-size: 1rem;">10 דקות</button>
+          <button class="time-btn" data-minutes="15" style="padding: 10px 20px; font-size: 1rem;">15 דקות</button>
+        </div>
+        
+        <!-- Start/Stop button -->
+        <button class="start-btn" id="startBtn" style="padding: 12px 35px; font-size: 1.1rem; margin: 12px 0;">▶️ התחל!</button>
+        
+        <!-- Countdown display -->
+        <div class="countdown-display" id="countdownDisplay">
+          <div class="time-remaining" style="font-size: 3rem;">
+            <span class="minutes">10</span>:<span class="seconds">00</span>
+          </div>
+          <div class="time-label" style="font-size: 0.95rem; margin-bottom: 12px;">זמן שנותר</div>
+          <div class="progress-ring" style="width: 160px; height: 160px;">
+            <svg width="160" height="160">
+              <circle class="progress-ring-circle-bg" cx="80" cy="80" r="70" />
+              <circle class="progress-ring-circle" cx="80" cy="80" r="70" id="progressCircle" />
+            </svg>
+            <div class="progress-text">
+              <span id="percentText" style="font-size: 1.5rem;">100%</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+<!-- ==================== SLIDE 9: LESSON SUMMARY ==================== -->
+<div class="slide slide-9">
+  <h2>🎓 מה למדנו היום?</h2>
+  <p class="subtitle">סיכום השיעור על אגמוגרפים</p>
+  
+  <div style="display: flex; gap: 25px; max-width: 1100px; align-items: flex-start;">
+    
+    <!-- LEFT: Summary points -->
+    <div style="flex: 1;">
+      <ul class="icon-list" style="margin-top: 0;">
+        <li>
+          <span class="emoji">🎨</span>
+          <span><strong>מה זה אגמוגרף?</strong><br>זוויות שונות = מציאויות שונות! תמונה שמשתנה כשאתה זז</span>
+        </li>
+        <li>
+          <span class="emoji">👤</span>
+          <span><strong>מי המציא?</strong><br>יעקב אגם - אמן ישראלי, חלוץ האמנות הקינטית (שנות ה-60)</span>
+        </li>
+        <li>
+          <span class="emoji">🔧</span>
+          <span><strong>איך זה עובד?</strong><br>10 פסים מקופלים באקורדיון - כל צד מראה תמונה אחרת</span>
+        </li>
+        <li>
+          <span class="emoji">🌍</span>
+          <span><strong>מה זה נתן לעולם?</strong><br>אמנות חיה, ראיית זוויות, פסלים במוזיאונים, מחשבה חדשה</span>
+        </li>
+        <li>
+          <span class="emoji">✨</span>
+          <span><strong>מה עשינו?</strong><br>כל אחד קיבל אגמוגרף לחג השבועות - 4 סגנונים שונים!</span>
+        </li>
+      </ul>
+    </div>
+    
+    <!-- RIGHT: Key takeaway box -->
+    <div style="flex: 0 0 420px;">
+      <div class="content-box" style="padding: 25px; margin-top: 0; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border: none;">
+        <h3 style="color: white; font-size: 1.4rem; margin-bottom: 15px;">💡 המסר המרכזי</h3>
+        <p style="font-size: 1.15rem; line-height: 1.8; color: white;">
+          <strong>אמת אחת לא קיימת!</strong><br><br>
+          כל אחד רואה את העולם מזווית שונה. מה שאתה רואה תלוי <strong>איפה אתה עומד</strong>.<br><br>
+          האגמוגרף מלמד אותנו: <strong>כדי להבין תמונה שלמה, צריך להסתכל מכל הצדדים!</strong> 👀
+        </p>
+      </div>
+      
+      <div style="background: rgba(255,255,255,0.95); border-radius: 15px; padding: 20px; margin-top: 15px; box-shadow: 0 8px 20px rgba(0,0,0,0.15);">
+        <h4 style="color: #667eea; font-size: 1.2rem; margin-bottom: 10px; text-align: center;">🎁 הכרטיסים שלכם</h4>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; font-size: 0.9rem; color: #555;">
+          <div style="background: #fff8e1; padding: 8px; border-radius: 8px; text-align: center;">
+            <strong>🌾 חגיגי</strong><br>
+            <span style="font-size: 0.85rem;">חג שבועות / ביכורים</span>
+          </div>
+          <div style="background: #fff3e0; padding: 8px; border-radius: 8px; text-align: center;">
+            <strong>⛰️ גיאומטרי</strong><br>
+            <span style="font-size: 0.85rem;">מתן תורה / האסיף</span>
+          </div>
+          <div style="background: #e8f5e9; padding: 8px; border-radius: 8px; text-align: center;">
+            <strong>🍇 מינימליסטי</strong><br>
+            <span style="font-size: 0.85rem;">הביכורים / הקציר</span>
+          </div>
+          <div style="background: #fce4ec; padding: 8px; border-radius: 8px; text-align: center;">
+            <strong>📜 קלאסי</strong><br>
+            <span style="font-size: 0.85rem;">רות / הדיברות</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <div style="margin-top: 25px; text-align: center;">
+    <p style="font-size: 2rem; color: white; font-weight: 900; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">
+      🎨 חג שבועות שמח! 🌾
+    </p>
+  </div>
+</div>
+
+</div>
+
+<script>
+// Navigation functionality
+const slideContainer = document.getElementById('slideContainer');
+const slides = document.querySelectorAll('.slide');
+const dots = document.querySelectorAll('.dot');
+let currentSlide = 0;
+
+// Update active dot
+function updateDots() {
+  dots.forEach((dot, index) => {
+    dot.classList.toggle('active', index === currentSlide);
+  });
+}
+
+// Scroll to slide
+function goToSlide(index) {
+  if (index >= 0 && index < slides.length) {
+    currentSlide = index;
+    slides[index].scrollIntoView({ behavior: 'smooth' });
+    updateDots();
+  }
+}
+
+// Dot click navigation
+dots.forEach((dot, index) => {
+  dot.addEventListener('click', () => goToSlide(index));
+});
+
+// Keyboard navigation
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight') {
+    goToSlide(currentSlide + 1);
+  } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft') {
+    goToSlide(currentSlide - 1);
+  }
+});
+
+// Track scroll position to update current slide
+let scrollTimeout;
+slideContainer.addEventListener('scroll', () => {
+  clearTimeout(scrollTimeout);
+  scrollTimeout = setTimeout(() => {
+    const scrollPosition = slideContainer.scrollTop;
+    const slideHeight = window.innerHeight;
+    const newSlide = Math.round(scrollPosition / slideHeight);
+    if (newSlide !== currentSlide) {
+      currentSlide = newSlide;
+      updateDots();
+    }
+  }, 100);
+});
+
+// Mouse wheel navigation (optional, smoother)
+let wheelTimeout;
+slideContainer.addEventListener('wheel', (e) => {
+  e.preventDefault();
+  clearTimeout(wheelTimeout);
+  wheelTimeout = setTimeout(() => {
+    if (e.deltaY > 0) {
+      goToSlide(currentSlide + 1);
+    } else {
+      goToSlide(currentSlide - 1);
+    }
+  }, 50);
+}, { passive: false });
+
+// ============= TIMER FUNCTIONALITY =============
+let timerInterval = null;
+let totalSeconds = 600; // 10 minutes default
+let remainingSeconds = 600;
+let selectedMinutes = 10;
+
+const timeButtons = document.querySelectorAll('.time-btn');
+const startBtn = document.getElementById('startBtn');
+const countdownDisplay = document.getElementById('countdownDisplay');
+const minutesDisplay = document.querySelector('.minutes');
+const secondsDisplay = document.querySelector('.seconds');
+const percentText = document.getElementById('percentText');
+const progressCircle = document.getElementById('progressCircle');
+
+const circumference = 2 * Math.PI * 70; // radius = 70 (smaller circle)
+progressCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+
+// Time button selection
+timeButtons.forEach(btn => {
+  btn.addEventListener('click', () => {
+    if (timerInterval) return; // Don't change time while running
+    
+    timeButtons.forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    
+    selectedMinutes = parseInt(btn.dataset.minutes);
+    totalSeconds = selectedMinutes * 60;
+    remainingSeconds = totalSeconds;
+    
+    updateDisplay();
+  });
+});
+
+// Start/Stop button
+startBtn.addEventListener('click', () => {
+  if (timerInterval) {
+    // Stop timer
+    clearInterval(timerInterval);
+    timerInterval = null;
+    startBtn.textContent = '▶️ המשך';
+    startBtn.classList.remove('running');
+  } else {
+    // Start timer
+    if (remainingSeconds <= 0) {
+      remainingSeconds = totalSeconds; // Reset if finished
+    }
+    countdownDisplay.classList.add('active');
+    startBtn.textContent = '⏸️ עצור';
+    startBtn.classList.add('running');
+    
+    timerInterval = setInterval(() => {
+      remainingSeconds--;
+      
+      if (remainingSeconds <= 0) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        startBtn.textContent = '🔄 התחל מחדש';
+        startBtn.classList.remove('running');
+        playFinishSound();
+        return;
+      }
+      
+      updateDisplay();
+    }, 1000);
+  }
+});
+
+function updateDisplay() {
+  const mins = Math.floor(remainingSeconds / 60);
+  const secs = remainingSeconds % 60;
+  
+  minutesDisplay.textContent = mins.toString().padStart(2, '0');
+  secondsDisplay.textContent = secs.toString().padStart(2, '0');
+  
+  const percent = Math.round((remainingSeconds / totalSeconds) * 100);
+  percentText.textContent = `${percent}%`;
+  
+  // Update progress ring
+  const offset = circumference - (remainingSeconds / totalSeconds) * circumference;
+  progressCircle.style.strokeDashoffset = offset;
+  
+  // Update colors based on time remaining
+  countdownDisplay.classList.remove('green', 'yellow', 'orange', 'red');
+  
+  if (percent > 50) {
+    countdownDisplay.classList.add('green');
+  } else if (percent > 25) {
+    countdownDisplay.classList.add('yellow');
+  } else if (percent > 10) {
+    countdownDisplay.classList.add('orange');
+  } else {
+    countdownDisplay.classList.add('red');
+  }
+}
+
+function playFinishSound() {
+  // Create a simple beep sound using Web Audio API
+  try {
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+    
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+    
+    oscillator.frequency.value = 800;
+    oscillator.type = 'sine';
+    
+    gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+    gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.5);
+    
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.5);
+  } catch (e) {
+    console.log('Audio not supported');
+  }
+}
+
+// Initialize display
+updateDisplay();
+
+</script>
+
+</body>
+</html>
