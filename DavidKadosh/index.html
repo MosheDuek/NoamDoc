@@ -1,0 +1,1005 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>הצילו את דוד קדוש — קרן החירום הלאומית</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;900&family=Suez+One&family=Assistant:wght@300;400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0a0a0a;
+    --paper: #f4ecdc;
+    --paper-aged: #e8dcc0;
+    --blood: #b8131a;
+    --blood-dark: #7a0a0e;
+    --sickly: #7a8a3a;
+    --bruise: #2a2418;
+    --stamp: #c41e1e;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  html, body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Assistant', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* Grain & paper texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 999;
+    background-image:
+      radial-gradient(circle at 20% 30%, rgba(122,10,14,0.04) 0%, transparent 50%),
+      radial-gradient(circle at 80% 70%, rgba(42,36,24,0.06) 0%, transparent 50%),
+      url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence baseFrequency='0.9' numOctaves='3'/><feColorMatrix values='0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.18 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
+    mix-blend-mode: multiply;
+    opacity: 0.55;
+  }
+
+  .siren-bar {
+    background: var(--blood);
+    color: var(--paper);
+    padding: 8px 0;
+    text-align: center;
+    font-family: 'Suez One', serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    border-bottom: 3px double var(--paper);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .siren-bar::before, .siren-bar::after {
+    content: '◉';
+    margin: 0 18px;
+    animation: blink 1.1s infinite;
+  }
+
+  @keyframes blink {
+    0%, 49% { opacity: 1; }
+    50%, 100% { opacity: 0.1; }
+  }
+
+  .masthead {
+    border-bottom: 4px solid var(--ink);
+    padding: 28px 40px 22px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    position: relative;
+  }
+
+  .masthead-meta {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 13px;
+    color: var(--bruise);
+    letter-spacing: 1px;
+    line-height: 1.6;
+  }
+
+  .masthead-meta b { color: var(--blood); }
+
+  .logo {
+    font-family: 'Suez One', serif;
+    font-size: 28px;
+    text-align: center;
+    line-height: 1;
+  }
+
+  .logo-sub {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    margin-top: 6px;
+    color: var(--blood-dark);
+  }
+
+  .hero {
+    padding: 60px 40px 40px;
+    text-align: center;
+    position: relative;
+    border-bottom: 1px solid var(--bruise);
+  }
+
+  .hero-eyebrow {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-style: italic;
+    font-weight: 500;
+    font-size: 18px;
+    color: var(--blood);
+    margin-bottom: 24px;
+    letter-spacing: 1px;
+  }
+
+  .hero h1 {
+    font-family: 'Suez One', serif;
+    font-size: clamp(48px, 9vw, 128px);
+    line-height: 0.92;
+    color: var(--ink);
+    letter-spacing: -2px;
+    margin-bottom: 28px;
+    text-shadow: 3px 3px 0 var(--blood);
+  }
+
+  .hero h1 span {
+    display: block;
+    color: var(--blood);
+    text-shadow: 3px 3px 0 var(--ink);
+    transform: rotate(-1.5deg);
+    margin-top: 10px;
+  }
+
+  .hero-lede {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 22px;
+    font-weight: 500;
+    max-width: 760px;
+    margin: 0 auto 40px;
+    line-height: 1.5;
+  }
+
+  .hero-lede u {
+    text-decoration: underline wavy var(--blood) 2px;
+    text-underline-offset: 6px;
+  }
+
+  /* Stamp overlay */
+  .stamp {
+    position: absolute;
+    top: 80px;
+    left: 60px;
+    border: 4px double var(--stamp);
+    color: var(--stamp);
+    padding: 14px 22px;
+    font-family: 'Suez One', serif;
+    font-size: 22px;
+    letter-spacing: 4px;
+    transform: rotate(-14deg);
+    opacity: 0.85;
+    line-height: 1;
+  }
+
+  .stamp small {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 2px;
+    margin-top: 4px;
+  }
+
+  /* Breath-o-meter */
+  .breath-meter {
+    max-width: 720px;
+    margin: 0 auto 50px;
+    border: 2px solid var(--ink);
+    background: var(--paper-aged);
+    padding: 24px 28px;
+    position: relative;
+  }
+
+  .breath-meter-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-bottom: 14px;
+  }
+
+  .breath-meter-label span:last-child {
+    color: var(--blood);
+    font-family: 'Suez One', serif;
+    font-size: 24px;
+    letter-spacing: 0;
+  }
+
+  .breath-bar {
+    height: 22px;
+    background: repeating-linear-gradient(
+      45deg,
+      var(--bruise),
+      var(--bruise) 6px,
+      var(--ink) 6px,
+      var(--ink) 12px
+    );
+    border: 2px solid var(--ink);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .breath-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--blood) 0%, var(--blood-dark) 100%);
+    width: 7%;
+    animation: gasp 3.2s ease-in-out infinite;
+    box-shadow: inset 0 -3px 0 rgba(0,0,0,0.3);
+  }
+
+  @keyframes gasp {
+    0%, 100% { width: 7%; }
+    25% { width: 11%; }
+    50% { width: 4%; }
+    75% { width: 9%; }
+  }
+
+  .breath-note {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-style: italic;
+    font-size: 13px;
+    margin-top: 10px;
+    color: var(--bruise);
+  }
+
+  /* CTA */
+  .cta-wrap {
+    text-align: center;
+    margin-top: 40px;
+  }
+
+  .cta {
+    display: inline-block;
+    background: var(--blood);
+    color: var(--paper);
+    font-family: 'Suez One', serif;
+    font-size: 28px;
+    padding: 22px 56px;
+    border: 4px solid var(--ink);
+    box-shadow: 8px 8px 0 var(--ink);
+    text-decoration: none;
+    letter-spacing: 2px;
+    transition: all 0.15s ease;
+    cursor: pointer;
+    position: relative;
+  }
+
+  .cta:hover {
+    transform: translate(4px, 4px);
+    box-shadow: 4px 4px 0 var(--ink);
+  }
+
+  .cta:active {
+    transform: translate(8px, 8px);
+    box-shadow: 0 0 0 var(--ink);
+  }
+
+  .cta-sub {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-style: italic;
+    font-size: 15px;
+    margin-top: 14px;
+    color: var(--bruise);
+  }
+
+  /* Sections */
+  section {
+    padding: 70px 40px;
+    border-bottom: 1px solid var(--bruise);
+    position: relative;
+  }
+
+  .section-num {
+    position: absolute;
+    top: 30px;
+    left: 40px;
+    font-family: 'Suez One', serif;
+    font-size: 80px;
+    color: var(--paper-aged);
+    line-height: 1;
+    z-index: 0;
+  }
+
+  .section-title {
+    font-family: 'Suez One', serif;
+    font-size: clamp(34px, 5vw, 56px);
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .section-title::after {
+    content: '';
+    display: block;
+    width: 80px;
+    height: 6px;
+    background: var(--blood);
+    margin-top: 12px;
+  }
+
+  /* Story */
+  .story {
+    max-width: 820px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .story p {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 19px;
+    line-height: 1.75;
+    margin-bottom: 22px;
+  }
+
+  .story p::first-letter {
+    font-family: 'Suez One', serif;
+    font-size: 56px;
+    float: right;
+    line-height: 0.9;
+    margin-left: 10px;
+    margin-top: 4px;
+    color: var(--blood);
+  }
+
+  .story p:not(:first-child)::first-letter {
+    font-size: inherit;
+    float: none;
+    margin: 0;
+    color: inherit;
+  }
+
+  .story blockquote {
+    border-right: 6px solid var(--blood);
+    padding: 18px 24px;
+    margin: 30px 0;
+    font-family: 'Suez One', serif;
+    font-size: 26px;
+    line-height: 1.3;
+    background: var(--paper-aged);
+    font-style: italic;
+  }
+
+  .story blockquote cite {
+    display: block;
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 14px;
+    font-style: normal;
+    margin-top: 12px;
+    color: var(--bruise);
+  }
+
+  /* Symptoms grid */
+  .symptoms {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .symptom {
+    background: var(--paper);
+    border: 2px solid var(--ink);
+    padding: 24px;
+    position: relative;
+    transition: transform 0.2s;
+  }
+
+  .symptom:hover {
+    transform: rotate(-1deg) scale(1.02);
+  }
+
+  .symptom:nth-child(even):hover {
+    transform: rotate(1deg) scale(1.02);
+  }
+
+  .symptom-icon {
+    font-family: 'Suez One', serif;
+    font-size: 42px;
+    color: var(--blood);
+    line-height: 1;
+    margin-bottom: 10px;
+  }
+
+  .symptom h3 {
+    font-family: 'Suez One', serif;
+    font-size: 22px;
+    margin-bottom: 8px;
+    line-height: 1.2;
+  }
+
+  .symptom p {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 16px;
+    line-height: 1.5;
+  }
+
+  .symptom-severity {
+    margin-top: 14px;
+    padding-top: 12px;
+    border-top: 1px dashed var(--bruise);
+    font-family: 'Assistant', sans-serif;
+    font-size: 12px;
+    letter-spacing: 1px;
+    color: var(--blood);
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  /* Stats */
+  .stats-section {
+    background: var(--ink);
+    color: var(--paper);
+  }
+
+  .stats-section .section-num { color: rgba(244,236,220,0.08); }
+  .stats-section .section-title { color: var(--paper); }
+  .stats-section .section-title::after { background: var(--paper); }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .stat {
+    text-align: center;
+    padding: 20px;
+  }
+
+  .stat-num {
+    font-family: 'Suez One', serif;
+    font-size: 64px;
+    color: var(--blood);
+    line-height: 1;
+    margin-bottom: 8px;
+  }
+
+  .stat-label {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 15px;
+    line-height: 1.4;
+    color: var(--paper-aged);
+  }
+
+  /* Testimonials */
+  .testimonials {
+    max-width: 1000px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 26px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .testimonial {
+    background: var(--paper-aged);
+    border: 2px solid var(--ink);
+    padding: 26px;
+    position: relative;
+  }
+
+  .testimonial:nth-child(1) { transform: rotate(-1.2deg); }
+  .testimonial:nth-child(2) { transform: rotate(0.8deg); }
+  .testimonial:nth-child(3) { transform: rotate(-0.6deg); }
+  .testimonial:nth-child(4) { transform: rotate(1.4deg); }
+
+  .testimonial::before {
+    content: '"';
+    font-family: 'Suez One', serif;
+    font-size: 100px;
+    color: var(--blood);
+    position: absolute;
+    top: -10px;
+    right: 14px;
+    line-height: 1;
+  }
+
+  .testimonial p {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 17px;
+    line-height: 1.6;
+    margin-bottom: 14px;
+    padding-top: 30px;
+  }
+
+  .testimonial-author {
+    font-family: 'Suez One', serif;
+    font-size: 16px;
+    border-top: 2px solid var(--ink);
+    padding-top: 10px;
+  }
+
+  .testimonial-role {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 13px;
+    font-style: italic;
+    color: var(--bruise);
+  }
+
+  /* Countdown */
+  .countdown-section {
+    background: var(--blood);
+    color: var(--paper);
+    text-align: center;
+  }
+
+  .countdown-section .section-num { color: rgba(244,236,220,0.1); }
+  .countdown-section .section-title { color: var(--paper); }
+  .countdown-section .section-title::after { background: var(--paper); margin-inline: auto; }
+
+  .countdown {
+    display: flex;
+    justify-content: center;
+    gap: 18px;
+    margin: 40px 0 30px;
+    flex-wrap: wrap;
+  }
+
+  .count-box {
+    background: var(--ink);
+    border: 3px solid var(--paper);
+    padding: 22px 28px;
+    min-width: 110px;
+  }
+
+  .count-num {
+    font-family: 'Suez One', serif;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--paper);
+  }
+
+  .count-label {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 14px;
+    letter-spacing: 2px;
+    margin-top: 6px;
+  }
+
+  .countdown-desc {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-style: italic;
+    font-size: 20px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  /* Donate */
+  .donate-tiers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    max-width: 1100px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tier {
+    background: var(--paper);
+    border: 3px solid var(--ink);
+    padding: 28px 20px;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s;
+    position: relative;
+  }
+
+  .tier:hover {
+    background: var(--ink);
+    color: var(--paper);
+    transform: translateY(-4px);
+  }
+
+  .tier:hover .tier-amount { color: var(--paper); }
+  .tier:hover .tier-perk { color: var(--paper-aged); }
+
+  .tier-amount {
+    font-family: 'Suez One', serif;
+    font-size: 44px;
+    color: var(--blood);
+    line-height: 1;
+  }
+
+  .tier-name {
+    font-family: 'Suez One', serif;
+    font-size: 18px;
+    margin-top: 10px;
+  }
+
+  .tier-perk {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 14px;
+    margin-top: 10px;
+    line-height: 1.4;
+    color: var(--bruise);
+    font-style: italic;
+  }
+
+  .tier-featured {
+    background: var(--blood);
+    color: var(--paper);
+  }
+
+  .tier-featured .tier-amount { color: var(--paper); }
+  .tier-featured .tier-perk { color: var(--paper-aged); }
+  .tier-featured::after {
+    content: 'הכי פופולרי';
+    position: absolute;
+    top: -12px;
+    right: 50%;
+    transform: translateX(50%);
+    background: var(--ink);
+    color: var(--paper);
+    font-family: 'Suez One', serif;
+    font-size: 12px;
+    padding: 4px 12px;
+    letter-spacing: 2px;
+  }
+
+  /* FAQ */
+  .faq {
+    max-width: 820px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .faq-item {
+    border-top: 2px solid var(--ink);
+    padding: 22px 0;
+  }
+
+  .faq-item:last-child { border-bottom: 2px solid var(--ink); }
+
+  .faq-q {
+    font-family: 'Suez One', serif;
+    font-size: 22px;
+    margin-bottom: 10px;
+    color: var(--blood-dark);
+  }
+
+  .faq-a {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 17px;
+    line-height: 1.6;
+  }
+
+  /* Footer */
+  footer {
+    background: var(--ink);
+    color: var(--paper);
+    padding: 60px 40px 30px;
+    text-align: center;
+  }
+
+  footer h2 {
+    font-family: 'Suez One', serif;
+    font-size: 36px;
+    margin-bottom: 16px;
+  }
+
+  footer p {
+    font-family: 'Frank Ruhl Libre', serif;
+    font-size: 15px;
+    max-width: 700px;
+    margin: 0 auto 14px;
+    line-height: 1.7;
+    color: var(--paper-aged);
+  }
+
+  .disclaimer {
+    border-top: 1px solid rgba(244,236,220,0.2);
+    margin-top: 40px;
+    padding-top: 30px;
+    font-size: 12px;
+    color: rgba(244,236,220,0.5);
+    font-family: 'Assistant', sans-serif;
+    line-height: 1.8;
+    letter-spacing: 0.5px;
+  }
+
+  @media (max-width: 700px) {
+    .masthead { flex-direction: column; gap: 16px; text-align: center; }
+    .stamp { top: 20px; left: 20px; font-size: 16px; padding: 10px 14px; }
+    section { padding: 50px 24px; }
+    .section-num { font-size: 60px; }
+    .hero { padding: 40px 24px 30px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="siren-bar">
+  אזעקה לאומית • דוד קדוש בסכנת חיים מיידית • דרושה התערבות דחופה • עדכון 14:32
+</div>
+
+<header class="masthead">
+  <div class="masthead-meta">
+    <b>גיליון מיוחד</b><br>
+    יום שלישי, השעה כבר מאוחרת מדי<br>
+    הופץ בכל מהדורות החדשות
+  </div>
+  <div class="logo">
+    קרן "תנו לו לנשום"
+    <div class="logo-sub">מיסודה של משפחת קדוש המודאגת</div>
+  </div>
+  <div class="masthead-meta" style="text-align: left;">
+    מס׳ עמותה: <b>פיגום-770</b><br>
+    סטטוס: <b>קריטי</b><br>
+    מנשים זמינים: <b>0</b>
+  </div>
+</header>
+
+<div class="hero">
+  <div class="stamp">דחוף!<small>קריטי ביותר</small></div>
+  <div class="hero-eyebrow">— מבזק חירום אנושי —</div>
+  <h1>דוד קדוש<span>לא יכול לנשום</span></h1>
+  <p class="hero-lede">
+    בבוקר זה, בשעה לא ידועה, עלה דוד על <u>פיגום</u>. מאז — חייו, וריאותיו, ושאר היכולות הבסיסיות שלו — <u>מוטלות בספק</u>. הרופאים מסרבים להתנבא. המשפחה כבר התחילה לחפש מקום לישיבת השבעה.
+  </p>
+
+  <div class="breath-meter">
+    <div class="breath-meter-label">
+      <span>מד נשימה בזמן אמת</span>
+      <span id="bpm">3.2 / דקה</span>
+    </div>
+    <div class="breath-bar"><div class="breath-fill"></div></div>
+    <div class="breath-note">לשם השוואה: אדם בריא נושם 12–20 פעמים בדקה. תינוק רדום — 30. דוד אחרי פיגום — שאלה פתוחה.</div>
+  </div>
+
+  <div class="cta-wrap">
+    <a href="tel:0500000000" class="cta" onclick="callDavid(event)">התקשרו עכשיו ←</a>
+    <div class="cta-sub">לפני שיהיה מאוחר. ואפילו אם כבר מאוחר — תתקשרו בכל זאת, שיידע שחשבתם עליו.</div>
+  </div>
+</div>
+
+<section>
+  <div class="section-num">01</div>
+  <h2 class="section-title">מה בדיוק קרה הבוקר?</h2>
+  <div class="story">
+    <p>
+      העדויות שנאספו עד כה משרטטות תמונה עגומה. בשעת בוקר מוקדמת — מוקדמת מהרגיל, מוקדמת מהיכולת האנושית, מוקדמת מכפי שאלוהים התכוון — נדרש דוד קדוש לבצע משימה שאיש לא היה אמור לבצע: לעלות על פיגום.
+    </p>
+    <p>
+      מקורבים מספרים שדוד שתה קפה. אחד. בלי סוכר. הוא הביט בפיגום. הפיגום הביט בו. ואז, בניגוד לכל אינסטינקט הישרדותי שפיתח האדם מאז שירד מהעצים, הוא עלה.
+    </p>
+    <blockquote>
+      "ראיתי אותו עולה. אמרתי לו 'דוד, אל תעלה'. הוא לא הקשיב. עכשיו אנחנו כאן."
+      <cite>— עד ראייה ששכח להזדהות</cite>
+    </blockquote>
+    <p>
+      מה שאירע על הפיגום עצמו נותר עלום. ידוע רק כי דוד ירד ממנו — לא באותה הצורה שעלה אליו. הצבע: חיוור. המבט: מזוגג. הנשימה: נושא לדיון פילוסופי. הוא הצליח להוציא את המילים "אני לא יכול יותר", ומאז לא ברור אם הוא התכוון לפיגום, ליום, או לחיים בכלל.
+    </p>
+    <p>
+      הוא כעת מוטל על הספה במצב שהמשפחה מתארת כ"בין הכרה לאי-הכרה". מסרב לאוכל. מסכים למים, אבל רק אם מביאים לידו. צופה בטלוויזיה בעיניים פקוחות אך ללא תגובה לגירויים.
+    </p>
+  </div>
+</section>
+
+<section>
+  <div class="section-num">02</div>
+  <h2 class="section-title">תסמינים מדאיגים שזוהו</h2>
+  <div class="symptoms">
+    <div class="symptom">
+      <div class="symptom-icon">✕</div>
+      <h3>חוסר יכולת מוחלט לקום מהספה</h3>
+      <p>נצפה כשהוא מנסה להושיט יד לשלט. הזרוע הגיעה עד אמצע הדרך וצנחה. הניסיון השני בוטל מראש.</p>
+      <div class="symptom-severity">חומרה: קטסטרופלית</div>
+    </div>
+    <div class="symptom">
+      <div class="symptom-icon">✕</div>
+      <h3>אנחות עמוקות כל 8 שניות</h3>
+      <p>נמדדו אנחות באורך ממוצע של 3.4 שניות, בעוצמה שמרעידה את חלונות הבית. הכלב של השכנים החל לבכות.</p>
+      <div class="symptom-severity">חומרה: דרמטית</div>
+    </div>
+    <div class="symptom">
+      <div class="symptom-icon">✕</div>
+      <h3>פראזה חוזרת: "אין לי כוח"</h3>
+      <p>נאמרה 47 פעמים בשעתיים. בכל פעם בטון אחר. בפעם ה־48 הוא יוותר על השפה המדוברת כליל.</p>
+      <div class="symptom-severity">חומרה: לשונית</div>
+    </div>
+    <div class="symptom">
+      <div class="symptom-icon">✕</div>
+      <h3>דרישות לתה עם לימון ודבש</h3>
+      <p>ארבע כוסות. כל אחת בטמפרטורה שגויה. החזיר בלי לטעום. ביקש חמישית. גם אותה לא שתה.</p>
+      <div class="symptom-severity">חומרה: צרכנית</div>
+    </div>
+    <div class="symptom">
+      <div class="symptom-icon">✕</div>
+      <h3>תיעוד עצמי של הסבל בסטטוסים</h3>
+      <p>פוסט אחד בפייסבוק, שלושה סטוריז, ושיחה קולית בת 14 דקות לקבוצת הוואטסאפ של העבודה. אף אחד לא ענה.</p>
+      <div class="symptom-severity">חומרה: ויראלית</div>
+    </div>
+    <div class="symptom">
+      <div class="symptom-icon">✕</div>
+      <h3>חוסר יכולת לפתוח את המקרר</h3>
+      <p>הגיע למטבח. עמד מול המקרר 90 שניות. חזר לספה ללא דבר. שלח אישה להביא יוגורט.</p>
+      <div class="symptom-severity">חומרה: מערכתית</div>
+    </div>
+  </div>
+</section>
+
+<section class="stats-section">
+  <div class="section-num">03</div>
+  <h2 class="section-title">המספרים שמסבירים הכול</h2>
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-num">1</div>
+      <div class="stat-label">פיגום שעלה עליו<br>הבוקר</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">14</div>
+      <div class="stat-label">דקות שבילה<br>על הפיגום בפועל</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">8</div>
+      <div class="stat-label">שעות מאז<br>שהוא מתאושש</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">∞</div>
+      <div class="stat-label">סבל אקזיסטנציאלי<br>מצטבר</div>
+    </div>
+    <div class="stat">
+      <div class="stat-num">0</div>
+      <div class="stat-label">תזכורות שביקש<br>ליום המחרת</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-num">04</div>
+  <h2 class="section-title">מה אומרים המקורבים</h2>
+  <div class="testimonials">
+    <div class="testimonial">
+      <p>קראתי לו "דוד תקום, אכלת". הוא פתח עין אחת, הסתכל עליי, אמר "לא עכשיו" וחזר לישון. זה היה לפני שש שעות. מאז לא זז.</p>
+      <div class="testimonial-author">אשתו</div>
+      <div class="testimonial-role">מי שאמורה להחזיק את כל הבית לבד עכשיו</div>
+    </div>
+    <div class="testimonial">
+      <p>אבא נראה רע. אמרתי לו "אבא בוא נשחק". הוא אמר "תן לי שניה". זה היה לפני אתמול. אני עדיין מחכה.</p>
+      <div class="testimonial-author">בנו הקטן</div>
+      <div class="testimonial-role">גיל 7, מאוכזב</div>
+    </div>
+    <div class="testimonial">
+      <p>קליניקלית הוא בסדר. בפועל — לא. לא ראיתי גבר בריא בן 40 שנשבר ככה מפיגום של שעה. מבחינה רפואית, זה תופעה.</p>
+      <div class="testimonial-author">ד״ר מומחה אנונימי</div>
+      <div class="testimonial-role">שאל לא להזדהות מטעמי מבוכה מקצועית</div>
+    </div>
+    <div class="testimonial">
+      <p>תגיד לו שאני שולחת חיבוק. אבל באמת — שיתקשר אליי הוא, אני לא אתחיל לרדוף אחריו עכשיו עם כל הסבל הזה. יש לי גם דברים בחיים.</p>
+      <div class="testimonial-author">אמא שלו</div>
+      <div class="testimonial-role">דואגת אבל עם גבולות</div>
+    </div>
+  </div>
+</section>
+
+<section class="countdown-section">
+  <div class="section-num">05</div>
+  <h2 class="section-title">הספירה לאחור עד האשפוז</h2>
+  <div class="countdown">
+    <div class="count-box">
+      <div class="count-num" id="hh">04</div>
+      <div class="count-label">שעות</div>
+    </div>
+    <div class="count-box">
+      <div class="count-num" id="mm">23</div>
+      <div class="count-label">דקות</div>
+    </div>
+    <div class="count-box">
+      <div class="count-num" id="ss">17</div>
+      <div class="count-label">שניות</div>
+    </div>
+  </div>
+  <p class="countdown-desc">
+    זמן משוער עד שדוד יעלה למכונת הנשמה. הזמן הוערך על־ידי דוד עצמו, בקול חלוש, בשקט חדר השינה.
+  </p>
+</section>
+
+<section>
+  <div class="section-num">06</div>
+  <h2 class="section-title">איך אתם יכולים לעזור?</h2>
+  <div class="donate-tiers">
+    <div class="tier">
+      <div class="tier-amount">₪18</div>
+      <div class="tier-name">חבר רחוק</div>
+      <div class="tier-perk">תיעוד שמכם בקבוצת הוואטסאפ של המשפחה</div>
+    </div>
+    <div class="tier">
+      <div class="tier-amount">₪54</div>
+      <div class="tier-name">דואג קל</div>
+      <div class="tier-perk">דוד יענה לכם בסטיקר של "תודה" בוואטסאפ</div>
+    </div>
+    <div class="tier tier-featured">
+      <div class="tier-amount">₪180</div>
+      <div class="tier-name">גואל לאומי</div>
+      <div class="tier-perk">דוד יקום מהספה בשבילכם וייקח את הכוס שלו לכיור</div>
+    </div>
+    <div class="tier">
+      <div class="tier-amount">₪770</div>
+      <div class="tier-name">פטרון רוחני</div>
+      <div class="tier-perk">דוד מסכים להישבע שלא יעלה שוב על פיגום עד יום שני</div>
+    </div>
+  </div>
+</section>
+
+<section>
+  <div class="section-num">07</div>
+  <h2 class="section-title">שאלות שכבר שאלתם את עצמכם</h2>
+  <div class="faq">
+    <div class="faq-item">
+      <div class="faq-q">האם דוד באמת לא יכול לנשום?</div>
+      <div class="faq-a">הוא נושם. אבל הוא מתאר את הנשימה הזו כ"מאמץ". אנחנו מאמינים לו. כי אם לא נאמין לו, מי יאמין?</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">למה הוא עלה על פיגום מלכתחילה?</div>
+      <div class="faq-a">שאלה מצוינת. גם אנחנו שואלים. דוד עצמו לא יודע. הוא רק זוכר ש"היה צריך". מה היה צריך — לא ברור עד היום.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">האם הוא יחזור על המעשה?</div>
+      <div class="faq-a">לפי הצהרתו: לעולם לא. לפי ההיסטוריה שלו: ביום שלישי הבא, בשעה 06:30.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">מה הכי יעזור לו עכשיו?</div>
+      <div class="faq-a">שיחת טלפון אחת. רק תגידו לו שראיתם את הסטטוס. שאתם חושבים עליו. שאתם יודעים כמה זה קשה. ואז תנתקו לפני שהוא יתחיל לפרט.</div>
+    </div>
+    <div class="faq-item">
+      <div class="faq-q">האם הקרן רשומה כעמותה?</div>
+      <div class="faq-a">לא. אבל הכוונות שלנו טובות, וזה מה שחשוב במדינה הזו.</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <h2>תן לדוד לנשום</h2>
+  <p>
+    כל שיחה — מצילה. כל הודעה — מחזירה את הצבע ללחיים. כל אזכור בסטוריז — מוסיף 0.4 נשימות לדקה.<br>
+    אל תתנו לו לעבור את הלילה הזה לבד עם הסבל שלו ועם הזיכרון של הפיגום.
+  </p>
+  <a href="tel:0500000000" class="cta" style="margin-top: 20px; background: var(--paper); color: var(--ink);" onclick="callDavid(event)">
+    התקשרו לדוד עכשיו
+  </a>
+  <div class="disclaimer">
+    כל המקרים המתוארים באתר זה הם פיקטיביים לחלוטין. דוד קדוש הוא שם בדוי. כל דמיון לאדם אמיתי, חי או מותש, הוא מקרי בהחלט. אין באתר זה ייעוץ רפואי. הקרן אינה מקבלת תרומות בפועל. הפיגום — קיים, ויחזור.
+  </div>
+</footer>
+
+<script>
+  // Countdown that resets dramatically every loop
+  let h = 4, m = 23, s = 17;
+  setInterval(() => {
+    s--;
+    if (s < 0) { s = 59; m--; }
+    if (m < 0) { m = 59; h--; }
+    if (h < 0) { h = 4; m = 23; s = 17; }
+    document.getElementById('hh').textContent = String(h).padStart(2, '0');
+    document.getElementById('mm').textContent = String(m).padStart(2, '0');
+    document.getElementById('ss').textContent = String(s).padStart(2, '0');
+  }, 1000);
+
+  // BPM jitter
+  setInterval(() => {
+    const bpm = (Math.random() * 4 + 1.5).toFixed(1);
+    document.getElementById('bpm').textContent = bpm + ' / דקה';
+  }, 1400);
+
+  function callDavid(e) {
+    e.preventDefault();
+    const messages = [
+      'דוד עסוק בלהיאנח. נסו שוב בעוד 3 דקות.',
+      'דוד ענה ואמר "אני לא יכול לדבר עכשיו" וניתק.',
+      'דוד צופה בטלוויזיה ולא רוצה שיפריעו לו.',
+      'אשתו של דוד ענתה ואמרה שהוא ישן. היא ביקשה שתשלחו הודעה.',
+      'דוד מבקש שתתקשרו אחרי שתי כוסות תה. הוא צריך זמן.',
+    ];
+    alert(messages[Math.floor(Math.random() * messages.length)]);
+  }
+</script>
+
+</body>
+</html>
