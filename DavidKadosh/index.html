@@ -69,10 +69,11 @@
 
   .masthead {
     border-bottom: 4px solid var(--ink);
-    padding: 28px 40px 22px;
+    padding: clamp(18px, 3vw, 28px) clamp(18px, 4vw, 40px) clamp(16px, 2.5vw, 22px);
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
+    gap: 20px;
     position: relative;
   }
 
@@ -88,7 +89,7 @@
 
   .logo {
     font-family: 'Suez One', serif;
-    font-size: 28px;
+    font-size: clamp(20px, 3.5vw, 28px);
     text-align: center;
     line-height: 1;
   }
@@ -102,7 +103,7 @@
   }
 
   .hero {
-    padding: 60px 40px 40px;
+    padding: clamp(32px, 5vw, 60px) clamp(18px, 4vw, 40px) clamp(28px, 4vw, 40px);
     text-align: center;
     position: relative;
     border-bottom: 1px solid var(--bruise);
@@ -153,22 +154,23 @@
   /* Stamp overlay */
   .stamp {
     position: absolute;
-    top: 80px;
-    left: 60px;
+    top: clamp(20px, 4vw, 80px);
+    left: clamp(15px, 3vw, 60px);
     border: 4px double var(--stamp);
     color: var(--stamp);
-    padding: 14px 22px;
+    padding: clamp(8px, 1.5vw, 14px) clamp(12px, 2vw, 22px);
     font-family: 'Suez One', serif;
-    font-size: 22px;
-    letter-spacing: 4px;
+    font-size: clamp(14px, 2.2vw, 22px);
+    letter-spacing: clamp(2px, 0.5vw, 4px);
     transform: rotate(-14deg);
     opacity: 0.85;
     line-height: 1;
+    z-index: 2;
   }
 
   .stamp small {
     display: block;
-    font-size: 11px;
+    font-size: clamp(9px, 1.2vw, 11px);
     letter-spacing: 2px;
     margin-top: 4px;
   }
@@ -249,8 +251,8 @@
     background: var(--blood);
     color: var(--paper);
     font-family: 'Suez One', serif;
-    font-size: 28px;
-    padding: 22px 56px;
+    font-size: clamp(18px, 4vw, 28px);
+    padding: clamp(14px, 3vw, 22px) clamp(28px, 6vw, 56px);
     border: 4px solid var(--ink);
     box-shadow: 8px 8px 0 var(--ink);
     text-decoration: none;
@@ -258,6 +260,7 @@
     transition: all 0.15s ease;
     cursor: pointer;
     position: relative;
+    max-width: 100%;
   }
 
   .cta:hover {
@@ -280,20 +283,21 @@
 
   /* Sections */
   section {
-    padding: 70px 40px;
+    padding: clamp(44px, 6vw, 70px) clamp(18px, 4vw, 40px);
     border-bottom: 1px solid var(--bruise);
     position: relative;
   }
 
   .section-num {
     position: absolute;
-    top: 30px;
-    left: 40px;
+    top: clamp(14px, 2vw, 30px);
+    left: clamp(18px, 4vw, 40px);
     font-family: 'Suez One', serif;
-    font-size: 80px;
+    font-size: clamp(40px, 7vw, 80px);
     color: var(--paper-aged);
     line-height: 1;
     z-index: 0;
+    opacity: 0.7;
   }
 
   .section-title {
@@ -452,7 +456,7 @@
 
   .stat-num {
     font-family: 'Suez One', serif;
-    font-size: 64px;
+    font-size: clamp(44px, 8vw, 64px);
     color: var(--blood);
     line-height: 1;
     margin-bottom: 8px;
@@ -543,13 +547,13 @@
   .count-box {
     background: var(--ink);
     border: 3px solid var(--paper);
-    padding: 22px 28px;
-    min-width: 110px;
+    padding: clamp(14px, 3vw, 22px) clamp(16px, 3vw, 28px);
+    min-width: clamp(80px, 22vw, 110px);
   }
 
   .count-num {
     font-family: 'Suez One', serif;
-    font-size: 56px;
+    font-size: clamp(36px, 7vw, 56px);
     line-height: 1;
     color: var(--paper);
   }
@@ -601,7 +605,7 @@
 
   .tier-amount {
     font-family: 'Suez One', serif;
-    font-size: 44px;
+    font-size: clamp(34px, 6vw, 44px);
     color: var(--blood);
     line-height: 1;
   }
@@ -674,13 +678,13 @@
   footer {
     background: var(--ink);
     color: var(--paper);
-    padding: 60px 40px 30px;
+    padding: clamp(40px, 6vw, 60px) clamp(18px, 4vw, 40px) clamp(24px, 3vw, 30px);
     text-align: center;
   }
 
   footer h2 {
     font-family: 'Suez One', serif;
-    font-size: 36px;
+    font-size: clamp(26px, 5vw, 36px);
     margin-bottom: 16px;
   }
 
@@ -704,12 +708,200 @@
     letter-spacing: 0.5px;
   }
 
-  @media (max-width: 700px) {
-    .masthead { flex-direction: column; gap: 16px; text-align: center; }
-    .stamp { top: 20px; left: 20px; font-size: 16px; padding: 10px 14px; }
-    section { padding: 50px 24px; }
-    .section-num { font-size: 60px; }
-    .hero { padding: 40px 24px 30px; }
+  /* === RESPONSIVE BREAKPOINTS === */
+
+  /* Tablets / small laptops */
+  @media (max-width: 1024px) {
+    .masthead {
+      flex-wrap: wrap;
+      justify-content: center;
+      text-align: center;
+    }
+    .masthead-meta { font-size: 12px; }
+    .stamp { top: 30px; }
+  }
+
+  /* Mobile landscape / large phones */
+  @media (max-width: 768px) {
+    .siren-bar {
+      font-size: 11px;
+      letter-spacing: 1px;
+      padding: 6px 12px;
+    }
+    .siren-bar::before, .siren-bar::after {
+      margin: 0 8px;
+    }
+
+    .masthead {
+      flex-direction: column;
+      gap: 14px;
+      text-align: center;
+    }
+    .masthead-meta { text-align: center !important; }
+
+    .hero h1 {
+      letter-spacing: -1px;
+      text-shadow: 2px 2px 0 var(--blood);
+    }
+    .hero h1 span {
+      text-shadow: 2px 2px 0 var(--ink);
+    }
+    .hero-eyebrow { font-size: 15px; }
+    .hero-lede { font-size: 17px; }
+
+    .stamp {
+      position: relative;
+      top: auto;
+      left: auto;
+      display: inline-block;
+      margin: 0 auto 20px;
+      transform: rotate(-8deg);
+    }
+
+    .breath-meter { padding: 18px 20px; }
+    .breath-meter-label { font-size: 12px; }
+    .breath-meter-label span:last-child { font-size: 18px; }
+
+    .section-title {
+      margin-top: 30px;
+      margin-bottom: 24px;
+    }
+    .stats-section .section-title,
+    .countdown-section .section-title { margin-top: 30px; }
+
+    .story p {
+      font-size: 17px;
+      line-height: 1.7;
+    }
+    .story p::first-letter {
+      font-size: 44px;
+    }
+    .story blockquote {
+      font-size: 20px;
+      padding: 14px 18px;
+    }
+
+    .symptoms, .testimonials, .donate-tiers {
+      grid-template-columns: 1fr;
+    }
+
+    .testimonial:nth-child(n) { transform: none; }
+
+    .stats {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 18px;
+    }
+
+    .countdown { gap: 10px; }
+
+    .countdown-desc { font-size: 16px; }
+
+    .faq-q { font-size: 19px; }
+    .faq-a { font-size: 16px; }
+
+    footer p { font-size: 14px; }
+  }
+
+  /* Small phones */
+  @media (max-width: 480px) {
+    .siren-bar {
+      font-size: 10px;
+      letter-spacing: 0.5px;
+    }
+
+    .hero h1 {
+      text-shadow: 1.5px 1.5px 0 var(--blood);
+      letter-spacing: -0.5px;
+    }
+    .hero h1 span {
+      text-shadow: 1.5px 1.5px 0 var(--ink);
+    }
+
+    .cta {
+      box-shadow: 5px 5px 0 var(--ink);
+      letter-spacing: 1px;
+    }
+    .cta:hover { box-shadow: 3px 3px 0 var(--ink); }
+
+    .story p::first-letter {
+      font-size: inherit;
+      float: none;
+      margin: 0;
+      color: inherit;
+    }
+
+    .stats {
+      grid-template-columns: 1fr 1fr;
+    }
+
+    .countdown {
+      gap: 8px;
+    }
+    .count-box {
+      padding: 12px 14px;
+      min-width: 0;
+      flex: 1 1 28%;
+    }
+    .count-label {
+      font-size: 11px;
+      letter-spacing: 1px;
+    }
+
+    .tier-featured::after {
+      font-size: 10px;
+      padding: 3px 8px;
+    }
+
+    .symptom { padding: 20px 18px; }
+    .symptom:hover, .symptom:nth-child(even):hover { transform: none; }
+
+    .testimonial { padding: 20px 18px; }
+    .testimonial::before { font-size: 70px; top: -4px; }
+    .testimonial p { padding-top: 22px; font-size: 16px; }
+
+    .disclaimer {
+      font-size: 11px;
+      line-height: 1.7;
+    }
+  }
+
+  /* Tiny phones (iPhone SE, folded devices) */
+  @media (max-width: 360px) {
+    .siren-bar {
+      font-size: 9px;
+    }
+    .siren-bar::before, .siren-bar::after {
+      margin: 0 4px;
+    }
+
+    .logo { font-size: 18px; }
+    .logo-sub { font-size: 9px; letter-spacing: 2px; }
+
+    .hero-lede { font-size: 15px; }
+
+    .cta {
+      width: 100%;
+      padding: 14px 20px;
+      letter-spacing: 0.5px;
+    }
+
+    .stats { grid-template-columns: 1fr; }
+
+    .countdown {
+      flex-direction: row;
+      flex-wrap: wrap;
+    }
+  }
+
+  /* Reduced motion preference */
+  @media (prefers-reduced-motion: reduce) {
+    .siren-bar::before, .siren-bar::after,
+    .breath-fill {
+      animation: none;
+    }
+    .cta, .symptom, .tier {
+      transition: none;
+    }
   }
 </style>
 </head>
