@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>האמת על העישון — שיעור אינטראקטיבי</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Secular+One&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg1:#0d1320; --bg2:#131d2e; --bg3:#0a0f18;
+    --surface:rgba(255,255,255,.05);
+    --surface2:rgba(255,255,255,.09);
+    --line:rgba(255,255,255,.12);
+    --text:#eef3fb; --muted:#9fb0c7;
+    --teal:#34e0c4; --teal-dim:#1aa78f;
+    --coral:#ff5d73; --coral-dim:#c93a51;
+    --yellow:#ffd23f;
+    --pink:#ff9eb5; --tar:#15171c;
+    --good:#34e0c4; --bad:#ff5d73;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    font-family:'Assistant',sans-serif;
+    background:
+      radial-gradient(1200px 700px at 80% -10%, rgba(52,224,196,.12), transparent 60%),
+      radial-gradient(900px 600px at 10% 110%, rgba(255,93,115,.12), transparent 60%),
+      linear-gradient(160deg,var(--bg2),var(--bg1) 55%,var(--bg3));
+    color:var(--text);
+    overflow:hidden;
+    -webkit-font-smoothing:antialiased;
+  }
+  .display{font-family:'Secular One',sans-serif;font-weight:400;letter-spacing:.5px}
+
+  /* ---------- deck ---------- */
+  .deck{position:fixed;inset:0;}
+  .slide{
+    position:absolute;inset:0;
+    display:flex;flex-direction:column;align-items:center;justify-content:center;
+    padding:64px clamp(24px,5vw,96px) 96px;
+    opacity:0;visibility:hidden;transform:translateY(24px) scale(.99);
+    transition:opacity .5s ease, transform .5s ease, visibility .5s;
+    text-align:center;
+  }
+  .slide.active{opacity:1;visibility:visible;transform:none;}
+  .slide h1{font-size:clamp(34px,6vw,76px);line-height:1.02;margin-bottom:18px}
+  .slide h2{font-size:clamp(26px,4.4vw,52px);line-height:1.05;margin-bottom:14px}
+  .lead{font-size:clamp(17px,2.1vw,25px);color:var(--muted);max-width:900px;margin:0 auto 8px;font-weight:600}
+  .accent-t{color:var(--teal)} .accent-c{color:var(--coral)} .accent-y{color:var(--yellow)}
+
+  /* reveal helper */
+  .active .reveal{animation:rise .6s both}
+  .active .reveal.d1{animation-delay:.12s}.active .reveal.d2{animation-delay:.24s}
+  .active .reveal.d3{animation-delay:.36s}.active .reveal.d4{animation-delay:.48s}
+  .active .reveal.d5{animation-delay:.6s}.active .reveal.d6{animation-delay:.72s}
+  @keyframes rise{from{opacity:0;transform:translateY(26px)}to{opacity:1;transform:none}}
+
+  /* ---------- top bars ---------- */
+  .progress{position:fixed;top:0;right:0;left:0;height:5px;background:rgba(255,255,255,.06);z-index:40}
+  .progress > i{display:block;height:100%;width:0;
+    background:linear-gradient(90deg,var(--teal),var(--yellow),var(--coral));
+    transition:width .4s ease}
+  .timepill{
+    position:fixed;top:16px;left:18px;z-index:42;
+    background:var(--surface2);border:1px solid var(--line);
+    padding:6px 14px;border-radius:999px;font-weight:800;font-size:13px;color:var(--muted)}
+  .timepill b{color:var(--yellow)}
+  .counter{
+    position:fixed;top:16px;right:18px;z-index:42;
+    background:var(--surface2);border:1px solid var(--line);
+    padding:6px 14px;border-radius:999px;font-weight:800;font-size:13px;color:var(--muted)}
+
+  /* ---------- nav ---------- */
+  .nav{position:fixed;bottom:18px;left:0;right:0;z-index:42;
+    display:flex;justify-content:center;gap:12px}
+  .btn{
+    font-family:'Assistant';font-weight:800;font-size:16px;cursor:pointer;
+    border:1px solid var(--line);background:var(--surface2);color:var(--text);
+    padding:11px 22px;border-radius:14px;transition:.2s;user-select:none}
+  .btn:hover{background:var(--teal);color:#04211c;border-color:var(--teal);transform:translateY(-2px)}
+  .btn.ghost:hover{background:var(--coral);color:#260910;border-color:var(--coral)}
+
+  .notes-toggle{position:fixed;bottom:18px;left:18px;z-index:43}
+  .teacher-note{
+    display:none;position:fixed;bottom:64px;left:50%;transform:translateX(-50%);
+    z-index:41;max-width:min(820px,92vw);
+    background:rgba(255,210,63,.1);border:1px solid rgba(255,210,63,.4);
+    border-radius:14px;padding:12px 18px;font-size:14.5px;color:#ffe89a;font-weight:600}
+  .teacher-note b{color:var(--yellow)}
+  body.show-notes .slide.active .teacher-note{display:block;animation:rise .4s both}
+
+  /* ---------- generic cards ---------- */
+  .grid{display:grid;gap:16px;width:100%;max-width:1050px;margin-top:26px}
+  .g3{grid-template-columns:repeat(3,1fr)}
+  .g2{grid-template-columns:repeat(2,1fr)}
+  .card{
+    background:var(--surface);border:1px solid var(--line);border-radius:18px;
+    padding:20px 18px;text-align:center}
+  .card .ic{font-size:34px;line-height:1;margin-bottom:8px}
+  .card h3{font-size:20px;margin-bottom:4px;font-family:'Secular One'}
+  .card p{font-size:15px;color:var(--muted);font-weight:600;line-height:1.35}
+  .vs{font-size:12px;color:var(--coral);font-weight:800;margin-top:8px;
+    display:inline-block;background:rgba(255,93,115,.13);padding:3px 9px;border-radius:8px}
+
+  /* ---------- poll / options ---------- */
+  .opts{display:flex;flex-direction:column;gap:12px;width:100%;max-width:620px;margin-top:24px}
+  .opt{cursor:pointer;text-align:right;background:var(--surface);border:1px solid var(--line);
+    border-radius:14px;padding:16px 20px;font-size:19px;font-weight:700;transition:.2s}
+  .opt:hover{border-color:var(--teal);transform:translateX(-4px)}
+  .opt.right{background:rgba(52,224,196,.16);border-color:var(--teal);color:#bff7ec}
+  .poll-result{margin-top:18px;font-size:20px;font-weight:800;color:var(--teal);opacity:0;transition:.4s}
+  .poll-result.show{opacity:1}
+
+  /* ---------- chemicals ---------- */
+  .chem{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;max-width:1000px;width:100%;margin-top:26px}
+  .chip{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:16px;text-align:center}
+  .chip .name{font-family:'Secular One';font-size:21px;color:var(--coral)}
+  .chip .where{font-size:14.5px;color:var(--muted);font-weight:600;margin-top:4px}
+  .chip .em{font-size:30px}
+
+  /* ---------- lungs ---------- */
+  .lung-wrap{display:flex;gap:36px;align-items:center;flex-wrap:wrap;justify-content:center;margin-top:14px}
+  .lung-svg{width:min(360px,72vw)}
+  .lung-tar{transition:opacity .6s ease}
+  .lung-side{display:flex;flex-direction:column;gap:14px;align-items:center}
+  .yearbox{font-family:'Secular One';font-size:46px;color:var(--coral)}
+  .yearbox span{font-size:18px;color:var(--muted);font-family:'Assistant';display:block;margin-top:-4px}
+
+  /* ---------- heart / ecg ---------- */
+  .heart-row{display:flex;flex-direction:column;align-items:center;gap:10px;margin-top:10px}
+  .heart{animation:beat 1s ease-in-out infinite}
+  @keyframes beat{0%,40%,100%{transform:scale(1)}20%{transform:scale(1.12)}30%{transform:scale(1.04)}}
+  .ecg{width:min(560px,86vw);height:120px}
+  .ecg path{stroke:var(--coral);stroke-width:3;fill:none;
+    stroke-dasharray:1000;animation:draw 2.4s linear infinite}
+  @keyframes draw{from{stroke-dashoffset:1000}to{stroke-dashoffset:0}}
+
+  /* ---------- money ---------- */
+  .money{font-family:'Secular One';font-size:clamp(56px,12vw,140px);color:var(--yellow);line-height:1}
+  .money-row{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:22px}
+  .money-row .card h3{color:var(--yellow)}
+
+  /* ---------- addiction loop ---------- */
+  .loop-wrap{position:relative;width:min(460px,84vw);height:min(460px,84vw);margin-top:6px}
+  @keyframes spin{to{transform:rotate(360deg)}}
+  .loop-arrow{position:absolute;inset:0;width:100%;height:100%;animation:spin 16s linear infinite}
+  .loop-nodes{position:absolute;inset:0}
+  .loop-node{position:absolute;width:150px;margin-left:-75px;margin-top:-30px;
+    background:var(--surface2);border:1px solid var(--line);border-radius:14px;
+    padding:10px;font-size:13.5px;font-weight:800;text-align:center;line-height:1.25}
+  .loop-center{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;
+    text-align:center;font-family:'Secular One';font-size:22px;color:var(--coral);
+    padding:0 30%;pointer-events:none}
+
+  /* ---------- flip cards ---------- */
+  .flips{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:900px;width:100%;margin-top:22px}
+  .flip{perspective:1200px;cursor:pointer;height:140px}
+  .flip-in{position:relative;width:100%;height:100%;transition:transform .6s;transform-style:preserve-3d}
+  .flip.flipped .flip-in{transform:rotateY(180deg)}
+  .flip-face{position:absolute;inset:0;backface-visibility:hidden;border-radius:16px;
+    display:flex;align-items:center;justify-content:center;padding:16px;text-align:center;
+    font-weight:800;font-size:18px;border:1px solid var(--line)}
+  .flip-front{background:var(--surface)}
+  .flip-back{background:rgba(52,224,196,.14);transform:rotateY(180deg);color:#cdfaf0;font-size:16px}
+  .flip-front .tag{position:absolute;top:8px;right:12px;font-size:12px;color:var(--muted)}
+
+  /* ---------- refusal ---------- */
+  .ways{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;max-width:920px;width:100%;margin-top:22px}
+  .way{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;text-align:right}
+  .way .num{font-family:'Secular One';font-size:30px;color:var(--teal)}
+  .way h3{font-size:19px;margin:2px 0 4px}
+  .way p{font-size:15px;color:var(--muted);font-weight:600}
+
+  /* ---------- quiz ---------- */
+  .quiz{width:100%;max-width:760px;margin-top:16px;display:flex;flex-direction:column;gap:12px}
+  .q{background:var(--surface);border:1px solid var(--line);border-radius:14px;
+    padding:14px 16px;display:flex;align-items:center;justify-content:space-between;gap:14px}
+  .q .txt{font-size:17px;font-weight:700;text-align:right}
+  .q .ans{display:flex;gap:8px;flex-shrink:0}
+  .q .ans button{cursor:pointer;border:1px solid var(--line);background:var(--surface2);
+    color:var(--text);font-family:'Assistant';font-weight:800;padding:8px 14px;border-radius:10px}
+  .q.ok{border-color:var(--good);background:rgba(52,224,196,.14)}
+  .q.no{border-color:var(--bad);background:rgba(255,93,115,.14)}
+  .score{font-family:'Secular One';font-size:30px;color:var(--teal);margin-top:10px;min-height:38px}
+
+  /* ---------- video ---------- */
+  .video-box{width:min(900px,92vw);aspect-ratio:16/9;border-radius:18px;overflow:hidden;
+    border:1px solid var(--line);box-shadow:0 30px 80px rgba(0,0,0,.5);margin-top:16px}
+  .video-box iframe{width:100%;height:100%;border:0;display:block}
+
+  /* ---------- cig + smoke (slide 1) ---------- */
+  .smoke c{fill:#cfe6ff}
+  @keyframes puff{
+    0%{opacity:0;transform:translateY(0) scale(.6)}
+    20%{opacity:.6}
+    100%{opacity:0;transform:translateY(-150px) scale(2.2)}}
+  .smoke .p{transform-origin:center;animation:puff 4s ease-in infinite;opacity:0}
+  .smoke .p:nth-child(2){animation-delay:.8s}
+  .smoke .p:nth-child(3){animation-delay:1.6s}
+  .smoke .p:nth-child(4){animation-delay:2.4s}
+  .smoke .p:nth-child(5){animation-delay:3.2s}
+  .ember{animation:glow 1.4s ease-in-out infinite}
+  @keyframes glow{0%,100%{fill:#ff7a3c}50%{fill:#ffd23f}}
+
+  .hint{position:fixed;bottom:64px;right:18px;z-index:41;color:var(--muted);font-size:12.5px;font-weight:700;opacity:.7}
+  @media(max-width:680px){
+    .g3,.chem{grid-template-columns:1fr 1fr}
+    .flips,.ways{grid-template-columns:1fr}
+    .loop-node{width:120px;margin-left:-60px;font-size:12px}
+  }
+</style>
+</head>
+<body>
+
+<div class="progress"><i id="bar"></i></div>
+<div class="timepill" id="timepill">דקות <b>0–5</b></div>
+<div class="counter" id="counter">1 / 15</div>
+
+<div class="deck" id="deck">
+
+  <!-- 1 PATIחה -->
+  <section class="slide active" data-time="0–5" data-fn="">
+    <svg width="150" height="230" viewBox="0 0 150 230" class="reveal" aria-hidden="true">
+      <g class="smoke">
+        <circle class="p" cx="78" cy="55" r="9"></circle>
+        <circle class="p" cx="70" cy="55" r="8"></circle>
+        <circle class="p" cx="82" cy="55" r="7"></circle>
+        <circle class="p" cx="72" cy="55" r="10"></circle>
+        <circle class="p" cx="80" cy="55" r="7"></circle>
+      </g>
+      <rect x="40" y="120" width="86" height="20" rx="5" fill="#f4f1e8"></rect>
+      <rect x="40" y="120" width="22" height="20" rx="5" fill="#e0a13c"></rect>
+      <rect x="118" y="120" width="14" height="20" rx="5" fill="#ff8a4c"></rect>
+      <circle class="ember" cx="133" cy="130" r="6"></circle>
+    </svg>
+    <h1 class="display reveal d1">האמת על <span class="accent-c">העישון</span></h1>
+    <p class="lead reveal d2">מה <b>באמת</b> קורה כשמדליקים סיגריה — ומה חברות הטבק מעדיפות שלא תדעו</p>
+    <p class="lead reveal d3" style="font-size:18px;color:var(--teal)">שיעור אינטראקטיבי · 60 דקות</p>
+    <div class="teacher-note"><b>מורה:</b> פתחו בשאלה פתוחה — "מי מכיר מישהו שמעשן?". הסבירו שהיום אנחנו בלשים, חוקרים מה יש בתוך סיגריה אחת. ללא הטפות — סקרנות.</div>
+  </section>
+
+  <!-- 2 SEKER -->
+  <section class="slide" data-time="3–5">
+    <h2 class="display reveal">לפני שמתחילים — מה <span class="accent-t">דעתכם</span>?</h2>
+    <p class="lead reveal d1">מה הכי מסוכן בסיגריה אחת? לחצו על התשובה שלכם</p>
+    <div class="opts reveal d2">
+      <div class="opt" onclick="poll(this)">הניקוטין שמכר אותנו</div>
+      <div class="opt" onclick="poll(this)">הזפת שנדבק לריאות</div>
+      <div class="opt" onclick="poll(this)">הגזים הרעילים שאנחנו שואפים</div>
+      <div class="opt" data-correct="1" onclick="poll(this)">כל אלה יחד — וזה הסיפור</div>
+    </div>
+    <div class="poll-result" id="pollres">בדיוק! אין "חלק אחד מסוכן" — הסיגריה היא חבילה שלמה של נזק 👇</div>
+    <div class="teacher-note"><b>מורה:</b> תנו ל-3–4 תלמידים להצביע בקול. כל תשובה "נכונה חלקית" — זה מוביל אותנו לשקף הבא: מה באמת בפנים.</div>
+  </section>
+
+  <!-- 3 HEMIקלים -->
+  <section class="slide" data-time="5–15">
+    <h2 class="display reveal">מה באמת <span class="accent-c">מעשנים</span>?</h2>
+    <p class="lead reveal d1">בסיגריה אחת יש מעל <b class="accent-y">4,000</b> חומרים. לפחות <b class="accent-c">70</b> מהם גורמים לסרטן. הנה כמה — ואיפה עוד פוגשים אותם:</p>
+    <div class="chem">
+      <div class="chip reveal d1"><div class="em">🚬</div><div class="name">ניקוטין</div><div class="where">הסם שגורם להתמכרות</div></div>
+      <div class="chip reveal d1"><div class="em">🛢️</div><div class="name">זפת</div><div class="where">אותו חומר שמכסים בו כבישים</div></div>
+      <div class="chip reveal d2"><div class="em">🚗</div><div class="name">פחמן חד-חמצני</div><div class="where">הגז הרעיל שיוצא ממכוניות</div></div>
+      <div class="chip reveal d2"><div class="em">🧼</div><div class="name">אמוניה</div><div class="where">חומר לניקוי שירותים</div></div>
+      <div class="chip reveal d3"><div class="em">🐀</div><div class="name">ארסן</div><div class="where">רעל להדברת עכברים</div></div>
+      <div class="chip reveal d3"><div class="em">💅</div><div class="name">אצטון</div><div class="where">מסיר לק לציפורניים</div></div>
+    </div>
+    <div class="teacher-note"><b>מורה:</b> שאלו: "מי היה שם את אחד מאלה בכוס שתייה?". הנקודה — אנשים שואפים את כל אלה כל יום בלי לחשוב.</div>
+  </section>
+
+  <!-- 4 RIOT -->
+  <section class="slide" data-time="15–22" data-fn="lungReset">
+    <h2 class="display reveal">מה קורה <span class="accent-c">לריאות</span>?</h2>
+    <div class="lung-wrap">
+      <svg class="lung-svg reveal d1" viewBox="0 0 400 360" aria-hidden="true">
+        <!-- trachea -->
+        <rect x="188" y="40" width="24" height="70" rx="10" fill="#d98aa0"></rect>
+        <path d="M200,100 C175,120 160,120 150,140 M200,100 C225,120 240,120 250,140" stroke="#d98aa0" stroke-width="9" fill="none" stroke-linecap="round"></path>
+        <!-- healthy base -->
+        <g id="lungBase">
+          <path d="M188,120 C150,128 120,165 116,220 C112,275 130,320 168,332 C188,338 188,318 188,292 Z" fill="var(--pink)"></path>
+          <path d="M212,120 C250,128 280,165 284,220 C288,275 270,320 232,332 C212,338 212,318 212,292 Z" fill="var(--pink)"></path>
+        </g>
+        <!-- tar overlay -->
+        <g id="lungTar" class="lung-tar" style="opacity:0">
+          <path d="M188,120 C150,128 120,165 116,220 C112,275 130,320 168,332 C188,338 188,318 188,292 Z" fill="var(--tar)"></path>
+          <path d="M212,120 C250,128 280,165 284,220 C288,275 270,320 232,332 C212,338 212,318 212,292 Z" fill="var(--tar)"></path>
+        </g>
+      </svg>
+      <div class="lung-side reveal d2">
+        <div class="yearbox"><span id="lungYearsLbl">ריאות בריאות</span><span id="lungYears">0 שנות עישון</span></div>
+        <button class="btn" onclick="smokeYear()">🚬 לעשן עוד שנה</button>
+        <button class="btn ghost" onclick="lungReset()">להתחיל מחדש</button>
+      </div>
+    </div>
+    <p class="lead reveal d3" style="margin-top:18px">הזפת מצטבר ומכסה את הריאות — וזה כמעט בלתי הפיך.</p>
+    <div class="teacher-note"><b>מורה:</b> בקשו מתלמיד ללחוץ "לעשן עוד שנה" כמה פעמים. עצרו ב-20 שנה ושאלו: "הייתם רוצים לנשום עם ריאות כאלה בריצה?".</div>
+  </section>
+
+  <!-- 5 LEV -->
+  <section class="slide" data-time="22–27">
+    <h2 class="display reveal">והלב? <span class="accent-c">עובד קשה יותר</span></h2>
+    <p class="lead reveal d1">הניקוטין מאיץ את הלב ומצמצם את כלי הדם — הגוף נאבק לקבל חמצן.</p>
+    <div class="heart-row reveal d2">
+      <svg class="heart" width="120" height="120" viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M60,104 C20,74 8,50 18,32 C26,18 46,18 60,38 C74,18 94,18 102,32 C112,50 100,74 60,104 Z" fill="var(--coral)"></path>
+      </svg>
+      <svg class="ecg" viewBox="0 0 560 120" aria-hidden="true">
+        <path d="M0,60 L120,60 L140,60 L150,30 L165,90 L180,15 L195,60 L320,60 L340,60 L350,30 L365,90 L380,15 L395,60 L560,60"></path>
+      </svg>
+    </div>
+    <div class="grid g3" style="max-width:880px">
+      <div class="card reveal d3"><div class="ic">💓</div><h3>דופק מהיר</h3><p>הלב פועם מהר גם במנוחה</p></div>
+      <div class="card reveal d3"><div class="ic">🩸</div><h3>לחץ דם גבוה</h3><p>כלי הדם מצטמצמים</p></div>
+      <div class="card reveal d4"><div class="ic">😮‍💨</div><h3>פחות חמצן</h3><p>מתעייפים מהר בספורט</p></div>
+    </div>
+    <div class="teacher-note"><b>מורה:</b> בקשו מהכיתה למדוד דופק 10 שניות. הסבירו שאצל מעשן הלב "רץ" כך כל הזמן, גם בלי לזוז.</div>
+  </section>
+
+  <!-- 6 MIYAD -->
+  <section class="slide" data-time="25–27">
+    <h2 class="display reveal">מה רואים <span class="accent-t">כבר עכשיו</span>?</h2>
+    <p class="lead reveal d1">לא צריך לחכות 40 שנה. אלה השפעות שמרגישים תוך שבועות:</p>
+    <div class="grid g3" style="max-width:980px">
+      <div class="card reveal d1"><div class="ic">🦷</div><h3>שיניים צהובות</h3><p>וכתמים שקשה להוריד</p></div>
+      <div class="card reveal d2"><div class="ic">👃</div><h3>ריח רע</h3><p>מהפה, מהשיער ומהבגדים</p></div>
+      <div class="card reveal d3"><div class="ic">🏃</div><h3>פחות אוויר</h3><p>מתנשפים מהר בספורט</p></div>
+      <div class="card reveal d4"><div class="ic">😴</div><h3>פחות אנרגיה</h3><p>עייפות ופחות ריכוז</p></div>
+      <div class="card reveal d5"><div class="ic">💸</div><h3>הרבה כסף</h3><p>שנעלם בעשן ממש</p></div>
+      <div class="card reveal d6"><div class="ic">🧴</div><h3>עור פחות בריא</h3><p>מתקמט ומאבד צבע</p></div>
+    </div>
+    <div class="teacher-note"><b>מורה:</b> זה השקף הכי משכנע לגיל הזה — הם מתחברים ל"עכשיו" יותר מאשר ל"בעוד 40 שנה". התעכבו עליו.</div>
+  </section>
+
+  <!-- 7 VIDEO -->
+  <section class="slide" data-time="27–35">
+    <h2 class="display reveal">בואו נצפה <span class="accent-c">ביחד</span></h2>
+    <div class="video-box reveal d1">
+      <iframe src="https://www.youtube.com/embed/jTUGyMzBnOk?rel=0&modestbranding=1"
+        title="סרטון הסברה על עישון" allowfullscreen
+        allow="accelerometer; clipboard-write; encrypted-media; gyroscope; picture-in-picture"></iframe>
+    </div>
+    <p class="lead reveal d2">בזמן הצפייה — שימו לב: מה הכי הפתיע אתכם?</p>
+    <div class="teacher-note"><b>מורה:</b> לפני ההפעלה בקשו מהם לזכור דבר אחד שיפתיע אותם. אם אין אינטרנט בכיתה — הורידו את הסרטון מראש. אחרי הצפייה עוברים לשקף הדיון.</div>
+  </section>
+
+  <!-- 8 DIYUN -->
+  <section class="slide" data-time="33–35">
+    <h2 class="display reveal">בואו <span class="accent-t">נדבר</span></h2>
+    <div class="opts reveal d1" style="max-width:760px">
+      <div class="opt" style="cursor:default">1 · מה הכי הפתיע אתכם בסרטון?</div>
+      <div class="opt" style="cursor:default">2 · למה לדעתכם אנשים מתחילים לעשן בכלל?</div>
+      <div class="opt" style="cursor:default">3 · מה הייתם אומרים לחבר שמציע לכם סיגריה?</div>
+    </div>
+    <div class="teacher-note"><b>מורה:</b> שאלות פתוחות בלבד, בלי "תשובה נכונה". תנו לכמה תלמידים לדבר. השאלה השלישית מובילה ישר לחלק "איך אומרים לא".</div>
+  </section>
+
+  <!-- 9 KESEF -->
+  <section class="slide" data-time="35–40" data-fn="runMoney">
+    <h2 class="display reveal">כמה זה <span class="accent-y">עולה</span> באמת?</h2>
+    <p class="lead reveal d1">מעשן ממוצע, קופסה ביום (~35 ₪). תוך שנה זה הופך ל…</p>
+    <div class="money reveal d2"><span id="moneyNum">0</span> ₪</div>
+    <p class="lead reveal d2" style="font-size:18px">בכל שנה — שנשרפים פשוטו כמשמעו</p>
+    <div class="money-row reveal d3">
+      <div class="card"><div class="ic">🎮</div><h3>קונסולת משחקים</h3><p>ועוד כמה משחקים</p></div>
+      <div class="card"><div class="ic">📱</div><h3>טלפון חדש</h3><p>מהדגמים הטובים</p></div>
+      <div class="card"><div class="ic">✈️</div><h3>טיול בחו"ל</h3><p>עם כל המשפחה</p></div>
+    </div>
+    <div class="teacher-note"><b>מורה:</b> שאלו "מה הייתם קונים ב-12,775 ₪?". זה ממחיש את העלות בצורה שהם מרגישים. אפשר לחשב יחד עלות ל-10 שנים.</div>
+  </section>
+
+  <!-- 10 HITMAKRUT -->
+  <section class="slide" data-time="40–45">
+    <h2 class="display reveal">מלכודת <span class="accent-c">ההתמכרות</span></h2>
+    <p class="lead reveal d1">"רק לנסות" זה בדיוק מה שהמלכודת מחכה לו. ככה היא עובדת:</p>
+    <div class="loop-wrap reveal d2">
+      <svg class="loop-arrow" viewBox="0 0 100 100" aria-hidden="true">
+        <circle cx="50" cy="50" r="40" fill="none" stroke="rgba(255,93,115,.4)" stroke-width="2.5" stroke-dasharray="5 7"></circle>
+        <path d="M50,6 l7,9 l-14,0 z" fill="var(--coral)"></path>
+      </svg>
+      <div class="loop-nodes">
+        <div class="loop-node" style="left:50%;top:6%">1 · מנסים סיגריה ראשונה</div>
+        <div class="loop-node" style="left:90%;top:42%">2 · הניקוטין משחרר תחושת "טוב"</div>
+        <div class="loop-node" style="left:74%;top:88%">3 · אבל התחושה נעלמת מהר</div>
+        <div class="loop-node" style="left:20%;top:88%">4 · הגוף "דורש" עוד</div>
+        <div class="loop-node" style="left:8%;top:42%">5 · מעשנים שוב… ושוב</div>
+      </div>
+      <div class="loop-center">לולאה<br>שקשה לשבור</div>
+    </div>
+    <p class="lead reveal d3" style="font-size:18px"><b class="accent-y">9 מתוך 10</b> מעשנים התחילו לפני גיל 18.</p>
+    <div class="teacher-note"><b>מורה:</b> הדגישו: אף אחד לא מתכנן להתמכר. כולם חשבו "רק פעם אחת". זו בדיוק הסכנה — ההתמכרות מתחילה מהר.</div>
+  </section>
+
+  <!-- 11 VAPE -->
+  <section class="slide" data-time="45–48">
+    <h2 class="display reveal">"אבל וייפ זה <span class="accent-t">לא נורא</span>"?</h2>
+    <p class="lead reveal d1">סיגריה אלקטרונית ונרגילה הן <b class="accent-c">לא</b> בטוחות. זה רק נראה אחרת.</p>
+    <div class="grid g2" style="max-width:860px">
+      <div class="card reveal d1" style="text-align:right"><h3 class="accent-c">סיגריה אלקטרונית (וייפ)</h3><p>מכילה ניקוטין ממכר וכימיקלים שפוגעים בריאות. הטעמים המתוקים נועדו למשוך דווקא בני נוער.</p></div>
+      <div class="card reveal d2" style="text-align:right"><h3 class="accent-c">נרגילה</h3><p>שעה אחת של נרגילה ≈ שאיפת עשן של כ-<b class="accent-y">100</b> סיגריות. גם זה מכניס המון חומרים רעילים.</p></div>
+    </div>
+    <div class="teacher-note"><b>מורה:</b> נושא קריטי לגיל הזה — הרבה חושבים שווייפ "בריא". נפצו את המיתוס בעובדות, בלי דרמה.</div>
+  </section>
+
+  <!-- 12 MYTH/FACT -->
+  <section class="slide" data-time="48–50">
+    <h2 class="display reveal">מיתוס או <span class="accent-t">עובדה</span>?</h2>
+    <p class="lead reveal d1">לחצו על כל כרטיס כדי לחשוף את התשובה</p>
+    <div class="flips">
+      <div class="flip reveal d1" onclick="this.classList.toggle('flipped')"><div class="flip-in">
+        <div class="flip-face flip-front"><span class="tag">לחצו</span>"כמה סיגריות לא יזיקו"</div>
+        <div class="flip-face flip-back">מיתוס. גם מעט סיגריות מתחילות התמכרות ופוגעות בגוף.</div>
+      </div></div>
+      <div class="flip reveal d2" onclick="this.classList.toggle('flipped')"><div class="flip-in">
+        <div class="flip-face flip-front"><span class="tag">לחצו</span>"אפשר להפסיק מתי שרוצים"</div>
+        <div class="flip-face flip-back">מיתוס. הניקוטין ממכר מאוד — רוב המעשנים מתקשים להפסיק.</div>
+      </div></div>
+      <div class="flip reveal d3" onclick="this.classList.toggle('flipped')"><div class="flip-in">
+        <div class="flip-face flip-front"><span class="tag">לחצו</span>"עישון פוגע גם במי שלידי"</div>
+        <div class="flip-face flip-back">עובדה. "עישון פסיבי" מזיק לכל מי שנושם את העשן.</div>
+      </div></div>
+      <div class="flip reveal d4" onclick="this.classList.toggle('flipped')"><div class="flip-in">
+        <div class="flip-face flip-front"><span class="tag">לחצו</span>"רוב בני הנוער מעשנים"</div>
+        <div class="flip-face flip-back">מיתוס. רוב בני הנוער דווקא <b>לא</b> מעשנים בכלל.</div>
+      </div></div>
+    </div>
+    <div class="teacher-note"><b>מורה:</b> תנו לכל קבוצה לנחש לפני החשיפה. השקף האחרון חשוב — הוא מנפץ את הלחץ החברתי ("כולם עושים את זה").</div>
+  </section>
+
+  <!-- 13 OMRIM LO -->
+  <section class="slide" data-time="50–55">
+    <h2 class="display reveal">איך אומרים <span class="accent-t">"לא"</span>?</h2>
+    <p class="lead reveal d1">כשמישהו מציע לכם — יש לכם כוח. הנה 4 דרכים פשוטות:</p>
+    <div class="ways">
+      <div class="way reveal d1"><div class="num">1</div><h3>פשוט וברור</h3><p>"לא, תודה. זה ממש לא בשבילי."</p></div>
+      <div class="way reveal d2"><div class="num">2</div><h3>הציעו חלופה</h3><p>"בוא נשחק כדורגל במקום."</p></div>
+      <div class="way reveal d3"><div class="num">3</div><h3>השתמשו בהומור</h3><p>"אני אוהב את הריאות שלי ורוד 😄"</p></div>
+      <div class="way reveal d4"><div class="num">4</div><h3>פשוט ללכת</h3><p>חברים אמיתיים לא ילחצו אתכם.</p></div>
+    </div>
+    <div class="teacher-note"><b>מורה:</b> משחק תפקידים: זוג מתנדבים — אחד מציע, השני מסרב באחת הדרכים. מחזקים שזה לגיטימי וקל יותר ממה שחושבים.</div>
+  </section>
+
+  <!-- 14 QUIZ -->
+  <section class="slide" data-time="55–58" data-fn="resetQuiz">
+    <h2 class="display reveal">חידון <span class="accent-y">סיום</span> — אמת או שקר?</h2>
+    <div class="quiz reveal d1" id="quiz">
+      <div class="q" data-ans="false"><div class="txt">בסיגריה יש פחות מ-100 חומרים בלבד</div>
+        <div class="ans"><button onclick="qz(this,true)">אמת</button><button onclick="qz(this,false)">שקר</button></div></div>
+      <div class="q" data-ans="true"><div class="txt">הזפת מצטבר בריאות וקשה מאוד להעלים אותו</div>
+        <div class="ans"><button onclick="qz(this,true)">אמת</button><button onclick="qz(this,false)">שקר</button></div></div>
+      <div class="q" data-ans="true"><div class="txt">סיגריה אלקטרונית גם מכילה ניקוטין ממכר</div>
+        <div class="ans"><button onclick="qz(this,true)">אמת</button><button onclick="qz(this,false)">שקר</button></div></div>
+      <div class="q" data-ans="false"><div class="txt">רוב בני הנוער בעולם מעשנים</div>
+        <div class="ans"><button onclick="qz(this,true)">אמת</button><button onclick="qz(this,false)">שקר</button></div></div>
+      <div class="q" data-ans="true"><div class="txt">עישון פסיבי מזיק גם למי שלא מעשן</div>
+        <div class="ans"><button onclick="qz(this,true)">אמת</button><button onclick="qz(this,false)">שקר</button></div></div>
+    </div>
+    <div class="score" id="score"></div>
+    <div class="teacher-note"><b>מורה:</b> אפשר לחלק לקבוצות ולתת ניקוד. כל שאלה מתחברת לשקף שלמדנו — מצוין לחזרה מהירה.</div>
+  </section>
+
+  <!-- 15 SIYUM -->
+  <section class="slide" data-time="58–60">
+    <svg width="120" height="120" viewBox="0 0 120 120" class="reveal" aria-hidden="true">
+      <circle cx="60" cy="60" r="52" fill="none" stroke="var(--teal)" stroke-width="6"></circle>
+      <path d="M38,62 L54,78 L84,44" fill="none" stroke="var(--teal)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"></path>
+    </svg>
+    <h1 class="display reveal d1">אתם <span class="accent-t">בשליטה</span></h1>
+    <p class="lead reveal d2">הידע הוא הכוח שלכם. עכשיו אתם יודעים מה באמת יש בסיגריה — ואיך לומר "לא" בביטחון.</p>
+    <p class="lead reveal d3" style="color:var(--teal);font-size:18px">תודה שהקשבתם, חוקרים צעירים! 🫁💪</p>
+    <div class="teacher-note"><b>מורה:</b> סיכום: כל אחד אומר במילה אחת מה ייקח מהשיעור. אפשר לתת משימת בית — לספר לבן משפחה דבר אחד שלמדו היום.</div>
+  </section>
+
+</div>
+
+<div class="hint">חיצים ◄ ► · רווח · להחלפת שקף</div>
+<button class="btn notes-toggle" onclick="document.body.classList.toggle('show-notes')">הערות מורה 📝</button>
+<div class="nav">
+  <button class="btn ghost" onclick="go(-1)">► הקודם</button>
+  <button class="btn" onclick="go(1)">הבא ◄</button>
+</div>
+
+<script>
+  const slides=[...document.querySelectorAll('.slide')];
+  let cur=0;
+  const bar=document.getElementById('bar');
+  const counter=document.getElementById('counter');
+  const timepill=document.getElementById('timepill');
+
+  function show(n){
+    cur=Math.max(0,Math.min(slides.length-1,n));
+    slides.forEach((s,i)=>s.classList.toggle('active',i===cur));
+    bar.style.width=((cur)/(slides.length-1)*100)+'%';
+    counter.textContent=(cur+1)+' / '+slides.length;
+    const t=slides[cur].dataset.time||'';
+    timepill.innerHTML='דקות <b>'+t+'</b>';
+    const fn=slides[cur].dataset.fn;
+    if(fn && window[fn]) window[fn]();
+  }
+  function go(d){show(cur+d);}
+
+  document.addEventListener('keydown',e=>{
+    if(e.key==='ArrowLeft'||e.key===' '||e.key==='PageDown'){e.preventDefault();go(1);}
+    else if(e.key==='ArrowRight'||e.key==='PageUp'){e.preventDefault();go(-1);}
+    else if(e.key.toLowerCase()==='n'){document.body.classList.toggle('show-notes');}
+  });
+
+  /* poll */
+  function poll(el){
+    document.querySelectorAll('.opt').forEach(o=>o.classList.remove('right'));
+    const correct=el.parentElement.querySelector('[data-correct]');
+    if(correct)correct.classList.add('right');
+    document.getElementById('pollres').classList.add('show');
+  }
+
+  /* lungs */
+  let years=0;
+  const tar=document.getElementById('lungTar');
+  function smokeYear(){
+    years=Math.min(40,years+1);
+    paintLungs();
+  }
+  function paintLungs(){
+    tar.style.opacity=Math.min(.92,years/30);
+    document.getElementById('lungYears').textContent=years+' שנות עישון';
+    document.getElementById('lungYearsLbl').textContent= years===0?'ריאות בריאות':(years<10?'מתחיל להצטבר זפת':'ריאות מלאות זפת');
+  }
+  function lungReset(){years=0;paintLungs();}
+
+  /* money */
+  let moneyDone=false;
+  function runMoney(){
+    moneyDone=false;
+    const el=document.getElementById('moneyNum');
+    const target=12775; const dur=1600; const start=performance.now();
+    function step(now){
+      const p=Math.min(1,(now-start)/dur);
+      const v=Math.floor(p*target);
+      el.textContent=v.toLocaleString('he-IL');
+      if(p<1)requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* quiz */
+  function qz(btn,choice){
+    const q=btn.closest('.q');
+    if(q.dataset.done)return;
+    const correct=q.dataset.ans==='true';
+    q.dataset.done='1';
+    q.classList.add(choice===correct?'ok':'no');
+    q.querySelectorAll('button').forEach(b=>b.disabled=true);
+    tallyQuiz();
+  }
+  function tallyQuiz(){
+    const qs=[...document.querySelectorAll('#quiz .q')];
+    const done=qs.filter(q=>q.dataset.done);
+    const ok=qs.filter(q=>q.classList.contains('ok')).length;
+    const s=document.getElementById('score');
+    if(done.length===qs.length){
+      s.textContent=`כל הכבוד! ${ok} מתוך ${qs.length} נכון`+(ok===qs.length?' 🏆':' 👏');
+    }else{
+      s.textContent=`נכון עד כה: ${ok} / ${done.length}`;
+    }
+  }
+  function resetQuiz(){
+    document.querySelectorAll('#quiz .q').forEach(q=>{
+      q.classList.remove('ok','no');delete q.dataset.done;
+      q.querySelectorAll('button').forEach(b=>b.disabled=false);
+    });
+    document.getElementById('score').textContent='';
+  }
+
+  show(0);
+</script>
+</body>
+</html>
