@@ -1,0 +1,1195 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light">
+  <title>כהן נ' אליאסי | פרטיות, שליטה ומסגור מחדש</title>
+  <style>
+    :root {
+      --paper: #f8fbfd;
+      --ice: #eaf4fb;
+      --mist: #dcecf6;
+      --ink: #233342;
+      --muted: #607181;
+      --heading: #5f6871;
+      --blue: #2f74a8;
+      --blue-deep: #245879;
+      --teal: #278f86;
+      --coral: #d85d70;
+      --gold: #c99b43;
+      --line: #c9dce8;
+      --white: #ffffff;
+      --shadow: 0 22px 70px rgba(48, 82, 105, 0.14);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { margin: 0; width: 100%; height: 100%; overflow: hidden; }
+    body {
+      font-family: Arial, "Segoe UI", sans-serif;
+      color: var(--ink);
+      background: #dce8ef;
+      direction: rtl;
+    }
+    button { font: inherit; }
+
+    .deck {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #dce8ef;
+    }
+    .slide {
+      position: absolute;
+      inset: 0;
+      display: none;
+      min-width: 0;
+      padding: clamp(30px, 5vh, 58px) clamp(42px, 6vw, 92px) clamp(48px, 7vh, 72px);
+      background:
+        radial-gradient(circle at 9% 88%, rgba(47,116,168,.08), transparent 28%),
+        linear-gradient(135deg, var(--paper) 0%, #f4f9fc 58%, var(--ice) 100%);
+      overflow: hidden;
+      isolation: isolate;
+    }
+    .slide::before {
+      content: "";
+      position: absolute;
+      inset: 20px;
+      border: 1px solid rgba(95,104,113,.24);
+      border-radius: 30px;
+      pointer-events: none;
+      z-index: -1;
+    }
+    .slide.active {
+      display: flex;
+      flex-direction: column;
+      animation: enter .3s ease-out;
+    }
+    @keyframes enter {
+      from { opacity: 0; transform: translateY(8px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .eyebrow {
+      margin: 0 0 1.2vh;
+      color: var(--blue);
+      font-size: clamp(14px, 1.15vw, 20px);
+      font-weight: 700;
+      letter-spacing: .02em;
+    }
+    h1, h2, h3, p { margin-top: 0; }
+    h1 {
+      margin-bottom: 2.3vh;
+      color: var(--heading);
+      font-size: clamp(46px, 5.3vw, 82px);
+      line-height: 1.02;
+      letter-spacing: -.035em;
+      max-width: 880px;
+    }
+    h2 {
+      margin-bottom: 2.4vh;
+      color: var(--heading);
+      font-size: clamp(36px, 4vw, 64px);
+      line-height: 1.08;
+      letter-spacing: -.025em;
+    }
+    h3 {
+      color: var(--blue-deep);
+      font-size: clamp(24px, 2vw, 34px);
+      line-height: 1.15;
+      margin-bottom: 1.1vh;
+    }
+    .lead {
+      max-width: 900px;
+      color: var(--ink);
+      font-size: clamp(24px, 2.15vw, 38px);
+      line-height: 1.42;
+      font-weight: 600;
+    }
+    .subtle {
+      color: var(--muted);
+      font-size: clamp(18px, 1.45vw, 26px);
+      line-height: 1.5;
+    }
+    strong { color: var(--blue-deep); }
+    .accent { color: var(--coral); }
+    .teal { color: var(--teal); }
+
+    .main-two {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(340px, .95fr);
+      gap: clamp(24px, 4vw, 66px);
+      align-items: center;
+      min-height: 0;
+    }
+    .main-two.reverse { grid-template-columns: minmax(340px, .92fr) minmax(0, 1.08fr); }
+    .main-two.reverse .visual-stage { order: 2; }
+    .visual-stage {
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      align-self: stretch;
+    }
+    .visual-stage svg {
+      width: min(100%, 560px);
+      max-height: 54vh;
+      overflow: visible;
+    }
+
+    .short-list {
+      display: grid;
+      gap: 1.35vh;
+      margin: 2.1vh 0 0;
+      padding: 0;
+      list-style: none;
+      font-size: clamp(22px, 1.9vw, 34px);
+      line-height: 1.35;
+      font-weight: 650;
+    }
+    .short-list li {
+      position: relative;
+      padding-right: 1.25em;
+    }
+    .short-list li::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: .55em;
+      width: .38em;
+      height: .38em;
+      border-radius: 50%;
+      background: var(--coral);
+    }
+    .short-list.compact {
+      font-size: clamp(19px, 1.55vw, 28px);
+      gap: 1vh;
+    }
+
+    .question {
+      max-width: 900px;
+      font-size: clamp(36px, 4vw, 66px);
+      line-height: 1.2;
+      font-weight: 800;
+      color: var(--ink);
+      letter-spacing: -.025em;
+    }
+    .question .line { display: block; }
+    .question-mark {
+      display: inline-grid;
+      place-items: center;
+      width: 1.35em;
+      height: 1.35em;
+      margin-right: .12em;
+      border-radius: 50%;
+      color: white;
+      background: var(--coral);
+      box-shadow: 0 12px 28px rgba(216,93,112,.2);
+    }
+
+    .fact-line {
+      display: grid;
+      grid-template-columns: 86px 1fr;
+      gap: 18px;
+      align-items: center;
+      margin: 1.5vh 0;
+      font-size: clamp(22px, 1.9vw, 33px);
+      line-height: 1.25;
+      font-weight: 650;
+    }
+    .fact-no {
+      display: grid;
+      place-items: center;
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      border: 2px solid var(--line);
+      color: var(--blue);
+      background: rgba(255,255,255,.72);
+      font-size: 30px;
+      font-weight: 800;
+    }
+
+    .verdict-line {
+      display: grid;
+      grid-template-columns: 170px 1fr;
+      align-items: baseline;
+      gap: 24px;
+      padding: 2vh 0;
+      border-bottom: 1px solid var(--line);
+      font-size: clamp(22px, 2vw, 36px);
+      line-height: 1.25;
+    }
+    .verdict-line:last-child { border-bottom: 0; }
+    .verdict-line .result { font-weight: 800; color: var(--blue-deep); }
+    .verdict-line .result.no { color: var(--coral); }
+    .amount {
+      display: inline-block;
+      margin-top: 2.2vh;
+      color: var(--teal);
+      font-size: clamp(24px, 2.25vw, 40px);
+      font-weight: 800;
+    }
+
+    .contrast {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1px 1fr;
+      gap: clamp(22px, 3vw, 50px);
+      align-items: center;
+      min-height: 0;
+    }
+    .contrast-divider {
+      width: 1px;
+      height: 78%;
+      background: linear-gradient(transparent, var(--line) 16%, var(--line) 84%, transparent);
+    }
+    .contrast-side { align-self: center; }
+    .contrast-label {
+      display: inline-block;
+      margin-bottom: 1.2vh;
+      padding-bottom: .4vh;
+      color: var(--blue-deep);
+      border-bottom: 4px solid var(--teal);
+      font-size: clamp(24px, 2vw, 34px);
+      font-weight: 800;
+    }
+    .contrast-side.problem .contrast-label { border-color: var(--coral); }
+    .contrast-side p {
+      margin: .5vh 0;
+      font-size: clamp(21px, 1.75vw, 31px);
+      line-height: 1.45;
+      font-weight: 650;
+    }
+    .contrast-side .mini {
+      color: var(--muted);
+      font-size: clamp(17px, 1.25vw, 22px);
+      font-weight: 500;
+    }
+    .thesis-line {
+      margin: 1.4vh auto 0;
+      max-width: 1080px;
+      text-align: center;
+      color: var(--ink);
+      font-size: clamp(24px, 2.2vw, 39px);
+      line-height: 1.35;
+      font-weight: 800;
+    }
+
+    .definition {
+      max-width: 860px;
+      margin-bottom: 1.8vh;
+      font-size: clamp(27px, 2.55vw, 44px);
+      line-height: 1.35;
+      font-weight: 750;
+    }
+    .definition .underline {
+      text-decoration: underline;
+      text-decoration-color: var(--teal);
+      text-decoration-thickness: .15em;
+      text-underline-offset: .15em;
+    }
+    .keywords {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 14px;
+      margin-top: 2.1vh;
+    }
+    .keyword {
+      padding: .55em .85em;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: rgba(255,255,255,.7);
+      color: var(--blue-deep);
+      font-size: clamp(18px, 1.35vw, 24px);
+      font-weight: 750;
+    }
+
+    .case-note {
+      margin-top: 1.4vh;
+      color: var(--muted);
+      font-size: clamp(17px, 1.25vw, 22px);
+      line-height: 1.45;
+    }
+
+    .balance-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr minmax(250px, .58fr) 1fr;
+      gap: clamp(16px, 2.2vw, 34px);
+      align-items: center;
+      min-height: 0;
+    }
+    .balance-side h3 { margin-bottom: 1.6vh; }
+    .balance-side .short-list { font-size: clamp(19px, 1.5vw, 27px); }
+    .balance-center svg { width: 100%; max-height: 42vh; }
+    .balance-caption {
+      margin-top: 1vh;
+      text-align: center;
+      color: var(--muted);
+      font-size: clamp(16px, 1.15vw, 21px);
+      line-height: 1.35;
+    }
+
+    .case-columns {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1.06fr 1px .94fr;
+      gap: clamp(24px, 3vw, 48px);
+      align-items: center;
+      min-height: 0;
+    }
+    .case-divider {
+      width: 1px;
+      height: 88%;
+      background: linear-gradient(transparent, var(--line) 12%, var(--line) 88%, transparent);
+    }
+    .case-column h3 {
+      margin-bottom: 1.4vh;
+      padding-bottom: .55vh;
+      border-bottom: 4px solid var(--teal);
+      display: inline-block;
+      font-size: clamp(28px, 2.25vw, 40px);
+    }
+    .case-column.outcome h3 { border-color: var(--coral); }
+    .claim-amount {
+      margin: 0 0 1.5vh;
+      color: var(--blue-deep);
+      font-size: clamp(30px, 2.55vw, 45px);
+      line-height: 1.2;
+      font-weight: 800;
+    }
+    .plain-lines {
+      display: grid;
+      gap: 1.1vh;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-size: clamp(21px, 1.72vw, 30px);
+      line-height: 1.32;
+      font-weight: 650;
+    }
+    .plain-lines li {
+      position: relative;
+      padding-right: 1.05em;
+    }
+    .plain-lines li::before {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: .55em;
+      width: .32em;
+      height: .32em;
+      border-radius: 50%;
+      background: var(--coral);
+    }
+    .claim-label {
+      color: var(--muted);
+      font-size: clamp(18px, 1.2vw, 22px);
+      font-weight: 500;
+    }
+
+    .privacy-layout {
+      flex: 1;
+      display: grid;
+      grid-template-columns: minmax(0, 1.18fr) minmax(310px, .82fr);
+      gap: clamp(28px, 4vw, 62px);
+      align-items: center;
+      min-height: 0;
+    }
+    .reason-list {
+      display: grid;
+      gap: .85vh;
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      counter-reset: reasons;
+      font-size: clamp(17px, 1.27vw, 23px);
+      line-height: 1.32;
+      font-weight: 650;
+    }
+    .reason-list li {
+      counter-increment: reasons;
+      display: grid;
+      grid-template-columns: 38px 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    .reason-list li::before {
+      content: counter(reasons);
+      display: grid;
+      place-items: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      color: var(--blue-deep);
+      background: var(--ice);
+      border: 1px solid var(--line);
+      font-size: 16px;
+      font-weight: 800;
+    }
+    .critique-focus {
+      padding-right: 26px;
+      border-right: 6px solid var(--coral);
+    }
+    .critique-focus h3 { color: var(--coral); }
+    .critique-focus p {
+      margin: .7vh 0;
+      font-size: clamp(19px, 1.55vw, 28px);
+      line-height: 1.42;
+      font-weight: 700;
+    }
+    .legal-hooks {
+      margin-top: 1.7vh;
+      color: var(--muted);
+      font-size: clamp(15px, 1.05vw, 19px);
+      line-height: 1.4;
+    }
+
+    .story-flow {
+      display: grid;
+      gap: 1.15vh;
+    }
+    .story-step {
+      display: grid;
+      grid-template-columns: 112px 1fr;
+      gap: 18px;
+      align-items: baseline;
+      padding-bottom: .9vh;
+      border-bottom: 1px solid var(--line);
+    }
+    .story-step:last-child { border-bottom: 0; }
+    .story-step strong {
+      color: var(--blue-deep);
+      font-size: clamp(18px, 1.28vw, 23px);
+    }
+    .story-step span {
+      font-size: clamp(17px, 1.22vw, 22px);
+      line-height: 1.36;
+      font-weight: 620;
+    }
+    .method-line {
+      margin: 1.3vh 0 0;
+      color: var(--muted);
+      font-size: clamp(16px, 1.08vw, 20px);
+      line-height: 1.35;
+    }
+    .case-limit {
+      margin: 1.2vh 0 0;
+      color: var(--coral);
+      font-size: clamp(16px, 1.12vw, 20px);
+      line-height: 1.35;
+      font-weight: 750;
+    }
+
+    .application-matrix {
+      display: grid;
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+    }
+    .matrix-row {
+      display: grid;
+      grid-template-columns: 170px minmax(0, 1fr) 150px;
+      align-items: center;
+      min-height: 54px;
+      border-bottom: 1px solid var(--line);
+    }
+    .matrix-row:last-child { border-bottom: 0; }
+    .matrix-row.header {
+      min-height: 38px;
+      color: var(--muted);
+      background: rgba(220,236,246,.42);
+      font-size: clamp(14px, .95vw, 17px);
+      font-weight: 800;
+    }
+    .matrix-row > span {
+      padding: 8px 14px;
+      font-size: clamp(16px, 1.16vw, 21px);
+      line-height: 1.27;
+    }
+    .matrix-row > span:first-child {
+      color: var(--blue-deep);
+      font-weight: 800;
+    }
+    .matrix-weight {
+      text-align: center;
+      font-weight: 800;
+    }
+    .matrix-weight.expression { color: var(--teal); }
+    .matrix-weight.privacy { color: var(--coral); }
+    .matrix-weight.mixed { color: var(--gold); }
+    .application-conclusion {
+      margin: 1.5vh auto 0;
+      text-align: center;
+      color: var(--ink);
+      font-size: clamp(20px, 1.62vw, 29px);
+      line-height: 1.35;
+      font-weight: 800;
+    }
+    .corner-icon {
+      position: absolute;
+      left: clamp(46px, 7vw, 108px);
+      top: clamp(56px, 8vh, 96px);
+      width: clamp(72px, 7.5vw, 118px);
+      opacity: .16;
+      pointer-events: none;
+    }
+
+    .closing {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      padding: 2vh 6vw 5vh;
+      text-align: center;
+    }
+    .closing blockquote {
+      margin: 0;
+      max-width: 1050px;
+      color: var(--ink);
+      font-size: clamp(34px, 3.8vw, 64px);
+      line-height: 1.28;
+      font-weight: 800;
+      letter-spacing: -.025em;
+    }
+    .closing blockquote strong { color: var(--coral); }
+    .closing-rule {
+      width: 130px;
+      height: 7px;
+      margin: 3.2vh auto 0;
+      border-radius: 99px;
+      background: var(--teal);
+    }
+
+    .sources-grid {
+      flex: 1;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2vw 4vw;
+      align-content: start;
+      min-height: 0;
+    }
+    .source-group h3 {
+      margin: 0 0 .8vh;
+      padding-bottom: .55vh;
+      border-bottom: 3px solid var(--mist);
+      font-size: clamp(22px, 1.65vw, 29px);
+    }
+    .source-group p {
+      margin: 0 0 1vh;
+      font-size: clamp(16px, 1.14vw, 20px);
+      line-height: 1.42;
+    }
+    .source-group a { color: var(--blue-deep); text-decoration-color: rgba(36,88,121,.35); }
+
+    .citation {
+      position: absolute;
+      right: clamp(42px, 6vw, 92px);
+      bottom: 2.8vh;
+      max-width: calc(100% - 260px);
+      color: #71808d;
+      font-size: clamp(12px, .83vw, 15px);
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .slide-no {
+      position: absolute;
+      left: clamp(42px, 6vw, 92px);
+      bottom: 2.7vh;
+      color: #71808d;
+      font-size: clamp(13px, .88vw, 16px);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .controls {
+      position: fixed;
+      left: 20px;
+      bottom: 18px;
+      z-index: 20;
+      display: flex;
+      gap: 8px;
+      direction: ltr;
+      opacity: .28;
+      transition: opacity .2s ease;
+    }
+    .controls:hover, .controls:focus-within { opacity: 1; }
+    .controls button,
+    .controls a {
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(47,116,168,.22);
+      border-radius: 10px;
+      padding: 8px 11px;
+      color: var(--blue-deep);
+      background: rgba(255,255,255,.88);
+      cursor: pointer;
+      box-shadow: 0 5px 16px rgba(48,82,105,.08);
+      text-decoration: none;
+    }
+    .controls button:hover,
+    .controls a:hover { background: white; }
+    .controls button svg,
+    .controls a svg {
+      display: block;
+      width: 18px;
+      height: 18px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .progress {
+      position: fixed;
+      right: 0;
+      bottom: 0;
+      z-index: 25;
+      height: 5px;
+      background: linear-gradient(90deg, var(--teal), var(--blue));
+      transition: width .25s ease;
+    }
+
+    .help {
+      position: fixed;
+      z-index: 50;
+      inset: 0;
+      display: none;
+      place-items: center;
+      background: rgba(35,51,66,.34);
+    }
+    .help.show { display: grid; }
+    .help-box {
+      width: min(560px, 86vw);
+      padding: 28px 32px;
+      border-radius: 22px;
+      background: white;
+      box-shadow: var(--shadow);
+    }
+    .help-box h3 { margin-bottom: 14px; }
+    .help-box p { margin: 8px 0; font-size: 18px; line-height: 1.45; }
+
+    @media (max-width: 850px), (max-aspect-ratio: 4/3) {
+      .slide { overflow: auto; padding-top: 42px; }
+      .main-two, .main-two.reverse, .balance-layout, .case-columns, .privacy-layout { grid-template-columns: 1fr; }
+      .main-two.reverse .visual-stage { order: initial; }
+      .visual-stage { min-height: 220px; }
+      .visual-stage svg { max-height: 34vh; }
+      .contrast { grid-template-columns: 1fr; align-content: center; }
+      .contrast-divider { width: 100%; height: 1px; }
+      .balance-center { display: none; }
+      .case-divider { width: 100%; height: 1px; }
+      .matrix-row { grid-template-columns: 1fr; padding: 8px 0; }
+      .matrix-row.header { display: none; }
+      .matrix-weight { text-align: right; }
+      .sources-grid { grid-template-columns: 1fr; }
+      .citation { white-space: normal; max-width: 70%; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .slide.active { animation: none; }
+      .progress { transition: none; }
+    }
+    @media print {
+      @page { size: 13.333in 7.5in; margin: 0; }
+      html, body {
+        width: 13.333in;
+        height: auto;
+        overflow: visible;
+        background: white;
+      }
+      body { display: block; }
+      .deck {
+        display: block;
+        width: 13.333in;
+        height: auto;
+        overflow: visible;
+      }
+      .slide, .slide.active {
+        position: relative;
+        inset: auto;
+        display: flex !important;
+        flex-direction: column;
+        width: 13.333in;
+        height: 7.5in;
+        min-height: 7.5in;
+        margin: 0;
+        border: 0;
+        border-radius: 0;
+        box-shadow: none;
+        overflow: hidden;
+        opacity: 1;
+        transform: none;
+        page-break-after: always;
+        break-after: page;
+        animation: none;
+      }
+      .slide:last-child {
+        page-break-after: auto;
+        break-after: auto;
+      }
+      .main-two {
+        grid-template-columns: minmax(0, 1.05fr) minmax(340px, .95fr);
+      }
+      .main-two.reverse {
+        grid-template-columns: minmax(340px, .92fr) minmax(0, 1.08fr);
+      }
+      .main-two.reverse .visual-stage { order: 2; }
+      .balance-layout { grid-template-columns: 1fr 92px 1fr; }
+      .case-columns { grid-template-columns: 1fr 54px 1fr; }
+      .privacy-layout { grid-template-columns: minmax(0, 1.12fr) minmax(300px, .88fr); }
+      .visual-stage { min-height: 0; }
+      .visual-stage svg { max-height: 54vh; }
+      .contrast { grid-template-columns: 1fr 1px 1fr; }
+      .contrast-divider { width: 1px; height: 78%; }
+      .balance-center { display: grid; }
+      .case-divider { width: 1px; height: 86%; }
+      .matrix-row {
+        grid-template-columns: 170px minmax(0, 1fr) 150px;
+        padding: 0;
+      }
+      .matrix-row.header { display: grid; }
+      .matrix-weight { text-align: center; }
+      .sources-grid { grid-template-columns: 1fr 1fr; }
+      .citation { white-space: nowrap; max-width: calc(100% - 260px); }
+      .controls, .progress, .notes-panel, .help { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+  <main class="deck" id="deck" aria-live="polite">
+
+    <section class="slide active" data-title="שער">
+      <div class="main-two">
+        <div>
+          <p class="eyebrow">פרזנטציה משפטית | 10 דקות | 4 דוברים</p>
+          <h1>פרטיות, שליטה<br>ומסגור מחדש</h1>
+          <p class="lead">ביקורת על הנמקת הפרטיות<br>בעניין כהן נ' אליאסי</p>
+          <p class="subtle">ת"א 47698-02-17</p>
+        </div>
+        <div class="visual-stage" aria-hidden="true">
+          <svg viewBox="0 0 560 500" role="img" aria-label="אדם, רשת חברתית ומנעול פרטיות">
+            <defs>
+              <filter id="soft-shadow-1" x="-30%" y="-30%" width="160%" height="160%">
+                <feDropShadow dx="0" dy="12" stdDeviation="12" flood-color="#37627c" flood-opacity=".16"/>
+              </filter>
+            </defs>
+            <circle cx="280" cy="244" r="185" fill="#edf6fb" stroke="#c9dce8" stroke-width="2"/>
+            <circle cx="280" cy="244" r="132" fill="none" stroke="#b9d7e8" stroke-width="2" stroke-dasharray="8 13"/>
+            <path d="M178 168L265 224M386 154L306 222M162 326L258 264M398 332L310 264" fill="none" stroke="#2f74a8" stroke-width="5" stroke-linecap="round" opacity=".55"/>
+            <circle cx="158" cy="153" r="34" fill="#fff" stroke="#2f74a8" stroke-width="4"/>
+            <path d="M143 158h30M143 147h20M143 169h16" stroke="#2f74a8" stroke-width="4" stroke-linecap="round"/>
+            <circle cx="405" cy="139" r="34" fill="#fff" stroke="#278f86" stroke-width="4"/>
+            <path d="M391 146c12-22 31-19 31-19-1 23-12 34-31 19z" fill="none" stroke="#278f86" stroke-width="4"/>
+            <circle cx="142" cy="348" r="34" fill="#fff" stroke="#d85d70" stroke-width="4"/>
+            <path d="M127 351l29-18M138 330h18v18" fill="none" stroke="#d85d70" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="419" cy="351" r="34" fill="#fff" stroke="#c99b43" stroke-width="4"/>
+            <circle cx="410" cy="344" r="7" fill="none" stroke="#c99b43" stroke-width="4"/>
+            <circle cx="430" cy="344" r="7" fill="none" stroke="#c99b43" stroke-width="4"/>
+            <path d="M397 364c5-12 21-15 31-5M421 359c12-8 26-2 29 5" fill="none" stroke="#c99b43" stroke-width="4" stroke-linecap="round"/>
+            <g filter="url(#soft-shadow-1)">
+              <circle cx="280" cy="230" r="92" fill="#fff" stroke="#2f74a8" stroke-width="5"/>
+              <circle cx="280" cy="205" r="30" fill="#dcecf6" stroke="#245879" stroke-width="4"/>
+              <path d="M225 287c8-42 34-61 55-61s47 19 55 61" fill="#eaf4fb" stroke="#245879" stroke-width="4" stroke-linejoin="round"/>
+            </g>
+            <g transform="translate(325 274)" filter="url(#soft-shadow-1)">
+              <rect x="0" y="36" width="96" height="82" rx="18" fill="#fff" stroke="#278f86" stroke-width="5"/>
+              <path d="M23 40V25C23-8 73-8 73 25v15" fill="none" stroke="#278f86" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="48" cy="75" r="8" fill="#278f86"/>
+              <path d="M48 82v15" stroke="#278f86" stroke-width="6" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="citation">כהן נ' אליאסי; בירנהק, פרטיות כשליטה; ע"א 8954/11 פלוני נ' פלונית</div>
+      <div class="slide-no">1 / 10</div>
+    </section>
+
+    <section class="slide" data-title="השאלה">
+      <p class="eyebrow">נקודת המוצא</p>
+      <div class="main-two reverse">
+        <div class="visual-stage" aria-hidden="true">
+          <svg viewBox="0 0 560 480" role="img" aria-label="פוסט ציבורי עובר שיתוף לקהל גדול">
+            <rect x="72" y="54" width="250" height="335" rx="34" fill="#fff" stroke="#2f74a8" stroke-width="5"/>
+            <circle cx="112" cy="105" r="19" fill="#dcecf6" stroke="#245879" stroke-width="4"/>
+            <path d="M147 94h126M147 115h92" stroke="#9bbdce" stroke-width="8" stroke-linecap="round"/>
+            <rect x="101" y="153" width="191" height="116" rx="18" fill="#eaf4fb"/>
+            <path d="M126 239l45-42 35 29 34-46 29 59z" fill="#b9d7e8"/>
+            <path d="M108 307h78M216 307h62" stroke="#b8cbd7" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="112" cy="348" r="11" fill="none" stroke="#d85d70" stroke-width="4"/>
+            <path d="M107 346c4-9 15-9 18 0 0 8-9 13-13 17-5-4-13-9-13-17 0-8 9-9 13 0" fill="#f8dbe0" stroke="#d85d70" stroke-width="3"/>
+            <path d="M315 226h105" fill="none" stroke="#278f86" stroke-width="9" stroke-linecap="round"/>
+            <path d="M395 198l34 28-34 28" fill="none" stroke="#278f86" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+            <g transform="translate(397 110)">
+              <circle cx="80" cy="76" r="25" fill="#fff" stroke="#c99b43" stroke-width="4"/>
+              <circle cx="34" cy="131" r="21" fill="#fff" stroke="#c99b43" stroke-width="4"/>
+              <circle cx="126" cy="131" r="21" fill="#fff" stroke="#c99b43" stroke-width="4"/>
+              <circle cx="80" cy="173" r="21" fill="#fff" stroke="#c99b43" stroke-width="4"/>
+              <path d="M80 101v33M58 118l-9 4M102 118l9 4M80 101v47" stroke="#c99b43" stroke-width="4"/>
+              <path d="M53 200c0-24 20-38 43-38s43 14 43 38" fill="#fff" stroke="#c99b43" stroke-width="4"/>
+              <path d="M8 169c2-18 16-29 33-29s31 11 33 29M102 169c2-18 16-29 33-29s31 11 33 29" fill="#fff" stroke="#c99b43" stroke-width="4"/>
+            </g>
+            <g transform="translate(244 22)">
+              <path d="M24 42h55" stroke="#d85d70" stroke-width="5" stroke-linecap="round"/>
+              <path d="M56 18l28 24-28 24" fill="none" stroke="#d85d70" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/>
+              <circle cx="20" cy="42" r="13" fill="#fff" stroke="#d85d70" stroke-width="4"/>
+            </g>
+          </svg>
+        </div>
+        <div>
+          <p class="question">
+            <span class="line">פרסמתי פוסט</span>
+            <span class="line">בעמוד פתוח</span>
+            <span class="line accent">האם ויתרתי על</span>
+            <span class="line">כל שליטה בו <span class="question-mark">?</span></span>
+          </p>
+          <p class="subtle">נגישות לציבור אינה בהכרח הסכמה לכל שימוש עתידי</p>
+        </div>
+      </div>
+      <div class="citation">שאלת הדיון מתוך העבודה המתוקנת</div>
+      <div class="slide-no">2 / 10</div>
+    </section>
+
+    <section class="slide" data-title="העובדות">
+      <p class="eyebrow">ת"א 47698-02-17</p>
+      <h2>כהן נ' אליאסי: העובדות</h2>
+      <div class="main-two">
+        <div>
+          <div class="fact-line"><span class="fact-no">1</span><span>כהן פרסם פוסטים בוטים על פרשת אלאור אזריה</span></div>
+          <div class="fact-line"><span class="fact-no">2</span><span>העמוד היה פתוח לציבור</span></div>
+          <div class="fact-line"><span class="fact-no">3</span><span>אליאסי הרכיב מהם קולאז' והוסיף כיתוב משלו</span></div>
+          <div class="fact-line"><span class="fact-no">4</span><span>הפרסום הופץ לכ־300,000 עוקבים</span></div>
+        </div>
+        <div class="visual-stage" aria-hidden="true">
+          <svg viewBox="0 0 560 480" role="img" aria-label="פוסט הופך לקולאז' ומופץ באמצעות מגפון">
+            <rect x="40" y="85" width="165" height="252" rx="24" fill="#fff" stroke="#2f74a8" stroke-width="4"/>
+            <circle cx="78" cy="126" r="15" fill="#dcecf6" stroke="#245879" stroke-width="3"/>
+            <path d="M105 118h72M105 134h50M68 178h110M68 205h88M68 232h102" stroke="#a9c6d6" stroke-width="7" stroke-linecap="round"/>
+            <path d="M68 287h38M130 287h48" stroke="#d85d70" stroke-width="7" stroke-linecap="round"/>
+            <path d="M215 210h56" stroke="#278f86" stroke-width="7" stroke-linecap="round"/>
+            <path d="M251 190l24 20-24 20" fill="none" stroke="#278f86" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/>
+            <g transform="translate(278 70)">
+              <rect x="0" y="0" width="175" height="280" rx="22" fill="#fff" stroke="#d85d70" stroke-width="4"/>
+              <rect x="21" y="23" width="60" height="82" rx="13" fill="#eaf4fb"/>
+              <circle cx="51" cy="50" r="15" fill="#b9d7e8"/>
+              <path d="M29 91c5-20 16-27 22-27s17 7 22 27" fill="#b9d7e8"/>
+              <path d="M100 37h50M100 58h38M100 79h55" stroke="#9bbdce" stroke-width="7" stroke-linecap="round"/>
+              <path d="M23 136h128M23 163h102" stroke="#d85d70" stroke-width="8" stroke-linecap="round"/>
+              <rect x="21" y="198" width="132" height="56" rx="12" fill="#f8dbe0"/>
+              <path d="M36 218h101M36 237h72" stroke="#d85d70" stroke-width="6" stroke-linecap="round"/>
+            </g>
+            <g transform="translate(407 285)">
+              <path d="M0 30l91-35v92L0 53z" fill="#e7f3f1" stroke="#278f86" stroke-width="5" stroke-linejoin="round"/>
+              <rect x="-18" y="29" width="25" height="25" rx="6" fill="#fff" stroke="#278f86" stroke-width="5"/>
+              <path d="M35 69l10 60h36L67 58" fill="#fff" stroke="#278f86" stroke-width="5" stroke-linejoin="round"/>
+              <path d="M105 11l28-19M110 39h34M105 67l28 20" stroke="#c99b43" stroke-width="6" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="citation">ת"א (פ"ת) 47698-02-17 כהן נ' אליאסי, פס' 2–4, 26–29</div>
+      <div class="slide-no">3 / 10</div>
+    </section>
+
+    <section class="slide" data-title="התביעה וההכרעה">
+      <p class="eyebrow">פסק הדין</p>
+      <h2>מה נתבע — ומה נפסק?</h2>
+      <svg class="corner-icon" viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M60 18v70M27 90h66M39 103h42M22 39h76" fill="none" stroke="#245879" stroke-width="6" stroke-linecap="round"/>
+        <path d="M35 41L18 72h34zM85 41L68 72h34z" fill="#edf6fb" stroke="#2f74a8" stroke-width="4" stroke-linejoin="round"/>
+      </svg>
+      <div class="case-columns">
+        <div class="case-column claim">
+          <h3>התביעה</h3>
+          <p class="claim-amount">519,052 ש״ח ללא הוכחת נזק</p>
+          <ul class="plain-lines">
+            <li>שני פרסומים בדף הפייסבוק של אליאסי</li>
+            <li>עילות: לשון הרע ופגיעה בפרטיות</li>
+            <li>פרסום ראשון: קולאז׳ וכיתוב נלווה</li>
+            <li>פרסום שני: התכתבויות, הקלטה ומכתב התראה</li>
+          </ul>
+        </div>
+        <div class="case-divider" aria-hidden="true"></div>
+        <div class="case-column outcome">
+          <h3>הכרעת בית המשפט</h3>
+          <ul class="plain-lines">
+            <li>לשון הרע בפרסום הראשון התקבלה בחלקה</li>
+            <li>הפרסום השני נדחה בשל קשיי הוכחה</li>
+            <li>עילת הפרטיות נדחתה בשני הפרסומים</li>
+          </ul>
+          <div class="amount">פיצוי: 5,000 ש"ח</div>
+          <p class="claim-label">כל צד נשא בהוצאותיו</p>
+        </div>
+      </div>
+      <div class="citation">כהן נ' אליאסי, פס' 1, 8–9, 30–38, 41–42</div>
+      <div class="slide-no">4 / 10</div>
+    </section>
+
+    <section class="slide" data-title="הקושי בהנמקה">
+      <p class="eyebrow">מוקד הביקורת</p>
+      <h2>מדוע נדחתה עילת הפרטיות?</h2>
+      <div class="privacy-layout">
+        <div>
+          <h3>נימוקי בית המשפט</h3>
+          <ol class="reason-list">
+            <li>כהן לא הסביר כיצד נפגעה פרטיותו</li>
+            <li>הפוסטים והתמונה פורסמו בעמוד פתוח</li>
+            <li>ההערה על מצבו הנפשי נחשבה לעג, לא מידע רפואי</li>
+            <li>בתמונה עצמה לא נמצא דבר פוגעני</li>
+            <li>חומרי הפרסום השני לא צורפו, והמכתב לא סומן כחסוי</li>
+          </ol>
+        </div>
+        <div class="critique-focus">
+          <h3>מוקד הביקורת</h3>
+          <p>בית המשפט כמעט לא בחן את הקולאז׳, הכיתוב החדש וההפצה לכ־300,000 עוקבים.</p>
+          <p class="case-note">אותה הגברה שנחשבה ביוש בלתי מידתי כמעט לא נשקלה בניתוח הפרטיות.</p>
+          <div class="legal-hooks">לענייננו: סעיף 2(4) — תצלום בנסיבות משפילות; סעיף 2(9) — שימוש במידע למטרה אחרת.</div>
+        </div>
+      </div>
+      <div class="citation">כהן נ' אליאסי, פס' 26–29, 34–36; חוק הגנת הפרטיות, ס' 2(4), 2(9)</div>
+      <div class="slide-no">5 / 10</div>
+    </section>
+
+    <section class="slide" data-title="בירנהק">
+      <p class="eyebrow">המסגרת העיונית</p>
+      <h2>בירנהק: פרטיות כשליטה</h2>
+      <div class="main-two">
+        <div>
+          <p class="definition">פרטיות אינה רק מניעת חשיפה. היא כוללת גם <span class="underline">שליטה בדרך שבה מידע מועבר, מעובד ומשמש אחרים</span></p>
+          <div class="keywords" aria-label="מרכיבי השליטה במידע">
+            <span class="keyword">מתי</span>
+            <span class="keyword">כיצד</span>
+            <span class="keyword">לאיזו מטרה</span>
+            <span class="keyword">בפני איזה קהל</span>
+          </div>
+          <p class="case-note"><strong>במקרה שלנו:</strong> כהן בחר בפרסום פומבי, אך לא בחר בהכרח בקולאז׳, בכיתוב החדש ובחשיפה לקהל אחר.</p>
+          <p class="case-limit">אין מכאן שכל שימוש חוזר אסור. עדיין נדרשת עילה לפי החוק.</p>
+        </div>
+        <div class="visual-stage" aria-hidden="true">
+          <svg viewBox="0 0 560 480" role="img" aria-label="אדם שולט בזרימת מידע באמצעות מחוונים">
+            <circle cx="278" cy="232" r="180" fill="#edf6fb" stroke="#c9dce8" stroke-width="2"/>
+            <circle cx="278" cy="210" r="42" fill="#fff" stroke="#245879" stroke-width="5"/>
+            <path d="M199 332c10-68 49-96 79-96s69 28 79 96" fill="#fff" stroke="#245879" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M118 145h155M118 209h115M118 273h142M303 145h139M326 209h116M296 273h146" stroke="#9bbdce" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="192" cy="145" r="17" fill="#fff" stroke="#2f74a8" stroke-width="5"/>
+            <circle cx="171" cy="209" r="17" fill="#fff" stroke="#278f86" stroke-width="5"/>
+            <circle cx="225" cy="273" r="17" fill="#fff" stroke="#d85d70" stroke-width="5"/>
+            <circle cx="386" cy="145" r="17" fill="#fff" stroke="#c99b43" stroke-width="5"/>
+            <circle cx="365" cy="209" r="17" fill="#fff" stroke="#2f74a8" stroke-width="5"/>
+            <circle cx="346" cy="273" r="17" fill="#fff" stroke="#278f86" stroke-width="5"/>
+            <g transform="translate(353 315)">
+              <rect x="0" y="31" width="92" height="76" rx="17" fill="#fff" stroke="#278f86" stroke-width="5"/>
+              <path d="M22 34V21C22-7 70-7 70 21v13" fill="none" stroke="#278f86" stroke-width="7" stroke-linecap="round"/>
+              <circle cx="46" cy="67" r="7" fill="#278f86"/>
+              <path d="M46 74v15" stroke="#278f86" stroke-width="6" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+      </div>
+      <div class="citation">מיכאל בירנהק, מרחב פרטי: הזכות לפרטיות בין משפט לטכנולוגיה (2010), “פרטיות כשליטה”, עמ' 89–108</div>
+      <div class="slide-no">6 / 10</div>
+    </section>
+
+    <section class="slide" data-title="פלוני נ' פלונית">
+      <p class="eyebrow">המסגרת הפסיקתית</p>
+      <h2>פלוני נ' פלונית: כיצד מאזנים?</h2>
+      <div class="main-two reverse">
+        <div class="visual-stage" aria-hidden="true">
+          <svg viewBox="0 0 560 470" role="img" aria-label="ספר פרטי נשקל מול חופש הביטוי">
+            <path d="M280 80v245M190 328h180M228 365h104" stroke="#245879" stroke-width="9" stroke-linecap="round"/>
+            <path d="M120 147h320" stroke="#245879" stroke-width="8" stroke-linecap="round"/>
+            <circle cx="280" cy="147" r="18" fill="#fff" stroke="#245879" stroke-width="6"/>
+            <path d="M164 151l-60 116h120zM396 151l-60 116h120z" fill="#fff" stroke="#2f74a8" stroke-width="5" stroke-linejoin="round"/>
+            <path d="M104 267c11 31 31 47 60 47s49-16 60-47M336 267c11 31 31 47 60 47s49-16 60-47" fill="none" stroke="#2f74a8" stroke-width="5"/>
+            <g transform="translate(128 198)">
+              <path d="M0 0h75v74H0c17-12 17-62 0-74z" fill="#f8dbe0" stroke="#d85d70" stroke-width="4"/>
+              <path d="M75 0h18v74H75" fill="#fff" stroke="#d85d70" stroke-width="4"/>
+              <path d="M34 26c8-16 30-8 30 7 0 14-18 24-27 31-9-7-27-17-27-31 0-15 22-23 30-7" fill="none" stroke="#d85d70" stroke-width="4"/>
+            </g>
+            <g transform="translate(365 207)">
+              <path d="M0 21l70-25v74L0 45z" fill="#e7f3f1" stroke="#278f86" stroke-width="4" stroke-linejoin="round"/>
+              <rect x="-15" y="20" width="20" height="25" rx="5" fill="#fff" stroke="#278f86" stroke-width="4"/>
+              <path d="M75 8l19-13M78 33h24M75 57l19 14" stroke="#c99b43" stroke-width="5" stroke-linecap="round"/>
+            </g>
+          </svg>
+        </div>
+        <div>
+          <div class="story-flow">
+            <div class="story-step"><strong>המקרה</strong><span>רומן אוטוביוגרפי חשף מערכת יחסים אינטימית; האישה הייתה ניתנת לזיהוי.</span></div>
+            <div class="story-step"><strong>ההכרעה</strong><span>בית המשפט מנע את הפרסום בשל פגיעה קשה בליבת הפרטיות.</span></div>
+            <div class="story-step"><strong>העיקרון</strong><span>אין עדיפות אוטומטית לפרטיות או לביטוי; האיזון תלוי בנסיבות.</span></div>
+            <div class="story-step"><strong>הקשר לכהן</strong><span>התרומה היא שיטת הבחינה, לא תשובה ישירה לתביעה.</span></div>
+          </div>
+          <p class="method-line"><strong>השיקולים:</strong> טיב ומקור המידע, אופן הפרסום, מעמד הצדדים, היקף הפגיעה והעניין הציבורי.</p>
+          <p class="case-limit">שם דובר במידע אינטימי. אצל כהן מדובר בפוסט פוליטי פומבי.</p>
+        </div>
+      </div>
+      <div class="citation">ע"א 8954/11 פלוני נ' פלונית, פס' 117–127, 136, 157–160 לפסק דינו של השופט סולברג</div>
+      <div class="slide-no">7 / 10</div>
+    </section>
+
+    <section class="slide" data-title="יישום מבחני פלוני">
+      <p class="eyebrow">מההלכה אל המקרה</p>
+      <h2>מבחני פלוני בכהן נ' אליאסי</h2>
+      <svg class="corner-icon" viewBox="0 0 120 120" aria-hidden="true">
+        <path d="M60 17v72M25 91h70M40 104h40M20 40h80" fill="none" stroke="#245879" stroke-width="6" stroke-linecap="round"/>
+        <circle cx="34" cy="70" r="18" fill="#e7f3f1" stroke="#278f86" stroke-width="4"/><circle cx="86" cy="70" r="18" fill="#f8dbe0" stroke="#d85d70" stroke-width="4"/>
+      </svg>
+      <div class="application-matrix">
+        <div class="matrix-row header"><span>המבחן</span><span>היישום במקרה כהן</span><span>המשקל</span></div>
+        <div class="matrix-row"><span>טיב ומקור המידע</span><span>פוסטים פוליטיים מעמוד פתוח</span><span class="matrix-weight expression">חופש הביטוי</span></div>
+        <div class="matrix-row"><span>אופן הפרסום</span><span>קולאז׳ וכיתוב חדש של אליאסי</span><span class="matrix-weight privacy">בחינת פרטיות</span></div>
+        <div class="matrix-row"><span>היקף ומעמד</span><span>אדם פרטי מול מוביל דעה; 221 שיתופים ו־373 תגובות</span><span class="matrix-weight privacy">עוצמת הפגיעה</span></div>
+        <div class="matrix-row"><span>העניין הציבורי</span><span>הביקורת לגיטימית; החשד באיומים לא הוכח</span><span class="matrix-weight mixed">שיקול מעורב</span></div>
+        <div class="matrix-row"><span>התנהלות כהן</span><span>פרסום פתוח ובוטה בשיח ציבורי</span><span class="matrix-weight expression">מחליש את העילה</span></div>
+      </div>
+      <p class="application-conclusion">יישום המבחנים אינו מחייב לקבל את עילת הפרטיות. הוא מחייב לבחון אותה לפני שדוחים אותה.</p>
+      <div class="citation">כהן נ' אליאסי, פס' 2–5, 26–29, 34; פלוני נ' פלונית, פס' 127, 136</div>
+      <div class="slide-no">8 / 10</div>
+    </section>
+
+    <section class="slide" data-title="סיכום">
+      <p class="eyebrow">המסקנה</p>
+      <h2>מה היה חסר בפסק הדין</h2>
+      <div class="closing">
+        <div>
+          <blockquote>
+            השאלה אינה רק אם המידע היה <strong>פומבי</strong>,<br>
+            אלא מה נעשה בו, באיזה הקשר<br>
+            ובפני איזה קהל
+          </blockquote>
+          <div class="closing-rule" aria-hidden="true"></div>
+          <p class="subtle" style="margin-top:2.4vh">פומביות פותחת את האיזון. היא אינה מחליפה אותו.</p>
+        </div>
+      </div>
+      <div class="citation">סיכום העבודה המתוקנת על בסיס כהן נ' אליאסי, בירנהק ופלוני נ' פלונית</div>
+      <div class="slide-no">9 / 10</div>
+    </section>
+
+    <section class="slide" data-title="מקורות">
+      <p class="eyebrow">להעמקה ולשאלות</p>
+      <h2>מקורות</h2>
+      <div class="sources-grid">
+        <div class="source-group">
+          <h3>פסיקה</h3>
+          <p>ת"א (פ"ת) 47698-02-17 גיל בן-ימין כהן נ' יואב אליאסי, ניתן ביום 11.10.2020.</p>
+          <p>ע"א 8954/11 פלוני נ' פלונית, פסק דינו של השופט נעם סולברג, ניתן ביום 24.4.2014 והותר לפרסום ביום 22.5.2014.</p>
+        </div>
+        <div class="source-group">
+          <h3>חקיקה</h3>
+          <p><a href="https://main.knesset.gov.il/APPS/legislation/main/laws/2000234" target="_blank" rel="noreferrer">חוק הגנת הפרטיות, התשמ"א-1981</a>, ובפרט סעיף 2(4) וסעיף 2(9).</p>
+          <p>חוק איסור לשון הרע, התשכ"ה-1965.</p>
+        </div>
+        <div class="source-group">
+          <h3>ספרות</h3>
+          <p>מיכאל בירנהק, <strong>מרחב פרטי: הזכות לפרטיות בין משפט לטכנולוגיה</strong> (2010), החלק “פרטיות כשליטה”.</p>
+          <p>הדיון במצגת מתמקד בעמ' 89–108. <a href="https://www.tau.ac.il/law/members/birnhack/pratiut.pdf" target="_blank" rel="noreferrer">מאמר רקע מאת המחבר</a>.</p>
+        </div>
+        <div class="source-group">
+          <h3>מפת הפניות</h3>
+          <p><strong>הקושי בהנמקה:</strong> כהן נ' אליאסי, פס' 26–29, 34–36.</p>
+          <p><strong>האיזון:</strong> פלוני נ' פלונית, פס' 117–127, 136, 157–160.</p>
+        </div>
+      </div>
+      <div class="citation">הקישורים מיועדים לעיון; המצגת עצמה אינה דורשת חיבור לאינטרנט</div>
+      <div class="slide-no">10 / 10</div>
+    </section>
+  </main>
+
+  <nav class="controls" aria-label="ניווט במצגת">
+    <button type="button" id="next" aria-label="השקופית הבאה" title="השקופית הבאה">‹</button>
+    <button type="button" id="prev" aria-label="השקופית הקודמת" title="השקופית הקודמת">›</button>
+    <button type="button" id="full" aria-label="מסך מלא" title="מסך מלא">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 3H3v5M16 3h5v5M8 21H3v-5M16 21h5v-5"/></svg>
+    </button>
+    <a href="מצגת_כהן_נגד_אליאסי_RTL.pdf" download aria-label="הורדת המצגת כ־PDF" title="הורדת PDF">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12m0 0 4-4m-4 4-4-4M5 20h14"/></svg>
+    </a>
+    <button type="button" id="helpButton" aria-label="קיצורי מקשים">?</button>
+  </nav>
+  <div class="progress" id="progress" aria-hidden="true"></div>
+  <section class="help" id="help" aria-modal="true" role="dialog" aria-label="קיצורי מקשים">
+    <div class="help-box">
+      <h3>קיצורי מקשים</h3>
+      <p><strong>הבא:</strong> חץ שמאלה, רווח או Page Down</p>
+      <p><strong>הקודם:</strong> חץ ימינה או Page Up</p>
+      <p><strong>מסך מלא:</strong> F</p>
+      <p><strong>סגירה:</strong> Esc</p>
+    </div>
+  </section>
+
+  <script>
+    (() => {
+      const slides = [...document.querySelectorAll('.slide')];
+      const progress = document.getElementById('progress');
+      const help = document.getElementById('help');
+      let index = 0;
+
+      function normalizeIndex(value) {
+        return Math.max(0, Math.min(slides.length - 1, value));
+      }
+
+      function showSlide(value, pushHash = true) {
+        index = normalizeIndex(value);
+        slides.forEach((slide, slideIndex) => {
+          const active = slideIndex === index;
+          slide.classList.toggle('active', active);
+          slide.setAttribute('aria-hidden', active ? 'false' : 'true');
+        });
+        progress.style.width = `${((index + 1) / slides.length) * 100}%`;
+        document.title = `${index + 1}/${slides.length} | ${slides[index].dataset.title} | כהן נ' אליאסי`;
+        if (pushHash) history.replaceState(null, '', `#${index + 1}`);
+      }
+
+      function next() { showSlide(index + 1); }
+      function prev() { showSlide(index - 1); }
+      function toggleHelp() { help.classList.toggle('show'); }
+      async function toggleFullscreen() {
+        if (!document.fullscreenElement) {
+          try { await document.documentElement.requestFullscreen(); } catch (_) {}
+        } else {
+          try { await document.exitFullscreen(); } catch (_) {}
+        }
+      }
+
+      document.getElementById('next').addEventListener('click', next);
+      document.getElementById('prev').addEventListener('click', prev);
+      document.getElementById('full').addEventListener('click', toggleFullscreen);
+      document.getElementById('helpButton').addEventListener('click', toggleHelp);
+      help.addEventListener('click', event => { if (event.target === help) toggleHelp(); });
+
+      document.addEventListener('keydown', event => {
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowDown' || event.key === 'PageDown' || event.key === ' ') {
+          event.preventDefault(); next();
+        } else if (event.key === 'ArrowRight' || event.key === 'ArrowUp' || event.key === 'PageUp') {
+          event.preventDefault(); prev();
+        } else if (event.key.toLowerCase() === 'f') {
+          toggleFullscreen();
+        } else if (event.key === '?' || event.key === '/') {
+          toggleHelp();
+        } else if (event.key === 'Escape') {
+          help.classList.remove('show');
+        } else if (event.key === 'Home') {
+          showSlide(0);
+        } else if (event.key === 'End') {
+          showSlide(slides.length - 1);
+        }
+      });
+
+      let touchStartX = null;
+      document.addEventListener('touchstart', event => {
+        touchStartX = event.changedTouches[0].clientX;
+      }, { passive: true });
+      document.addEventListener('touchend', event => {
+        if (touchStartX === null) return;
+        const delta = event.changedTouches[0].clientX - touchStartX;
+        if (Math.abs(delta) > 55) delta < 0 ? next() : prev();
+        touchStartX = null;
+      }, { passive: true });
+
+      const hashIndex = Number.parseInt(location.hash.replace('#', ''), 10) - 1;
+      showSlide(Number.isFinite(hashIndex) ? hashIndex : 0, false);
+    })();
+  </script>
+</body>
+</html>
