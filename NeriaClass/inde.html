@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl"><head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>שיעור 1: שברים והבנת הנקרא</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box}
+:root{
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+  --bg:#f4f7fc;--grid:rgba(47,91,234,.08);--card:#ffffff;--ink:#1b2a4a;--muted:#5a6683;--line:#dbe3f0;
+  --math:#e8473c;--math-soft:#fde5e2;--heb:#2f5bea;--heb-soft:#e3eafd;
+  --good:#1a9e55;--good-soft:#dcf4e6;--bad:#d4373b;--bad-soft:#fbe1e2;
+  --fill:#f26b3a;--fill2:#2f5bea;--empty:#fff3dc;--empty-hover:#ffe3b8;--crust:#e3a857;
+  --pro:#ffe14d;--con:#8fe3b0;--shadow:0 2px 0 rgba(27,42,74,.06),0 8px 22px rgba(27,42,74,.06);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#121826;--grid:rgba(255,255,255,.045);--card:#1b2335;--ink:#eef2fa;--muted:#a2adc4;--line:#2c3650;
+    --math:#ff6b5e;--math-soft:#3b2224;--heb:#7b9aff;--heb-soft:#1f2a4a;
+    --good:#39c97a;--good-soft:#15342a;--bad:#ff6b6e;--bad-soft:#3d1f25;
+    --fill:#ff7a45;--fill2:#7b9aff;--empty:#3a3324;--empty-hover:#4a3f2a;--crust:#a7783a;
+    --pro:#7d6a10;--con:#1d6a41;--shadow:0 8px 22px rgba(0,0,0,.35);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#121826;--grid:rgba(255,255,255,.045);--card:#1b2335;--ink:#eef2fa;--muted:#a2adc4;--line:#2c3650;
+  --math:#ff6b5e;--math-soft:#3b2224;--heb:#7b9aff;--heb-soft:#1f2a4a;
+  --good:#39c97a;--good-soft:#15342a;--bad:#ff6b6e;--bad-soft:#3d1f25;
+  --fill:#ff7a45;--fill2:#7b9aff;--empty:#3a3324;--empty-hover:#4a3f2a;--crust:#a7783a;
+  --pro:#7d6a10;--con:#1d6a41;--shadow:0 8px 22px rgba(0,0,0,.35);
+}
+html{height:100%;scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+body{height:100%;margin:0;display:flex;flex-direction:column;background:var(--bg);color:var(--ink);
+  font-family:"Fredoka","Segoe UI","Noto Sans Hebrew","Arial Hebrew",Arial,sans-serif;font-size:18px;line-height:1.55;
+  --accent:var(--math);--accent-soft:var(--math-soft);-webkit-tap-highlight-color:transparent}
+body[data-subject="heb"]{--accent:var(--heb);--accent-soft:var(--heb-soft)}
+body[data-subject="break"]{--accent:var(--good);--accent-soft:var(--good-soft)}
+[hidden]{display:none!important}
+
+header{flex:none;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:10px 16px;background:var(--card);border-bottom:1px solid var(--line)}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.logo{font-size:1.6rem}
+.htitle{font-weight:600;font-size:.95rem;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.topic{font-size:.85rem;color:var(--accent);font-weight:600}
+.starbox{flex:none;background:var(--accent-soft);padding:6px 14px;border-radius:999px;font-weight:700;font-size:1.1rem}
+.starbox.pop{animation:pop .5s ease}
+@keyframes pop{40%{transform:scale(1.3)}}
+.progress{flex:none;height:6px;background:var(--line)}
+.progress i{display:block;height:100%;width:0;background:var(--accent);transition:width .4s ease}
+
+main{flex:1;overflow-y:auto;overflow-x:hidden;-webkit-overflow-scrolling:touch;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:26px 26px}
+.slide{display:none;max-width:820px;margin:0 auto;padding:18px 16px 36px}
+.slide.active{display:block;animation:slideIn .3s ease}
+@keyframes slideIn{from{opacity:0;transform:translateY(6px)}}
+footer{flex:none;display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 16px;background:var(--card);border-top:1px solid var(--line)}
+.muted{color:var(--muted);font-size:.9rem}
+
+h1,h2,h3,h4{line-height:1.2;margin:.2em 0 .35em;font-weight:700}
+h1{font-size:clamp(2.2rem,8vw,3.4rem)}
+h2{font-size:clamp(1.6rem,5.5vw,2.2rem)}
+h3{font-size:1.3rem}
+.lead{color:var(--muted);margin:0 0 .6em;font-size:1.08rem}
+.kicker{display:inline-block;background:var(--accent-soft);color:var(--accent);font-weight:600;font-size:.9rem;padding:3px 12px;border-radius:999px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;box-shadow:var(--shadow);margin:14px 0}
+
+.btn{font:inherit;font-weight:600;min-height:48px;padding:10px 18px;border-radius:14px;border:2px solid var(--line);background:var(--card);color:var(--ink);cursor:pointer;transition:transform .1s,background .2s,border-color .2s;touch-action:manipulation}
+.btn:active{transform:scale(.97)}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+.btn:disabled{cursor:default}
+footer .btn:disabled{opacity:.35}
+.btn.round{width:48px;padding:0;font-size:1.5rem;border-radius:50%}
+.chip{min-height:42px;padding:6px 14px;border-radius:999px}
+.chip.sel{border-color:var(--accent);background:var(--accent-soft)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.row{display:flex;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:12px}
+
+.frac{display:inline-flex;flex-direction:column;align-items:center;vertical-align:middle;font-weight:700;line-height:1.1;margin:0 .12em;direction:ltr}
+.frac>span{padding:0 .2em;min-width:1ch;text-align:center}
+.frac>span:first-child{border-bottom:.11em solid currentColor}
+.frac.big{font-size:3.2rem;color:var(--accent)}
+
+.pie{display:block;width:min(260px,72vw);height:auto;margin:6px auto}
+.pie.sm{width:min(200px,56vw)}
+.pie .crust{fill:var(--crust)}
+.pie .slice{fill:var(--empty);stroke:var(--crust);stroke-width:2.5;transition:fill .2s}
+.pie .slice.on{fill:var(--fill)}
+.pie.click .slice{cursor:pointer}
+.pie.click .slice:not(.on):hover{fill:var(--empty-hover)}
+
+.bar{display:flex;gap:4px;width:100%;height:52px;margin:6px 0}
+.bar.thin{height:30px;gap:3px}
+.cell{flex:1;min-width:0;border-radius:8px;background:var(--empty);border:2px solid var(--crust);transition:background .2s}
+.cell.on{background:var(--fill);border-color:var(--fill)}
+.bar.blue .cell{border-color:var(--line);background:var(--card)}
+.bar.blue .cell.on{background:var(--fill2);border-color:var(--fill2)}
+.bar.click .cell{cursor:pointer}
+
+.hero{text-align:center;padding:8px 0 4px}
+.hero .e{font-size:3.4rem;line-height:1}
+.agenda{display:grid;gap:10px}
+.ag{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:16px;border:1px solid var(--line);background:var(--card)}
+.ag .e{font-size:1.8rem;line-height:1.2}
+.ag.math{border-inline-start:6px solid var(--math)}
+.ag.heb{border-inline-start:6px solid var(--heb)}
+.ag.brk{border-inline-start:6px solid var(--good)}
+.ag b{display:block}
+.ag small{color:var(--muted);font-size:.95rem}
+
+.fracdemo{display:flex;align-items:center;gap:18px}
+.fracdemo p{margin:.3em 0}
+.c-acc{color:var(--accent)}
+.stepper{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;font-weight:600}
+.stepctl{display:flex;align-items:center;gap:12px;font-size:1.6rem}
+.pizzaOut{display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap;text-align:center}
+.pizzaOut p{margin:0;font-weight:600;max-width:340px}
+.challenge{margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--accent-soft);font-weight:600;text-align:center;font-size:1.12rem}
+.challenge.win{background:var(--good-soft);color:var(--good)}
+
+.roundinfo{color:var(--muted);font-size:.9rem;font-weight:600}
+.q{font-size:1.2rem;font-weight:600;margin:.6em 0}
+.vis{padding:6px 0}
+.opts{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media (min-width:620px){.opts:not(.text){grid-template-columns:repeat(4,minmax(0,1fr))}}
+.opt{font-size:1.5rem;min-height:84px}
+.opts.text{grid-template-columns:1fr}
+.opts.text .opt{font-size:1.04rem;min-height:52px;text-align:start;display:flex;align-items:center;gap:10px;font-weight:500}
+.ol{flex:none;display:inline-grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--accent-soft);color:var(--accent);font-weight:700;font-size:.9rem}
+.btn.ok{background:var(--good-soft);border-color:var(--good)}
+.btn.no{background:var(--bad-soft);border-color:var(--bad);opacity:.75}
+.fb{display:none;margin-top:12px;padding:12px 14px;border-radius:14px;background:var(--accent-soft)}
+.fb.show{display:block}
+.fb.ok{background:var(--good-soft)}
+.fb.no{background:var(--bad-soft)}
+.nextrow{display:flex;justify-content:flex-end;margin-top:12px}
+.done{text-align:center;font-size:1.4rem;font-weight:600;padding:20px 0}
+
+.vs{display:grid;grid-template-columns:1fr auto 1fr;gap:10px;align-items:stretch}
+.fcard{font-size:2.6rem;min-height:130px}
+.eqbtn{font-size:1rem;padding:8px 12px}
+.cmpbars{display:grid;gap:8px;margin-top:12px}
+.cbrow{display:grid;grid-template-columns:3rem 1fr;align-items:center;gap:10px;font-size:1.2rem}
+
+.items{display:flex;flex-wrap:wrap;justify-content:center;gap:6px;font-size:2rem;line-height:1.2;margin:8px 0}
+.groups{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin:8px 0}
+.group{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;padding:6px 10px;border:3px dashed var(--line);border-radius:14px;font-size:1.7rem;max-width:150px;opacity:.5}
+.group.take{border-style:solid;border-color:var(--accent);background:var(--accent-soft);opacity:1}
+.answer{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:center;margin-top:8px}
+.answer input{width:110px;font:inherit;font-size:1.6rem;font-weight:700;text-align:center;padding:6px 10px;border-radius:14px;border:2px solid var(--line);background:var(--bg);color:var(--ink);min-height:52px}
+.answer input:focus{outline:none;border-color:var(--accent)}
+.steps div{margin:.4em 0}
+.m{font-weight:700;background:var(--card);padding:2px 10px;border-radius:8px;display:inline-block;border:1px solid var(--line)}
+.eqline{display:inline-flex;align-items:center;gap:8px;font-size:1.3rem;vertical-align:middle}
+.foundlist{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap;vertical-align:middle;font-size:1.1rem}
+.tip{border-inline-start:5px solid var(--accent);background:var(--accent-soft);border-radius:12px;padding:12px 14px;margin:14px 0}
+.lbl{display:flex;align-items:center;gap:10px;font-weight:600;margin-top:12px;flex-wrap:wrap}
+
+.timer{font-size:clamp(3.6rem,17vw,6rem);font-weight:700;text-align:center;color:var(--accent);font-variant-numeric:tabular-nums;direction:ltr;line-height:1.1}
+.center{text-align:center}
+.ideas{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.idea{background:var(--accent-soft);border-radius:14px;padding:12px;text-align:center;font-weight:600}
+
+.strats{display:grid;gap:10px}
+.strat{display:block;width:100%;text-align:start}
+.strat .t{display:flex;align-items:center;gap:10px;font-size:1.12rem;font-weight:600}
+.strat .n{display:inline-grid;place-items:center;width:34px;height:34px;border-radius:50%;background:var(--heb);color:#fff;flex:none}
+.strat .d{display:none;font-weight:400;margin-top:8px}
+.strat.open .d{display:block}
+.strat.open{border-color:var(--heb);background:var(--heb-soft)}
+
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;position:sticky;top:0;z-index:2;background:var(--bg);padding:8px 0}
+.sw{display:inline-block;width:18px;height:18px;border-radius:5px;vertical-align:middle;margin-inline-end:6px;border:1px solid var(--line)}
+.sw.pro{background:var(--pro)}.sw.con{background:var(--con)}
+.mk.sel{border-color:var(--ink)}
+.reading{font-size:1.16rem;line-height:2}
+.reading h3{text-align:center;margin-bottom:.6em}
+.para{margin:0 0 .8em}
+.pn{display:inline-grid;place-items:center;width:1.7em;height:1.7em;border-radius:50%;background:var(--heb-soft);color:var(--heb);font-size:.8rem;font-weight:700;margin-inline-end:6px;vertical-align:middle;line-height:1}
+#readText .s{cursor:pointer}
+.s{border-radius:6px;padding:2px;transition:background .2s;-webkit-box-decoration-break:clone;box-decoration-break:clone}
+.s.hl-pro{background:var(--pro)}
+.s.hl-con{background:var(--con)}
+.s.r-ok{outline:2px solid var(--good);outline-offset:1px}
+.s.r-miss{outline:2px dashed var(--heb);outline-offset:1px}
+.s.r-bad{outline:2px solid var(--bad);outline-offset:1px}
+details.textcopy summary{cursor:pointer;font-weight:600;padding:4px 0}
+.qtag{display:inline-block;font-size:.8rem;font-weight:600;color:var(--heb);background:var(--heb-soft);padding:3px 10px;border-radius:999px}
+
+textarea{width:100%;font:inherit;font-size:1.05rem;padding:10px 12px;border-radius:12px;border:2px solid var(--line);background:var(--bg);color:var(--ink);resize:vertical;min-height:50px;line-height:1.6}
+textarea:focus{outline:none;border-color:var(--accent)}
+textarea.missing{border-color:var(--bad)}
+.checks label{display:flex;gap:10px;align-items:center;padding:6px 0;cursor:pointer}
+.checks input{width:22px;height:22px;accent-color:var(--good);flex:none}
+.model{background:var(--heb-soft);border-radius:12px;padding:12px 14px;margin-top:10px}
+
+.two p{margin:.3em 0}
+.fo-card{font-size:clamp(1.3rem,4.6vw,1.7rem);font-weight:600;text-align:center;padding:24px 12px;min-height:130px;display:grid;place-items:center;background:var(--heb-soft);border-radius:16px;margin:10px 0}
+.fo-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.fo-btns .btn{font-size:1.25rem;min-height:64px}
+
+.block{border-inline-start:5px solid var(--heb);padding-inline-start:12px;margin:18px 0}
+.block h4{margin:0 0 6px;font-size:1.05rem;color:var(--heb)}
+.sub{display:block;font-weight:600;color:var(--muted);margin:8px 0 4px;font-size:.98rem}
+.bank{position:sticky;top:0;z-index:2;background:var(--card);padding:8px 0}
+.paper{background:var(--card);border:2px solid var(--heb);border-radius:16px;padding:18px;font-size:1.15rem;line-height:1.9;white-space:pre-wrap;margin-top:12px}
+
+.moods{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.moods .btn{font-size:2rem;width:64px;height:64px;padding:0;border-radius:50%}
+.moods .btn.sel{border-color:var(--accent);background:var(--accent-soft)}
+.learned{display:flex;flex-wrap:wrap;gap:8px}
+.learned span{background:var(--accent-soft);border-radius:999px;padding:6px 14px;font-weight:600}
+
+.fly{position:fixed;z-index:50;font-size:1.5rem;font-weight:700;pointer-events:none;animation:fly 1s ease-out forwards}
+@keyframes fly{to{transform:translateY(-90px) scale(1.3);opacity:0}}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body data-subject="heb">
+
+<header>
+  <div class="brand">
+    <span class="logo" aria-hidden="true">🍕</span>
+    <div style="min-width:0">
+      <div class="htitle">שיעור 1: שברים והבנת הנקרא</div>
+      <div class="topic" id="topic">עברית: קריאה עם מרקרים</div>
+    </div>
+  </div>
+  <div class="starbox" id="starBox" aria-live="polite">⭐ <b id="starCount">0</b></div>
+</header>
+<div class="progress"><i id="progressFill" style="width: 66.6667%;"></i></div>
+
+<main id="main">
+
+<!-- 0 · Cover -->
+<section class="slide" data-subject="math" data-topic="פתיחה">
+  <div class="hero">
+    <div class="e" aria-hidden="true">🍕📖</div>
+    <h1>שיעור חווייתי</h1>
+    <p class="lead">היום: שברים בחשבון, וקריאת טקסט בעברית</p>
+  </div>
+  <div class="agenda">
+    <div class="ag math"><span class="e">🍕</span><div><b>חלק א׳: חשבון</b><small>מה זה שבר, משחק זיהוי, שברים שווים, מי גדול יותר, שבר מתוך כמות</small></div></div>
+    <div class="ag brk"><span class="e">🧃</span><div><b>הפסקה</b><small>5–10 דקות לנשום ולזוז</small></div></div>
+    <div class="ag heb"><span class="e">📖</span><div><b>חלק ב׳: עברית</b><small>איך קוראים טקסט, קריאה עם מרקרים, שאלות, עובדה או דעה, בונים טיעון</small></div></div>
+  </div>
+  <div class="tip">על כל תשובה נכונה בניסיון הראשון מקבלים ⭐. טעיתם? זה בסדר גמור – מקבלים רמז ומנסים שוב.</div>
+  <div class="row"><button class="btn primary" data-go="1">יוצאים לדרך</button></div>
+</section>
+
+<!-- 1 · What is a fraction -->
+<section class="slide" data-subject="math" data-topic="חשבון: מה זה שבר?">
+  <span class="kicker">חשבון</span>
+  <h2>מה זה שבר?</h2>
+  <p class="lead">שבר הוא <b>חלק משלם</b>. מחלקים את השלם ל<b>חלקים שווים</b>, ולוקחים כמה מהם.</p>
+  <div class="card">
+    <div class="fracdemo">
+      <span class="frac big"><span>3</span><span>4</span></span>
+      <div>
+        <p><b class="c-acc">מונה (למעלה)</b>: כמה חלקים לקחנו</p>
+        <p><b class="c-acc">מכנה (למטה)</b>: לכמה חלקים שווים חילקנו את השלם</p>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="stepper">
+      <span>לכמה חלקים לחתוך את הפיצה?</span>
+      <div class="stepctl">
+        <button class="btn round" id="pzMinus" aria-label="פחות חלקים">−</button>
+        <b id="pizzaD">4</b>
+        <button class="btn round" id="pzPlus" aria-label="יותר חלקים">+</button>
+      </div>
+    </div>
+    <div id="pizzaBox"><svg class="pie click" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="97" class="crust"></circle><path class="slice" data-i="0" d="M100 100L100.00 10.00A90 90 0 0 1 190.00 100.00Z"></path><path class="slice" data-i="1" d="M100 100L190.00 100.00A90 90 0 0 1 100.00 190.00Z"></path><path class="slice" data-i="2" d="M100 100L100.00 190.00A90 90 0 0 1 10.00 100.00Z"></path><path class="slice" data-i="3" d="M100 100L10.00 100.00A90 90 0 0 1 100.00 10.00Z"></path></svg></div>
+    <div class="pizzaOut"><span id="pizzaFrac"><span class="frac big"><span>0</span><span>4</span></span></span><p id="pizzaSay">לחצו על משולשי הפיצה כדי לצבוע אותם 👆</p></div>
+    <div class="challenge" id="pzChallenge">🎯 אתגר 1 מתוך 5: הכינו פיצה של <span class="frac "><span>1</span><span>2</span></span></div>
+  </div>
+</section>
+
+<!-- 2 · Identify game -->
+<section class="slide" data-subject="math" data-topic="חשבון: זהו את השבר">
+  <span class="kicker">חשבון</span>
+  <h2>משחק: זהו את השבר</h2>
+  <p class="lead">כמה חלקים צבועים? ומכמה חלקים יש בסך הכול?</p>
+  <div class="card" id="idGame"><div class="roundinfo">שאלה 1 מתוך 6</div><div class="vis"><svg class="pie sm" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="97" class="crust"></circle><path class="slice" data-i="0" d="M100 100L100.00 10.00A90 90 0 0 1 170.36 43.89Z"></path><path class="slice" data-i="1" d="M100 100L170.36 43.89A90 90 0 0 1 187.74 120.03Z"></path><path class="slice on" data-i="2" d="M100 100L187.74 120.03A90 90 0 0 1 139.05 181.09Z"></path><path class="slice" data-i="3" d="M100 100L139.05 181.09A90 90 0 0 1 60.95 181.09Z"></path><path class="slice" data-i="4" d="M100 100L60.95 181.09A90 90 0 0 1 12.26 120.03Z"></path><path class="slice on" data-i="5" d="M100 100L12.26 120.03A90 90 0 0 1 29.64 43.89Z"></path><path class="slice on" data-i="6" d="M100 100L29.64 43.89A90 90 0 0 1 100.00 10.00Z"></path></svg></div>
+    <p class="q">איזה שבר מהשלם צבוע?</p>
+    <div class="opts"><button class="btn opt" data-choice="3/7"><span class="frac "><span>3</span><span>7</span></span></button><button class="btn opt" data-choice="4/7"><span class="frac "><span>4</span><span>7</span></span></button><button class="btn opt" data-choice="3/8"><span class="frac "><span>3</span><span>8</span></span></button><button class="btn opt" data-choice="7/3"><span class="frac "><span>7</span><span>3</span></span></button></div>
+    <div class="fb"></div><div class="nextrow"><button class="btn primary" id="idNext" hidden="">לשאלה הבאה ←</button></div></div>
+</section>
+
+<!-- 3 · Equivalent fractions -->
+<section class="slide" data-subject="math" data-topic="חשבון: שברים שווים">
+  <span class="kicker">חשבון</span>
+  <h2>שברים שווים</h2>
+  <p class="lead">שברים שנראים שונים יכולים להיות באותו גודל! צבעו את הפס הכתום כך שיהיה בדיוק באורך של הפס הכחול.</p>
+  <div class="card">
+    <div class="lbl">בחרו שבר:</div>
+    <div class="chips" id="eqTargets" style="margin-top:6px"><button class="btn chip sel" data-t="0"><span class="frac "><span>1</span><span>2</span></span></button><button class="btn chip" data-t="1"><span class="frac "><span>1</span><span>3</span></span></button><button class="btn chip" data-t="2"><span class="frac "><span>3</span><span>4</span></span></button><button class="btn chip" data-t="3"><span class="frac "><span>2</span><span>5</span></span></button><button class="btn chip" data-t="4"><span class="frac "><span>2</span><span>3</span></span></button></div>
+    <div class="lbl"><span id="eqTopLbl"><span class="frac "><span>1</span><span>2</span></span></span> הפס הכחול</div>
+    <div id="eqTop"><div class="bar blue"><i class="cell on" data-i="0"></i><i class="cell" data-i="1"></i></div></div>
+    <div class="lbl">לכמה חלקים לחלק את הפס הכתום?</div>
+    <div class="chips" id="eqDens" style="margin-top:6px"><button class="btn chip" data-d="2">2</button><button class="btn chip" data-d="3">3</button><button class="btn chip sel" data-d="4">4</button><button class="btn chip" data-d="5">5</button><button class="btn chip" data-d="6">6</button><button class="btn chip" data-d="7">7</button><button class="btn chip" data-d="8">8</button><button class="btn chip" data-d="9">9</button><button class="btn chip" data-d="10">10</button><button class="btn chip" data-d="11">11</button><button class="btn chip" data-d="12">12</button></div>
+    <div class="lbl"><span id="eqBotLbl"><span class="frac "><span>0</span><span>4</span></span></span> הפס הכתום (לחצו על החלקים)</div>
+    <div id="eqBottom"><div class="bar click"><i class="cell" data-i="0"></i><i class="cell" data-i="1"></i><i class="cell" data-i="2"></i><i class="cell" data-i="3"></i></div></div>
+    <div class="fb show " id="eqMsg">לחצו על חלקים בפס הכתום עד שהוא יגיע לאותו אורך כמו הפס הכחול.</div>
+    <p id="eqFound" style="margin:.8em 0 0"></p>
+  </div>
+  <div class="tip">💡 הסוד: כופלים את המונה <b>ואת</b> המכנה באותו מספר, ומקבלים שבר שווה.
+    <span dir="ltr" class="eqline" style="font-size:1.05rem"><span class="frac"><span>1</span><span>2</span></span> = <span class="frac"><span>2</span><span>4</span></span> = <span class="frac"><span>3</span><span>6</span></span></span></div>
+</section>
+
+<!-- 4 · Compare -->
+<section class="slide" data-subject="math" data-topic="חשבון: מי גדול יותר?">
+  <span class="kicker">חשבון</span>
+  <h2>מי גדול יותר?</h2>
+  <p class="lead">משווים בין שני שברים. לפעמים הם אפילו שווים!</p>
+  <div class="card" id="cmpGame"><div class="roundinfo">סיבוב 1 מתוך 6</div>
+    <p class="q">לחצו על השבר <b>הגדול</b> יותר, או על "שווים"</p>
+    <div class="vs"><button class="btn fcard" data-choice="A"><span class="frac "><span>4</span><span>6</span></span></button><button class="btn eqbtn" data-choice="E">שווים</button><button class="btn fcard" data-choice="B"><span class="frac "><span>3</span><span>6</span></span></button></div>
+    <div class="fb"></div>
+    <div class="cmpbars" hidden=""><div class="cbrow"><span class="frac "><span>4</span><span>6</span></span><div class="bar thin"><i class="cell on" data-i="0"></i><i class="cell on" data-i="1"></i><i class="cell on" data-i="2"></i><i class="cell on" data-i="3"></i><i class="cell" data-i="4"></i><i class="cell" data-i="5"></i></div></div><div class="cbrow"><span class="frac "><span>3</span><span>6</span></span><div class="bar thin blue"><i class="cell on" data-i="0"></i><i class="cell on" data-i="1"></i><i class="cell on" data-i="2"></i><i class="cell" data-i="3"></i><i class="cell" data-i="4"></i><i class="cell" data-i="5"></i></div></div></div>
+    <div class="nextrow"><button class="btn primary" id="cmpNext" hidden="">לסיבוב הבא ←</button></div></div>
+</section>
+
+<!-- 5 · Fraction of a quantity -->
+<section class="slide" data-subject="math" data-topic="חשבון: שבר מתוך כמות">
+  <span class="kicker">חשבון</span>
+  <h2>שבר מתוך כמות</h2>
+  <p class="lead">מחלקים את הכמות לקבוצות שוות לפי המכנה, ולוקחים כמה קבוצות לפי המונה.</p>
+  <div class="card" id="qtGame"><div class="roundinfo">שאלה 1 מתוך 6</div>
+    <p class="q">כמה זה <span class="frac "><span>1</span><span>2</span></span> מתוך 10 🍬?</p>
+    <div class="items" id="qtItems"><span>🍬</span><span>🍬</span><span>🍬</span><span>🍬</span><span>🍬</span><span>🍬</span><span>🍬</span><span>🍬</span><span>🍬</span><span>🍬</span></div>
+    <div class="answer"><input id="qtIn" type="number" inputmode="numeric" min="0" placeholder="?" aria-label="התשובה"><button class="btn primary" id="qtCheck">בדיקה</button><button class="btn" id="qtShow">💡 איך פותרים?</button></div>
+    <div class="fb"></div><div class="nextrow"><button class="btn primary" id="qtNext" hidden="">לשאלה הבאה ←</button></div></div>
+</section>
+
+<!-- 6 · Break -->
+<section class="slide" data-subject="break" data-topic="הפסקה">
+  <span class="kicker">הפסקה</span>
+  <h2>הפסקה! 🧃</h2>
+  <p class="lead">עבדתם יפה. עד עכשיו צברתם ⭐ <b class="starsNow">0</b></p>
+  <div class="card center">
+    <div class="chips" style="justify-content:center">
+      <button class="btn chip sel" data-min="5">5 דקות</button>
+      <button class="btn chip" data-min="10">10 דקות</button>
+    </div>
+    <div class="timer" id="brTime">5:00</div>
+    <div class="row"><button class="btn primary" id="brStart">התחלה ▶</button></div>
+    <div class="fb show ok" id="brDone" hidden="">ההפסקה נגמרה! ממשיכים לעברית 💪</div>
+  </div>
+  <div class="ideas">
+    <div class="idea">🙆 למתוח ידיים למעלה</div>
+    <div class="idea">💧 לשתות מים</div>
+    <div class="idea">🤸 10 קפיצות במקום</div>
+    <div class="idea">👀 להסתכל רחוק מהמסך</div>
+  </div>
+</section>
+
+<!-- 7 · Reading strategies -->
+<section class="slide" data-subject="heb" data-topic="עברית: איך קוראים טקסט">
+  <span class="kicker">עברית</span>
+  <h2>איך קוראים טקסט שלא ראינו?</h2>
+  <p class="lead">ארבעה צעדים קבועים. לחצו על כל צעד כדי לפתוח אותו.</p>
+  <div class="strats">
+    <button class="btn strat" aria-expanded="false"><span class="t"><span class="n">1</span>מציצים 👀</span><span class="d">קוראים את הכותרת ומסתכלים על תמונות ומילים מודגשות. שואלים: על מה הטקסט הזה?</span></button>
+    <button class="btn strat" aria-expanded="false"><span class="t"><span class="n">2</span>קוראים פעם ראשונה 📖</span><span class="d">קוראים הכול עד הסוף, רק כדי להבין. לא נתקעים על כל מילה קשה.</span></button>
+    <button class="btn strat" aria-expanded="false"><span class="t"><span class="n">3</span>קוראים את השאלות ❓</span><span class="d">מבינים מה מחפשים, ומסמנים בשאלה מילות מפתח (למשל: "לפי פסקה 2", "למה", "מה הסיבה").</span></button>
+    <button class="btn strat" aria-expanded="false"><span class="t"><span class="n">4</span>חוזרים לטקסט ומסמנים 🖍️</span><span class="d">מוצאים בטקסט את המקום שבו נמצאת התשובה, מסמנים אותו, ורק אז עונים.</span></button>
+  </div>
+  <div class="tip">🅰️ <b>שאלה אמריקאית:</b> קודם פוסלים תשובות שבטוח לא נכונות, ובוחרים מבין מה שנשאר.<br>✏️ <b>שאלה פתוחה:</b> עונים במשפט שלם ומשתמשים במילים מהשאלה.</div>
+</section>
+
+<!-- 8 · Text with markers -->
+<section class="slide active" data-subject="heb" data-topic="עברית: קריאה עם מרקרים">
+  <span class="kicker">עברית</span>
+  <h2>קוראים ומסמנים</h2>
+  <p class="lead">קראו את הטקסט פעם אחת עד הסוף. אחר כך בחרו מרקר ולחצו על משפטים כדי לסמן אותם.</p>
+  <div class="toolbar">
+    <button class="btn chip mk sel" data-m="pro"><span class="sw pro"></span>בעד האיסור</button>
+    <button class="btn chip mk" data-m="con"><span class="sw con"></span>נגד האיסור</button>
+    <button class="btn chip mk" data-m="erase">🧽 מחיקה</button>
+    <button class="btn chip" id="readAloud">🔊 הקראה</button>
+  </div>
+  <article class="card reading" id="readText">
+    <h3>טלפונים בבית הספר: כן או לא?</h3>
+    <p class="para"><span class="pn">1</span><span class="s">בשנים האחרונות, לרוב הילדים בכיתה ה׳ יש טלפון חכם.</span> <span class="s">ילדים משתמשים בטלפון כדי לדבר עם ההורים, לשחק ולצפות בסרטונים.</span> <span class="s">בבתי ספר רבים מתנהל ויכוח: האם מותר להביא טלפון לבית הספר?</span></p>
+    <p class="para"><span class="pn">2</span><span class="s" data-k="pro">יש הטוענים שצריך לאסור טלפונים בבית הספר.</span> <span class="s" data-k="pro">לדבריהם, הטלפון מסיח את דעת התלמידים בזמן השיעור.</span> <span class="s" data-k="pro">בנוסף, הם אומרים שבהפסקות ילדים יושבים מול המסך, במקום לשחק יחד בחצר.</span></p>
+    <p class="para"><span class="pn">3</span><span class="s" data-k="con">לעומתם, יש הטוענים שאין לאסור את הטלפונים.</span> <span class="s" data-k="con">לדעתם, הטלפון עוזר לילדים להיות בקשר עם ההורים, למשל כשמשתנה שעת סיום הלימודים.</span> <span class="s" data-k="con">הם גם אומרים שבטלפון אפשר ללמוד: לחפש מידע, לצלם את הלוח ולהשתמש ביישומוני לימוד.</span></p>
+    <p class="para"><span class="pn">4</span><span class="s">יש גם מי שמציעים פתרון באמצע:</span> <span class="s">להביא את הטלפון לבית הספר, אבל לשמור אותו כבוי בתיק כל היום, ולהשתמש בו רק באישור המורה.</span> <span class="s">ומה דעתכם?</span></p>
+  </article>
+  <div class="row"><button class="btn primary" id="mkCheck">בדיקת הסימונים</button><button class="btn" id="mkClear">ניקוי הסימונים</button></div>
+  <div class="fb" id="mkFb"></div>
+  <div class="tip">💡 שימו לב למילים <b>"יש הטוענים"</b> ו<b>"לעומתם"</b>. הן מראות איפה מתחילה כל עמדה.</div>
+</section>
+
+<!-- 9 · Questions -->
+<section class="slide" id="sQ" data-subject="heb" data-topic="עברית: שאלות על הטקסט">
+  <span class="kicker">עברית</span>
+  <h2>שאלות על הטקסט</h2>
+  <details class="card textcopy"><summary>📖 פתיחת הטקסט (עם הסימונים שלכם)</summary><div class="reading" id="textCopy"></div></details>
+  <div id="mcBox"><div class="card mc" data-q="0"><span class="qtag">רעיון מרכזי</span><p class="q"><b>1.</b> מה הנושא המרכזי של הטקסט?</p>
+    <div class="opts text"><button class="btn opt" data-choice="0"><span class="ol">א</span>משחקים בחצר בזמן ההפסקה</button><button class="btn opt" data-choice="1"><span class="ol">ב</span>הוויכוח אם מותר להביא טלפונים לבית הספר</button><button class="btn opt" data-choice="2"><span class="ol">ג</span>איך משתמשים ביישומוני לימוד</button><button class="btn opt" data-choice="3"><span class="ol">ד</span>למה לילדים יש טלפונים</button></div><div class="fb"></div></div><div class="card mc" data-q="1"><span class="qtag">מידע גלוי</span><p class="q"><b>2.</b> לפי פסקה 2, מה סיבה אחת לאסור טלפונים בבית הספר?</p>
+    <div class="opts text"><button class="btn opt" data-choice="0"><span class="ol">א</span>הטלפונים יקרים מדי</button><button class="btn opt" data-choice="1"><span class="ol">ב</span>הטלפון מסיח את דעת התלמידים בשיעור</button><button class="btn opt" data-choice="2"><span class="ol">ג</span>ההורים מתקשרים יותר מדי</button><button class="btn opt" data-choice="3"><span class="ol">ד</span>אין קליטה בבית הספר</button></div><div class="fb"></div></div><div class="card mc" data-q="2"><span class="qtag">מילות קישור</span><p class="q"><b>3.</b> מה התפקיד של המילה "לעומתם" בתחילת פסקה 3?</p>
+    <div class="opts text"><button class="btn opt" data-choice="0"><span class="ol">א</span>מוסיפה עוד נימוק לאותו הצד</button><button class="btn opt" data-choice="1"><span class="ol">ב</span>מציגה עמדה הפוכה, את הצד השני של הוויכוח</button><button class="btn opt" data-choice="2"><span class="ol">ג</span>מסכמת את הטקסט</button><button class="btn opt" data-choice="3"><span class="ol">ד</span>נותנת דוגמה</button></div><div class="fb"></div></div><div class="card mc" data-q="3"><span class="qtag">מידע גלוי</span><p class="q"><b>4.</b> איזה פתרון מוצע בפסקה 4?</p>
+    <div class="opts text"><button class="btn opt" data-choice="0"><span class="ol">א</span>לאסור טלפונים לגמרי</button><button class="btn opt" data-choice="1"><span class="ol">ב</span>לאפשר שימוש חופשי כל היום</button><button class="btn opt" data-choice="2"><span class="ol">ג</span>להביא את הטלפון, לשמור אותו כבוי בתיק ולהשתמש בו רק באישור</button><button class="btn opt" data-choice="3"><span class="ol">ד</span>לקנות טלפון לכל תלמיד</button></div><div class="fb"></div></div><div class="card mc" data-q="4"><span class="qtag">אוצר מילים</span><p class="q"><b>5.</b> בפסקה 2 כתוב שהטלפון "מסיח את הדעת". מה הפירוש?</p>
+    <div class="opts text"><button class="btn opt" data-choice="0"><span class="ol">א</span>גורם לא להתרכז במה שצריך</button><button class="btn opt" data-choice="1"><span class="ol">ב</span>עוזר לזכור את החומר</button><button class="btn opt" data-choice="2"><span class="ol">ג</span>משמח את התלמידים</button><button class="btn opt" data-choice="3"><span class="ol">ד</span>עושה רעש חזק</button></div><div class="fb"></div></div><div class="card mc" data-q="5"><span class="qtag">הסקה</span><p class="q"><b>6.</b> למה לדעתכם הטקסט מסתיים בשאלה "ומה דעתכם?"</p>
+    <div class="opts text"><button class="btn opt" data-choice="0"><span class="ol">א</span>כי הכותב שכח לסיים</button><button class="btn opt" data-choice="1"><span class="ol">ב</span>כי הכותב רוצה שהקורא יחשוב ויחליט מה דעתו</button><button class="btn opt" data-choice="2"><span class="ol">ג</span>כי אין לשאלה תשובה</button><button class="btn opt" data-choice="3"><span class="ol">ד</span>כי זו שאלה ממבחן</button></div><div class="fb"></div></div></div>
+  <div class="card">
+    <span class="qtag">שאלה פתוחה</span>
+    <p class="q"><b>7.</b> הביאו נימוק אחד של כל צד בוויכוח. כתבו במשפטים שלמים.</p>
+    <textarea id="openAns" rows="4" placeholder="יש הטוענים ש... כי... לעומתם..."></textarea>
+    <p style="margin:.8em 0 .2em;font-weight:600">רשימת בדיקה לפני שמסיימים:</p>
+    <div class="checks" id="openChecks">
+      <label><input type="checkbox"> כתבתי במשפטים שלמים</label>
+      <label><input type="checkbox"> הבאתי נימוק של הצד הראשון</label>
+      <label><input type="checkbox"> הבאתי נימוק של הצד השני</label>
+      <label><input type="checkbox"> השתמשתי במילים מהטקסט</label>
+    </div>
+    <div class="row"><button class="btn primary" id="openDone">סיימתי</button><button class="btn" id="openShow">👀 תשובה לדוגמה</button></div>
+    <div class="fb" id="openFb"></div>
+    <div class="model" id="openModel" hidden=""><b>תשובה לדוגמה:</b> יש הטוענים שצריך לאסור טלפונים בבית הספר, כי הטלפון מסיח את דעת התלמידים בזמן השיעור. לעומתם, יש הטוענים שאין לאסור טלפונים, כי הטלפון עוזר לילדים להיות בקשר עם ההורים.</div>
+  </div>
+</section>
+
+<!-- 10 · Fact or opinion -->
+<section class="slide" data-subject="heb" data-topic="עברית: עובדה או דעה?">
+  <span class="kicker">עברית</span>
+  <h2>עובדה או דעה?</h2>
+  <div class="card two">
+    <p>🔍 <b>עובדה</b>: אפשר לבדוק ולהוכיח שזה נכון.</p>
+    <p>💭 <b>דעה</b>: מה שמישהו חושב. אחרים יכולים לחשוב אחרת.</p>
+  </div>
+  <div class="card" id="foGame"><div class="roundinfo">משפט 1 מתוך 8</div><div class="fo-card">בשבוע יש שבעה ימים.</div>
+    <div class="fo-btns"><button class="btn" data-choice="f">🔍 עובדה</button><button class="btn" data-choice="o">💭 דעה</button></div>
+    <div class="fb"></div><div class="nextrow"><button class="btn primary" id="foNext" hidden="">למשפט הבא ←</button></div></div>
+  <div class="tip">💡 מילים כמו <b>"הכי"</b>, <b>"צריך"</b>, <b>"כדאי"</b> ו<b>"לדעתי"</b> הן סימן שזו דעה.</div>
+</section>
+
+<!-- 11 · Argument builder -->
+<section class="slide" data-subject="heb" data-topic="עברית: בונים טקסט טיעוני">
+  <span class="kicker">עברית</span>
+  <h2>בונים טקסט טיעוני</h2>
+  <p class="lead">טקסט טיעוני מציג את שני הצדדים, ואז את הדעה שלנו עם נימוקים.</p>
+  <div class="card">
+    <div class="lbl" style="margin-top:0">בחרו נושא:</div>
+    <div class="chips" id="argTopics" style="margin-top:6px"><button class="btn chip sel" data-topic="phone">טלפונים בבית הספר</button><button class="btn chip" data-topic="uniform">תלבושת אחידה</button><button class="btn chip" data-topic="hw">שיעורי בית כל יום</button></div>
+  </div>
+  <div class="card" id="argForm">
+    <div class="bank">
+      <div class="muted" style="margin-bottom:6px">מילות קישור: לחצו כדי להוסיף לשדה שבו אתם כותבים</div>
+      <div class="chips" id="wordBank">
+        <button class="btn chip" data-w="כי">כי</button>
+        <button class="btn chip" data-w="מפני ש">מפני ש</button>
+        <button class="btn chip" data-w="לכן">לכן</button>
+        <button class="btn chip" data-w="בנוסף,">בנוסף</button>
+        <button class="btn chip" data-w="לדוגמה,">לדוגמה</button>
+        <button class="btn chip" data-w="לעומת זאת,">לעומת זאת</button>
+        <button class="btn chip" data-w="אולם">אולם</button>
+      </div>
+    </div>
+    <div class="block"><h4>פתיחה: מה הנושא?</h4><textarea id="argOpen" rows="2"></textarea></div>
+    <div class="block"><h4>צד אחד</h4><span class="sub">יש הטוענים ש…</span><textarea id="a1" rows="1" placeholder="למשל: צריך לאסור טלפונים בבית הספר"></textarea><span class="sub">…כי</span><textarea id="a2" rows="1" placeholder="למשל: הטלפון מסיח את הדעת בשיעור"></textarea></div>
+    <div class="block"><h4>הצד השני</h4><span class="sub">לעומתם, יש הטוענים ש…</span><textarea id="b1" rows="1" placeholder="למשל: אין לאסור טלפונים"></textarea><span class="sub">…כי</span><textarea id="b2" rows="1" placeholder="למשל: הטלפון עוזר להיות בקשר עם ההורים"></textarea></div>
+    <div class="block"><h4>הדעה שלי</h4><span class="sub">לדעתי,</span><textarea id="me" rows="1" placeholder="עם איזה צד אני מסכים/ה?"></textarea><span class="sub">כי</span><textarea id="why" rows="1" placeholder="הסיבה שלי"></textarea><span class="sub">בנוסף, (לא חובה)</span><textarea id="add" rows="1" placeholder="עוד סיבה"></textarea></div>
+    <div class="block"><h4>סיכום</h4><span class="sub">לסיכום,</span><textarea id="sum" rows="1" placeholder="מה ההחלטה שלי בסוף?"></textarea></div>
+    <div class="row"><button class="btn primary" id="argBuild">הרכבת הטקסט שלי</button></div>
+    <div class="fb" id="argFb"></div>
+    <div id="argOutWrap" hidden="">
+      <div class="paper" id="argOut"></div>
+      <div class="row"><button class="btn" id="argCopy">📋 העתקה</button></div>
+    </div>
+  </div>
+</section>
+
+<!-- 12 · End -->
+<section class="slide" data-subject="heb" data-topic="סיום">
+  <div class="hero"><div class="e" aria-hidden="true">🏆</div><h1>סיימנו!</h1><p class="lead">צברתם היום ⭐ <b class="starsNow">0</b></p></div>
+  <div class="card">
+    <h3>מה למדנו היום</h3>
+    <div class="learned"><span>מונה ומכנה</span><span>שברים שווים</span><span>השוואת שברים</span><span>שבר מתוך כמות</span><span>4 צעדים לקריאה</span><span>עובדה או דעה</span><span>טקסט טיעוני</span></div>
+  </div>
+  <div class="card">
+    <h3>כרטיס יציאה</h3>
+    <p class="muted" style="margin-top:0">איך הרגיש השיעור?</p>
+    <div class="moods" id="moods"><button class="btn" aria-label="מעולה">😀</button><button class="btn" aria-label="טוב">🙂</button><button class="btn" aria-label="ככה ככה">😐</button><button class="btn" aria-label="קשה">😕</button></div>
+    <span class="sub">מה היה הכי קל היום?</span><textarea rows="1"></textarea>
+    <span class="sub">מה היה הכי קשה?</span><textarea rows="1"></textarea>
+    <span class="sub">דבר אחד שאני רוצה לזכור:</span><textarea rows="1"></textarea>
+  </div>
+  <div class="row"><button class="btn" id="restart">🔄 התחלה מחדש</button></div>
+</section>
+
+</main>
+
+<footer>
+  <button class="btn" id="prevBtn">→ הקודם</button>
+  <span id="slideNum" class="muted">9 / 13</span>
+  <button class="btn primary" id="nextBtn">הבא ←</button>
+</footer>
+
+<script>
+(() => {
+'use strict';
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const rand = (a, b) => Math.floor(Math.random() * (b - a + 1)) + a;
+const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const PRAISE = ['מעולה!', 'כל הכבוד!', 'יפה מאוד!', 'אלופים!', 'בדיוק!', 'מצוין!'];
+const praise = () => PRAISE[rand(0, PRAISE.length - 1)];
+const frac = (n, d, c = '') => `<span class="frac ${c}"><span>${n}</span><span>${d}</span></span>`;
+const PFX = 'lesson1:';
+const store = {
+  get(k, d) { try { const v = localStorage.getItem(PFX + k); return v === null ? d : JSON.parse(v); } catch (e) { return d; } },
+  set(k, v) { try { localStorage.setItem(PFX + k, JSON.stringify(v)); } catch (e) {} },
+  clear() { try { Object.keys(localStorage).filter(k => k.startsWith(PFX)).forEach(k => localStorage.removeItem(k)); } catch (e) {} }
+};
+function fb(el, ok, html) { el.className = 'fb show ' + (ok === true ? 'ok' : ok === false ? 'no' : ''); el.innerHTML = html; }
+
+/* ---------- stars ---------- */
+let stars = Number(store.get('stars', 0)) || 0;
+const starBox = $('#starBox');
+function renderStars() { $('#starCount').textContent = stars; $$('.starsNow').forEach(e => e.textContent = stars); }
+function addStar(src) {
+  stars++; store.set('stars', stars); renderStars();
+  starBox.classList.remove('pop'); void starBox.offsetWidth; starBox.classList.add('pop');
+  if (src && src.getBoundingClientRect) {
+    const r = src.getBoundingClientRect(); const s = document.createElement('span');
+    s.className = 'fly'; s.textContent = '+⭐';
+    s.style.left = (r.left + r.width / 2 - 20) + 'px'; s.style.top = Math.max(r.top, 60) + 'px';
+    document.body.appendChild(s); setTimeout(() => s.remove(), 1000);
+  }
+}
+renderStars();
+
+/* ---------- choice helper: retry until right, star only on first try ---------- */
+function choice(box, isRight, onRight, onWrong) {
+  let tries = 0, done = false;
+  $$('[data-choice]', box).forEach(b => b.addEventListener('click', () => {
+    if (done || b.disabled) return; tries++;
+    if (isRight(b.dataset.choice)) { done = true; b.classList.add('ok'); $$('[data-choice]', box).forEach(x => x.disabled = true); onRight(tries === 1, b); }
+    else { b.classList.add('no'); b.disabled = true; onWrong(b.dataset.choice, b); }
+  }));
+}
+
+/* ---------- shapes ---------- */
+const barHTML = (d, n, cls = '') => `<div class="bar ${cls}">${Array.from({ length: d }, (_, i) => `<i class="cell${i < n ? ' on' : ''}" data-i="${i}"></i>`).join('')}</div>`;
+function pieSVG(d, isOn, cls = '') {
+  const cx = 100, cy = 100, r = 90; let s = '';
+  for (let i = 0; i < d; i++) {
+    const a1 = i / d * 2 * Math.PI - Math.PI / 2, a2 = (i + 1) / d * 2 * Math.PI - Math.PI / 2;
+    const x1 = (cx + r * Math.cos(a1)).toFixed(2), y1 = (cy + r * Math.sin(a1)).toFixed(2);
+    const x2 = (cx + r * Math.cos(a2)).toFixed(2), y2 = (cy + r * Math.sin(a2)).toFixed(2);
+    s += `<path class="slice${isOn(i) ? ' on' : ''}" data-i="${i}" d="M${cx} ${cy}L${x1} ${y1}A${r} ${r} 0 0 1 ${x2} ${y2}Z"/>`;
+  }
+  return `<svg class="pie ${cls}" viewBox="0 0 200 200" aria-hidden="true"><circle cx="100" cy="100" r="97" class="crust"/>${s}</svg>`;
+}
+
+/* ---------- slides ---------- */
+const slides = $$('.slide');
+let cur = Math.min(Number(store.get('slide', 0)) || 0, slides.length - 1);
+function go(i) {
+  if (i < 0 || i >= slides.length) return;
+  slides.forEach(s => s.classList.remove('active'));
+  cur = i; const s = slides[cur]; s.classList.add('active'); store.set('slide', cur);
+  $('#progressFill').style.width = (cur / (slides.length - 1) * 100) + '%';
+  $('#slideNum').textContent = `${cur + 1} / ${slides.length}`;
+  $('#prevBtn').disabled = cur === 0; $('#nextBtn').disabled = cur === slides.length - 1;
+  $('#topic').textContent = s.dataset.topic || '';
+  document.body.dataset.subject = s.dataset.subject || 'math';
+  $('#main').scrollTop = 0;
+  if (s.id === 'sQ') $('#textCopy').innerHTML = $('#readText').innerHTML;
+  if ('speechSynthesis' in window) speechSynthesis.cancel();
+}
+$('#prevBtn').onclick = () => go(cur - 1);
+$('#nextBtn').onclick = () => go(cur + 1);
+$$('[data-go]').forEach(b => b.onclick = () => go(+b.dataset.go));
+document.addEventListener('keydown', e => {
+  if (/INPUT|TEXTAREA/.test(document.activeElement.tagName)) return;
+  if (e.key === 'ArrowLeft') go(cur + 1);
+  if (e.key === 'ArrowRight') go(cur - 1);
+});
+
+/* ---------- 1 · pizza explorer ---------- */
+const pz = { d: 4, f: new Set(), ch: 0, lock: false };
+const PZC = [[1, 2], [3, 4], [2, 5], [5, 8], [4, 6]];
+function pzRender() {
+  $('#pizzaBox').innerHTML = pieSVG(pz.d, i => pz.f.has(i), 'click');
+  $('#pizzaD').textContent = pz.d;
+  const n = pz.f.size;
+  $('#pizzaFrac').innerHTML = frac(n, pz.d, 'big');
+  $('#pizzaSay').textContent = n === 0 ? 'לחצו על משולשי הפיצה כדי לצבוע אותם 👆'
+    : n === pz.d ? `צבעתם את כל ${pz.d} החלקים. זה שלם, שווה ל־1 🍕`
+    : `לקחנו ${n} ${n === 1 ? 'חלק' : 'חלקים'} מתוך ${pz.d} חלקים שווים`;
+  pzChallenge();
+}
+function pzChallenge() {
+  const el = $('#pzChallenge');
+  if (pz.ch >= PZC.length) { el.innerHTML = '🏆 כל אתגרי הפיצה הושלמו!'; el.classList.add('win'); return; }
+  if (pz.lock) return;
+  const [a, b] = PZC[pz.ch];
+  if (pz.d === b && pz.f.size === a) {
+    pz.lock = true; el.classList.add('win');
+    el.innerHTML = `✔ ${praise()} הכנתם פיצה של ${frac(a, b)}`; addStar(el);
+    setTimeout(() => { pz.ch++; pz.lock = false; el.classList.remove('win'); pzChallenge(); }, 1600);
+    return;
+  }
+  el.innerHTML = `🎯 אתגר ${pz.ch + 1} מתוך ${PZC.length}: הכינו פיצה של ${frac(a, b)}`;
+}
+$('#pizzaBox').addEventListener('click', e => {
+  const p = e.target.closest('.slice'); if (!p) return;
+  const i = +p.dataset.i; pz.f.has(i) ? pz.f.delete(i) : pz.f.add(i); pzRender();
+});
+$('#pzMinus').onclick = () => { if (pz.d > 2) { pz.d--; pz.f = new Set([...pz.f].filter(i => i < pz.d)); pzRender(); } };
+$('#pzPlus').onclick = () => { if (pz.d < 12) { pz.d++; pzRender(); } };
+pzRender();
+
+/* ---------- 2 · identify game ---------- */
+const idg = { round: 0, score: 0, total: 6 };
+function idNew() {
+  const d = rand(2, 8), n = rand(1, d - 1), shape = Math.random() < .5 ? 'pie' : 'bar';
+  const pos = new Set(shuffle([...Array(d).keys()]).slice(0, n));
+  const m = new Map([[`${n}/${d}`, [n, d]]]);
+  [[d - n, d], [d, n], [n, d + 1], [n + 1, d], [n, d - 1]].forEach(([a, b]) => {
+    if (m.size < 4 && a > 0 && b >= 2 && !m.has(`${a}/${b}`)) m.set(`${a}/${b}`, [a, b]);
+  });
+  while (m.size < 4) { const b = rand(2, 9), a = rand(1, b); if (!m.has(`${a}/${b}`)) m.set(`${a}/${b}`, [a, b]); }
+  idg.cur = { n, d, shape, pos, opts: shuffle([...m.values()]) };
+  idRender();
+}
+function idRender() {
+  const box = $('#idGame');
+  if (idg.round >= idg.total) {
+    box.innerHTML = `<div class="done">🎉 סיימתם!<br>${idg.score} מתוך ${idg.total} נכונות בניסיון הראשון</div><div class="row"><button class="btn primary" id="idAgain">משחק חדש</button></div>`;
+    $('#idAgain').onclick = () => { idg.round = 0; idg.score = 0; idNew(); }; return;
+  }
+  const c = idg.cur;
+  const vis = c.shape === 'pie' ? pieSVG(c.d, i => c.pos.has(i), 'sm') : barHTML(c.d, c.n);
+  box.innerHTML = `<div class="roundinfo">שאלה ${idg.round + 1} מתוך ${idg.total}</div><div class="vis">${vis}</div>
+    <p class="q">איזה שבר מהשלם צבוע?</p>
+    <div class="opts">${c.opts.map(([a, b]) => `<button class="btn opt" data-choice="${a}/${b}">${frac(a, b)}</button>`).join('')}</div>
+    <div class="fb"></div><div class="nextrow"><button class="btn primary" id="idNext" hidden>לשאלה הבאה ←</button></div>`;
+  const f = $('.fb', box);
+  choice(box, k => k === `${c.n}/${c.d}`,
+    (first, b) => { if (first) { idg.score++; addStar(b); } fb(f, true, `${praise()} ${c.n} ${c.n === 1 ? 'חלק צבוע' : 'חלקים צבועים'} מתוך ${c.d} חלקים.`); $('#idNext').hidden = false; },
+    k => {
+      const [a, b] = k.split('/').map(Number);
+      let h = 'ספרו: כמה חלקים צבועים? ומכמה חלקים יש בסך הכול?';
+      if (b === c.d && a === c.d - c.n) h = 'ספרתם את החלקים <b>הלבנים</b>. המונה סופר את החלקים <b>הצבועים</b> 🙂';
+      else if (a === c.d && b === c.n) h = 'התהפך! למעלה (מונה) = החלקים הצבועים, למטה (מכנה) = כל החלקים.';
+      fb(f, false, h + ' נסו שוב.');
+    });
+  $('#idNext').onclick = () => { idg.round++; idg.round < idg.total ? idNew() : idRender(); };
+}
+idNew();
+
+/* ---------- 3 · equivalent fractions ---------- */
+const EQT = [[1, 2], [1, 3], [3, 4], [2, 5], [2, 3]];
+const eq = { t: 0, d: 4, n: 0, found: new Set(store.get('eqFound', [])) };
+function eqRender() {
+  const [a, b] = EQT[eq.t];
+  $('#eqTargets').innerHTML = EQT.map(([x, y], i) => `<button class="btn chip${i === eq.t ? ' sel' : ''}" data-t="${i}">${frac(x, y)}</button>`).join('');
+  $('#eqTopLbl').innerHTML = frac(a, b);
+  $('#eqTop').innerHTML = barHTML(b, a, 'blue');
+  $('#eqDens').innerHTML = Array.from({ length: 11 }, (_, k) => k + 2).map(x => `<button class="btn chip${x === eq.d ? ' sel' : ''}" data-d="${x}">${x}</button>`).join('');
+  $('#eqBotLbl').innerHTML = frac(eq.n, eq.d);
+  $('#eqBottom').innerHTML = barHTML(eq.d, eq.n, 'click');
+  const msg = $('#eqMsg'), L = a * eq.d, R = eq.n * b;
+  const impossible = (a * eq.d) % b !== 0;
+  if (eq.n === 0) fb(msg, null, 'לחצו על חלקים בפס הכתום עד שהוא יגיע לאותו אורך כמו הפס הכחול.');
+  else if (L === R && eq.d === b) fb(msg, null, 'זה בדיוק אותו שבר 😉 נסו לחלק את הפס הכתום למספר <b>אחר</b> של חלקים.');
+  else if (L === R) {
+    const key = `${a}/${b}=${eq.n}/${eq.d}`;
+    fb(msg, true, `🎉 מצאתם שבר שווה! <span dir="ltr" class="eqline">${frac(a, b)} = ${frac(eq.n, eq.d)}</span>`);
+    if (!eq.found.has(key)) { eq.found.add(key); store.set('eqFound', [...eq.found]); addStar(msg); }
+  }
+  else if (impossible) fb(msg, false, `עם ${eq.d} חלקים אי אפשר להגיע בדיוק לאותו אורך. נסו מספר חלקים אחר.`);
+  else if (R < L) fb(msg, null, 'עוד קצת… הפס הכתום עדיין קצר יותר.');
+  else fb(msg, false, 'יותר מדי. הפס הכתום ארוך יותר, הורידו חלק.');
+  const mine = [...eq.found].filter(k => k.startsWith(`${a}/${b}=`)).map(k => { const [p, q] = k.split('=')[1].split('/'); return frac(p, q); });
+  $('#eqFound').innerHTML = mine.length ? `שברים ששווים ל־${frac(a, b)} שמצאתם: <span class="foundlist" dir="ltr">${mine.join('<span>,</span>')}</span>` : '';
+}
+$('#eqTargets').onclick = e => { const b = e.target.closest('[data-t]'); if (!b) return; eq.t = +b.dataset.t; eq.n = 0; eqRender(); };
+$('#eqDens').onclick = e => { const b = e.target.closest('[data-d]'); if (!b) return; eq.d = +b.dataset.d; eq.n = Math.min(eq.n, eq.d); eqRender(); };
+$('#eqBottom').onclick = e => { const c = e.target.closest('.cell'); if (!c) return; const i = +c.dataset.i; eq.n = eq.n === i + 1 ? i : i + 1; eqRender(); };
+eqRender();
+
+/* ---------- 4 · compare ---------- */
+const cmp = { round: 0, score: 0, total: 6, last: '' };
+const CMP_POOL = [[[1, 2], [2, 4]], [[2, 3], [3, 4]], [[1, 2], [3, 5]], [[3, 4], [5, 8]], [[1, 3], [2, 6]], [[4, 5], [7, 10]], [[2, 5], [1, 2]], [[3, 6], [1, 2]], [[5, 6], [2, 3]]];
+const CMP_TIP = {
+  den: 'המכנה זהה, אז כל החלקים באותו גודל. מי שלקח <b>יותר חלקים</b> (מונה גדול יותר) הוא הגדול.',
+  num: 'המונה זהה, כלומר לוקחים אותו מספר חלקים. אבל ככל שהמכנה <b>גדול</b> יותר, כל חלק <b>קטן</b> יותר! (פיצה שחתוכה ל־8 = משולשים קטנים)',
+  mix: 'כאן גם המונה וגם המכנה שונים. דמיינו פסים, או הביאו את שני השברים לאותו מכנה.'
+};
+function cmpNew() {
+  const r = cmp.round; let A, B, type;
+  if (r < 2) { type = 'den'; const d = rand(3, 10), a = rand(1, d - 1); let b; do { b = rand(1, d - 1); } while (b === a); A = [a, d]; B = [b, d]; }
+  else if (r < 4) { type = 'num'; const n = rand(1, 3), d1 = rand(n + 1, 10); let d2; do { d2 = rand(n + 1, 10); } while (d2 === d1); A = [n, d1]; B = [n, d2]; }
+  else { type = 'mix'; let p; do { p = CMP_POOL[rand(0, CMP_POOL.length - 1)]; } while (JSON.stringify(p) === cmp.last); cmp.last = JSON.stringify(p); [A, B] = Math.random() < .5 ? [p[0], p[1]] : [p[1], p[0]]; }
+  cmp.cur = { A, B, type }; cmpRender();
+}
+function cmpRender() {
+  const box = $('#cmpGame');
+  if (cmp.round >= cmp.total) {
+    box.innerHTML = `<div class="done">🎉 סיימתם!<br>${cmp.score} מתוך ${cmp.total} נכונות בניסיון הראשון</div><div class="row"><button class="btn primary" id="cmpAgain">משחק חדש</button></div>`;
+    $('#cmpAgain').onclick = () => { cmp.round = 0; cmp.score = 0; cmpNew(); }; return;
+  }
+  const { A, B, type } = cmp.cur;
+  box.innerHTML = `<div class="roundinfo">סיבוב ${cmp.round + 1} מתוך ${cmp.total}</div>
+    <p class="q">לחצו על השבר <b>הגדול</b> יותר, או על "שווים"</p>
+    <div class="vs"><button class="btn fcard" data-choice="A">${frac(A[0], A[1])}</button><button class="btn eqbtn" data-choice="E">שווים</button><button class="btn fcard" data-choice="B">${frac(B[0], B[1])}</button></div>
+    <div class="fb"></div>
+    <div class="cmpbars" hidden><div class="cbrow">${frac(A[0], A[1])}${barHTML(A[1], A[0], 'thin')}</div><div class="cbrow">${frac(B[0], B[1])}${barHTML(B[1], B[0], 'thin blue')}</div></div>
+    <div class="nextrow"><button class="btn primary" id="cmpNext" hidden>לסיבוב הבא ←</button></div>`;
+  const v = A[0] * B[1] - B[0] * A[1], right = v > 0 ? 'A' : v < 0 ? 'B' : 'E', f = $('.fb', box);
+  choice(box, k => k === right,
+    (first, b) => { if (first) { cmp.score++; addStar(b); } fb(f, true, `${praise()} ${right === 'E' ? 'הם שווים. ' : ''}תסתכלו על הפסים 👇<br><small>${CMP_TIP[type]}</small>`); $('.cmpbars', box).hidden = false; $('#cmpNext').hidden = false; },
+    () => fb(f, false, '🤔 ' + CMP_TIP[type] + ' נסו שוב.'));
+  $('#cmpNext').onclick = () => { cmp.round++; cmp.round < cmp.total ? cmpNew() : cmpRender(); };
+}
+cmpNew();
+
+/* ---------- 5 · fraction of a quantity ---------- */
+const QT = [[1, 2, 10, '🍬'], [1, 3, 12, '🍪'], [3, 4, 8, '⚽'], [2, 5, 15, '🍓'], [2, 3, 9, '🎈'], [5, 6, 12, '🧁']];
+const qt = { i: 0, score: 0 };
+function qtRender() {
+  const box = $('#qtGame');
+  if (qt.i >= QT.length) {
+    box.innerHTML = `<div class="done">🎉 סיימתם!<br>${qt.score} מתוך ${QT.length} נכונות בניסיון הראשון</div><div class="row"><button class="btn primary" id="qtAgain">שוב מההתחלה</button></div>`;
+    $('#qtAgain').onclick = () => { qt.i = 0; qt.score = 0; qtRender(); }; return;
+  }
+  const [n, d, t, e] = QT[qt.i], per = t / d, ans = per * n;
+  let tried = false, shown = false, solved = false;
+  box.innerHTML = `<div class="roundinfo">שאלה ${qt.i + 1} מתוך ${QT.length}</div>
+    <p class="q">כמה זה ${frac(n, d)} מתוך ${t} ${e}?</p>
+    <div class="items" id="qtItems">${Array(t).fill(`<span>${e}</span>`).join('')}</div>
+    <div class="answer"><input id="qtIn" type="number" inputmode="numeric" min="0" placeholder="?" aria-label="התשובה"><button class="btn primary" id="qtCheck">בדיקה</button><button class="btn" id="qtShow">💡 איך פותרים?</button></div>
+    <div class="fb"></div><div class="nextrow"><button class="btn primary" id="qtNext" hidden>לשאלה הבאה ←</button></div>`;
+  const f = $('.fb', box);
+  const steps = `<div class="steps"><div>1️⃣ מחלקים ל־${d} קבוצות שוות: <span dir="ltr" class="m">${t} ÷ ${d} = ${per}</span></div><div>2️⃣ לוקחים ${n} ${n === 1 ? 'קבוצה' : 'קבוצות'}: <span dir="ltr" class="m">${per} × ${n} = ${ans}</span></div></div>`;
+  const reveal = () => {
+    const it = $('#qtItems'); if (!it) return;
+    it.outerHTML = `<div class="groups">${Array.from({ length: d }, (_, g) => `<div class="group${g < n ? ' take' : ''}">${Array(per).fill(`<span>${e}</span>`).join('')}</div>`).join('')}</div>`;
+  };
+  const check = () => {
+    if (solved) return; const raw = $('#qtIn').value;
+    if (raw === '') { fb(f, null, 'כתבו מספר בתיבה 🙂'); return; }
+    if (Number(raw) === ans) {
+      solved = true; if (!tried && !shown) { qt.score++; addStar($('#qtCheck')); }
+      reveal(); fb(f, true, `${praise()} ${frac(n, d)} מתוך ${t} זה <b>${ans}</b>.` + steps); $('#qtNext').hidden = false;
+    } else { tried = true; fb(f, false, `כמעט! טיפ: קודם מחלקים את ה־${t} ל־${d} קבוצות שוות. כמה יש בכל קבוצה?`); }
+  };
+  $('#qtCheck').onclick = check;
+  $('#qtIn').addEventListener('keydown', ev => { if (ev.key === 'Enter') check(); });
+  $('#qtShow').onclick = () => { if (solved) return; shown = true; reveal(); fb(f, null, steps + '<div>עכשיו כתבו את התשובה ולחצו "בדיקה".</div>'); };
+  $('#qtNext').onclick = () => { qt.i++; qtRender(); };
+}
+qtRender();
+
+/* ---------- 6 · break timer ---------- */
+const br = { len: 300, left: 300, t: null };
+function brRender() {
+  const m = Math.floor(br.left / 60), s = br.left % 60;
+  $('#brTime').textContent = `${m}:${String(s).padStart(2, '0')}`;
+  $('#brStart').textContent = br.t ? 'עצירה ⏸' : (br.left < br.len && br.left > 0 ? 'המשך ▶' : 'התחלה ▶');
+}
+$('#brStart').onclick = () => {
+  if (br.t) { clearInterval(br.t); br.t = null; }
+  else {
+    if (br.left <= 0) br.left = br.len; $('#brDone').hidden = true;
+    br.t = setInterval(() => { br.left--; if (br.left <= 0) { br.left = 0; clearInterval(br.t); br.t = null; $('#brDone').hidden = false; } brRender(); }, 1000);
+  }
+  brRender();
+};
+$$('[data-min]').forEach(b => b.onclick = () => {
+  clearInterval(br.t); br.t = null; br.len = br.left = +b.dataset.min * 60; $('#brDone').hidden = true;
+  $$('[data-min]').forEach(x => x.classList.toggle('sel', x === b)); brRender();
+});
+brRender();
+
+/* ---------- 7 · strategies ---------- */
+$$('.strat').forEach(c => { c.setAttribute('aria-expanded', 'false'); c.onclick = () => { const o = c.classList.toggle('open'); c.setAttribute('aria-expanded', String(o)); }; });
+
+/* ---------- 8 · reading with markers ---------- */
+let marker = 'pro', mkStar = false;
+$$('.mk').forEach(b => b.onclick = () => { marker = b.dataset.m; $$('.mk').forEach(x => x.classList.toggle('sel', x === b)); });
+$('#readText').addEventListener('click', e => {
+  const s = e.target.closest('.s'); if (!s) return;
+  const has = s.classList.contains('hl-' + marker);
+  s.classList.remove('hl-pro', 'hl-con', 'r-ok', 'r-miss', 'r-bad');
+  if (marker !== 'erase' && !has) s.classList.add('hl-' + marker);
+});
+$('#mkCheck').onclick = () => {
+  let ok = 0, total = 0, bad = 0;
+  $$('#readText .s').forEach(s => {
+    s.classList.remove('r-ok', 'r-miss', 'r-bad');
+    const k = s.dataset.k || '', m = s.classList.contains('hl-pro') ? 'pro' : s.classList.contains('hl-con') ? 'con' : '';
+    if (k) total++;
+    if (k && m === k) { ok++; s.classList.add('r-ok'); }
+    else if (k && !m) s.classList.add('r-miss');
+    else if (m && m !== k) { bad++; s.classList.add('r-bad'); }
+  });
+  const f = $('#mkFb');
+  if (ok === total && bad === 0) { fb(f, true, `🎉 מושלם! סימנתם נכון את כל ${total} המשפטים.`); if (!mkStar) { mkStar = true; addStar(f); } }
+  else fb(f, false, `סימנתם נכון ${ok} מתוך ${total}. ${bad ? `${bad === 1 ? 'משפט אחד סומן' : bad + ' משפטים סומנו'} בצבע לא מתאים (מסגרת אדומה). ` : ''}${ok + bad < total ? 'משפטים עם מסגרת מקווקווה עוד מחכים לסימון. ' : ''}נסו לתקן!`);
+};
+$('#mkClear').onclick = () => { $$('#readText .s').forEach(s => s.classList.remove('hl-pro', 'hl-con', 'r-ok', 'r-miss', 'r-bad')); $('#mkFb').className = 'fb'; };
+if ('speechSynthesis' in window) {
+  const ra = $('#readAloud'); ra.hidden = false;
+  ra.onclick = () => {
+    if (speechSynthesis.speaking) { speechSynthesis.cancel(); return; }
+    const txt = [$('#readText h3').textContent, ...$$('#readText .s').map(s => s.textContent)].join(' ');
+    const u = new SpeechSynthesisUtterance(txt); u.lang = 'he-IL'; u.rate = .9;
+    const v = speechSynthesis.getVoices().find(v => v.lang && v.lang.toLowerCase().startsWith('he')); if (v) u.voice = v;
+    speechSynthesis.speak(u);
+  };
+}
+
+/* ---------- 9 · questions ---------- */
+const MCQ = [
+  { tag: 'רעיון מרכזי', q: 'מה הנושא המרכזי של הטקסט?', o: ['משחקים בחצר בזמן ההפסקה', 'הוויכוח אם מותר להביא טלפונים לבית הספר', 'איך משתמשים ביישומוני לימוד', 'למה לילדים יש טלפונים'], a: 1, h: 'רמז: הסתכלו על הכותרת ועל פסקה 1. נושא מרכזי הוא על מה <b>כל</b> הטקסט, לא רק פרט אחד.' },
+  { tag: 'מידע גלוי', q: 'לפי פסקה 2, מה סיבה אחת לאסור טלפונים בבית הספר?', o: ['הטלפונים יקרים מדי', 'הטלפון מסיח את דעת התלמידים בשיעור', 'ההורים מתקשרים יותר מדי', 'אין קליטה בבית הספר'], a: 1, h: 'רמז: חפשו בפסקה 2 את המילה "לדבריהם".' },
+  { tag: 'מילות קישור', q: 'מה התפקיד של המילה "לעומתם" בתחילת פסקה 3?', o: ['מוסיפה עוד נימוק לאותו הצד', 'מציגה עמדה הפוכה, את הצד השני של הוויכוח', 'מסכמת את הטקסט', 'נותנת דוגמה'], a: 1, h: 'רמז: "לעומת" פירושו "בניגוד ל־". מה בא אחרי המילה הזאת?' },
+  { tag: 'מידע גלוי', q: 'איזה פתרון מוצע בפסקה 4?', o: ['לאסור טלפונים לגמרי', 'לאפשר שימוש חופשי כל היום', 'להביא את הטלפון, לשמור אותו כבוי בתיק ולהשתמש בו רק באישור', 'לקנות טלפון לכל תלמיד'], a: 2, h: 'רמז: קראו שוב את פסקה 4, מה עושים עם הטלפון כל היום?' },
+  { tag: 'אוצר מילים', q: 'בפסקה 2 כתוב שהטלפון "מסיח את הדעת". מה הפירוש?', o: ['גורם לא להתרכז במה שצריך', 'עוזר לזכור את החומר', 'משמח את התלמידים', 'עושה רעש חזק'], a: 0, h: 'רמז: שימו כל תשובה במקום הביטוי וקראו את המשפט. באיזו תשובה המשפט הגיוני?' },
+  { tag: 'הסקה', q: 'למה לדעתכם הטקסט מסתיים בשאלה "ומה דעתכם?"', o: ['כי הכותב שכח לסיים', 'כי הכותב רוצה שהקורא יחשוב ויחליט מה דעתו', 'כי אין לשאלה תשובה', 'כי זו שאלה ממבחן'], a: 1, h: 'רמז: התשובה לא כתובה בטקסט. חשבו: למה פונים ישירות לקורא?' }
+];
+function mcRender() {
+  const box = $('#mcBox');
+  box.innerHTML = MCQ.map((q, i) => `<div class="card mc" data-q="${i}"><span class="qtag">${q.tag}</span><p class="q"><b>${i + 1}.</b> ${q.q}</p>
+    <div class="opts text">${q.o.map((o, j) => `<button class="btn opt" data-choice="${j}"><span class="ol">${'אבגד'[j]}</span>${o}</button>`).join('')}</div><div class="fb"></div></div>`).join('');
+  $$('.mc', box).forEach(card => {
+    const q = MCQ[+card.dataset.q], f = $('.fb', card);
+    choice(card, k => +k === q.a, (first, b) => { if (first) addStar(b); fb(f, true, praise()); }, () => fb(f, false, q.h + ' נסו שוב.'));
+  });
+}
+mcRender();
+let openStar = false;
+$('#openShow').onclick = () => { $('#openModel').hidden = false; };
+$('#openDone').onclick = () => {
+  const f = $('#openFb');
+  if ($('#openAns').value.trim().length < 10) { fb(f, false, 'כתבו קודם תשובה 🙂'); return; }
+  if (!$$('#openChecks input').every(c => c.checked)) { fb(f, false, 'עברו על רשימת הבדיקה וסמנו רק מה שבאמת עשיתם. אם משהו חסר, הוסיפו אותו לתשובה.'); return; }
+  fb(f, true, 'כל הכבוד! תשובה מלאה ומסודרת ✍️'); if (!openStar) { openStar = true; addStar(f); }
+};
+
+/* ---------- 10 · fact or opinion ---------- */
+const FO = shuffle([
+  ['בשבוע יש שבעה ימים.', 'f'], ['כדורגל הוא המשחק הכי כיפי שיש.', 'o'], ['לטלפון חכם יש מצלמה.', 'f'],
+  ['שיעורי בית הם בזבוז זמן.', 'o'], ['ההפסקה הגדולה מתחילה בשעה 10:00.', 'f'], ['צריך לאסור טלפונים בבית הספר.', 'o'],
+  ['פיצה היא האוכל הכי טעים.', 'o'], ['בכיתה שלנו יש 28 תלמידים.', 'f']
+]);
+const fo = { i: 0, score: 0 };
+function foRender() {
+  const box = $('#foGame');
+  if (fo.i >= FO.length) {
+    box.innerHTML = `<div class="done">🎉 סיימתם!<br>${fo.score} מתוך ${FO.length} נכונות בניסיון הראשון</div><div class="row"><button class="btn primary" id="foAgain">משחק חדש</button></div>`;
+    $('#foAgain').onclick = () => { shuffle(FO); fo.i = 0; fo.score = 0; foRender(); }; return;
+  }
+  const [t, k] = FO[fo.i];
+  box.innerHTML = `<div class="roundinfo">משפט ${fo.i + 1} מתוך ${FO.length}</div><div class="fo-card">${t}</div>
+    <div class="fo-btns"><button class="btn" data-choice="f">🔍 עובדה</button><button class="btn" data-choice="o">💭 דעה</button></div>
+    <div class="fb"></div><div class="nextrow"><button class="btn primary" id="foNext" hidden>למשפט הבא ←</button></div>`;
+  const f = $('.fb', box);
+  const why = k === 'f' ? 'אפשר לבדוק ולהוכיח את זה, לכן זו עובדה.' : 'זה מה שמישהו חושב, ואחרים יכולים לחשוב אחרת. לכן זו דעה.';
+  choice(box, c => c === k, (first, b) => { if (first) { fo.score++; addStar(b); } fb(f, true, `${praise()} ${why}`); $('#foNext').hidden = false; },
+    () => fb(f, false, k === 'f' ? 'שאלו את עצמכם: אפשר לבדוק את זה? נסו שוב.' : 'שאלו את עצמכם: כולם חייבים להסכים עם זה? נסו שוב.'));
+  $('#foNext').onclick = () => { fo.i++; foRender(); };
+}
+foRender();
+
+/* ---------- 11 · argument builder ---------- */
+const TOPICS = {
+  phone: { t: 'טלפונים בבית הספר', open: 'בבתי ספר רבים מתווכחים אם מותר להביא טלפונים לבית הספר.', ph: ['צריך לאסור טלפונים בבית הספר', 'הטלפון מסיח את הדעת בשיעור', 'אין לאסור טלפונים', 'הטלפון עוזר להיות בקשר עם ההורים'] },
+  uniform: { t: 'תלבושת אחידה', open: 'בבתי ספר רבים התלמידים לובשים תלבושת אחידה, ולא כולם מסכימים עם זה.', ph: ['תלבושת אחידה היא דבר טוב', 'כולם נראים שווים ואין תחרות על בגדים', 'צריך לבטל את התלבושת האחידה', 'כל ילד רוצה לבטא את עצמו בבגדים שלו'] },
+  hw: { t: 'שיעורי בית כל יום', open: 'האם תלמידים צריכים לקבל שיעורי בית כל יום? על השאלה הזאת יש ויכוח.', ph: ['שיעורי בית כל יום עוזרים ללמוד', 'תרגול בבית עוזר לזכור את החומר', 'אין צורך בשיעורי בית כל יום', 'לילדים צריך להיות זמן לנוח ולשחק'] }
+};
+const ARG_IDS = ['argOpen', 'a1', 'a2', 'b1', 'b2', 'me', 'why', 'add', 'sum'];
+let argTopic = store.get('argTopic', 'phone'); if (!TOPICS[argTopic]) argTopic = 'phone';
+function argTopicsRender() {
+  $('#argTopics').innerHTML = Object.entries(TOPICS).map(([k, v]) => `<button class="btn chip${k === argTopic ? ' sel' : ''}" data-topic="${k}">${v.t}</button>`).join('');
+  const T = TOPICS[argTopic];
+  ['a1', 'a2', 'b1', 'b2'].forEach((id, i) => $('#' + id).placeholder = 'למשל: ' + T.ph[i]);
+}
+$('#argTopics').onclick = e => {
+  const b = e.target.closest('[data-topic]'); if (!b) return;
+  const prevOpen = TOPICS[argTopic].open; argTopic = b.dataset.topic; store.set('argTopic', argTopic);
+  const o = $('#argOpen'); if (!o.value.trim() || o.value.trim() === prevOpen) o.value = TOPICS[argTopic].open;
+  argTopicsRender(); saveArg();
+};
+function saveArg() { const o = {}; ARG_IDS.forEach(id => o[id] = $('#' + id).value); store.set('arg', o); }
+const saved = store.get('arg', null);
+ARG_IDS.forEach(id => { const el = $('#' + id); if (saved && typeof saved[id] === 'string') el.value = saved[id]; el.addEventListener('input', () => { el.classList.remove('missing'); saveArg(); }); });
+if (!$('#argOpen').value.trim()) $('#argOpen').value = TOPICS[argTopic].open;
+argTopicsRender();
+let lastTA = null;
+$$('#argForm textarea').forEach(t => t.addEventListener('focus', () => lastTA = t));
+$('#wordBank').addEventListener('mousedown', e => e.preventDefault());
+$('#wordBank').onclick = e => {
+  const c = e.target.closest('[data-w]'); if (!c) return;
+  const t = lastTA || $('#a1'), w = c.dataset.w;
+  const s = t.selectionStart ?? t.value.length, en = t.selectionEnd ?? t.value.length;
+  const pre = t.value.slice(0, s), post = t.value.slice(en);
+  const ins = (pre && !/\s$/.test(pre) ? ' ' : '') + w + ' ';
+  t.value = pre + ins + post; t.focus(); const p = (pre + ins).length; t.setSelectionRange(p, p);
+  t.dispatchEvent(new Event('input'));
+};
+let argStar = false;
+const clean = s => s.trim().replace(/[.\s]+$/, '');
+$('#argBuild').onclick = () => {
+  const v = id => clean($('#' + id).value);
+  const need = ['a1', 'a2', 'b1', 'b2', 'me', 'why', 'sum'], miss = need.filter(k => !v(k));
+  const f = $('#argFb');
+  if (miss.length) { miss.forEach(k => $('#' + k).classList.add('missing')); fb(f, false, 'מלאו את כל השדות המסומנים באדום ("בנוסף" לא חובה) 🙂'); $('#argOutWrap').hidden = true; return; }
+  const strip = (s, w) => s.replace(new RegExp('^' + w + '\\s*'), '');
+  const txt = `${v('argOpen') ? v('argOpen') + '. ' : ''}יש הטוענים ש${v('a1')}, כי ${strip(v('a2'), 'כי')}. לעומתם, יש הטוענים ש${v('b1')}, כי ${strip(v('b2'), 'כי')}.\n\nלדעתי, ${strip(v('me'), 'לדעתי,?')}, כי ${strip(v('why'), 'כי')}.${v('add') ? ` בנוסף, ${strip(v('add'), 'בנוסף,?')}.` : ''}\n\nלסיכום, ${strip(v('sum'), 'לסיכום,?')}.`;
+  $('#argOut').textContent = txt; $('#argOutWrap').hidden = false;
+  fb(f, true, 'הנה הטקסט הטיעוני שלכם! קראו אותו בקול. האם הוא נשמע ברור?');
+  if (!argStar) { argStar = true; addStar(f); }
+};
+$('#argCopy').onclick = () => {
+  const btn = $('#argCopy'), txt = $('#argOut').textContent;
+  const okMsg = () => { btn.textContent = 'הועתק ✔'; setTimeout(() => btn.textContent = '📋 העתקה', 1500); };
+  try { navigator.clipboard.writeText(txt).then(okMsg).catch(() => { btn.textContent = 'סמנו והעתיקו ידנית'; }); } catch (e) { btn.textContent = 'סמנו והעתיקו ידנית'; }
+};
+
+/* ---------- 12 · end ---------- */
+$$('#moods .btn').forEach(b => b.onclick = () => $$('#moods .btn').forEach(x => x.classList.toggle('sel', x === b)));
+let rs = false;
+$('#restart').onclick = function () {
+  if (!rs) { rs = true; this.textContent = 'בטוח? לחצו שוב לאיפוס'; setTimeout(() => { rs = false; this.textContent = '🔄 התחלה מחדש'; }, 3000); return; }
+  store.clear(); location.reload();
+};
+
+go(cur);
+})();
+</script>
+
+
+</body></html>
